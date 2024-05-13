@@ -7,6 +7,7 @@ import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
+import com.vaadin.flow.router.RouterLink;
 import org.hbrs.se2.project.hellocar.control.LoginControl;
 import org.hbrs.se2.project.hellocar.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.hellocar.dtos.UserDTO;
@@ -52,6 +53,7 @@ public class MainView extends VerticalLayout {
         });
 
         add(component);
+        add(new RouterLink("Noch keinen Account?", RegistrationView.class));
         this.setAlignItems( Alignment.CENTER );
     }
 
