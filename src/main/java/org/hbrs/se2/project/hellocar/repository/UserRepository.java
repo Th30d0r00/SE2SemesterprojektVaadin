@@ -22,7 +22,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     // SELECT firstname, lastname, id
     // FROM User p
     // WHERE p.occupation = [StringValueOf( occupation )]
-    List<UserDTO> getUserByOccupation( String occupation );
+    //List<UserDTO> getUserByOccupation( String occupation );
 
     // SELECT firstname, lastname, id
     // FROM User p
