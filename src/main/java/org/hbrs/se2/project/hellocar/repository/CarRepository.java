@@ -22,7 +22,7 @@ import java.util.List;
  */
 public interface CarRepository extends JpaRepository<Car, Integer> {
 
-    @Query("  SELECT c.brand, c.model, c.price, u.firstName, u.lastName" +
+    @Query("  SELECT c.brand, c.model, c.price" +
             " FROM Car c, User u " +
             " WHERE  c.userid = u.id ")
     List<Object[]> findAllCarsAndTheirUsers();

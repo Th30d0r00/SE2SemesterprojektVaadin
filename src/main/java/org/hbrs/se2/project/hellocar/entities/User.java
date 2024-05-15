@@ -10,6 +10,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import org.hbrs.se2.project.hellocar.util.AccountType;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
@@ -18,15 +20,11 @@ import java.util.Objects;
 @Table( name ="user" , schema = "carlook" )
 public class User {
     private int id;
-    private LocalDate dateOfBirth;
     private String email;
-    private String firstName;
-    private String lastName;
-    private String occupation;
     private String password;
-    private String phone;
-    private String userid;
     private List<Rolle> roles;
+    private AccountType accountType;
+    private String userid;
 
     @Id
     @GeneratedValue
@@ -40,16 +38,6 @@ public class User {
     }
 
     @Basic
-    @Column(name = "date_of_birth")
-    public LocalDate getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public void setDateOfBirth(LocalDate dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
-
-    @Basic
     @Column(name = "email")
     public String getEmail() {
         return email;
@@ -60,36 +48,6 @@ public class User {
     }
 
     @Basic
-    @Column(name = "first_name")
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    @Basic
-    @Column(name = "last_name")
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    @Basic
-    @Column(name = "occupation")
-    public String getOccupation() {
-        return occupation;
-    }
-
-    public void setOccupation(String occupation) {
-        this.occupation = occupation;
-    }
-
-    @Basic
     @Column(name = "password")
     public String getPassword() {
         return password;
@@ -97,16 +55,6 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    @Basic
-    @Column(name = "phone")
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
     }
 
     @Basic
@@ -125,19 +73,14 @@ public class User {
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
         return id == user.id &&
-                Objects.equals(dateOfBirth, user.dateOfBirth) &&
                 Objects.equals(email, user.email) &&
-                Objects.equals(firstName, user.firstName) &&
-                Objects.equals(lastName, user.lastName) &&
-                Objects.equals(occupation, user.occupation) &&
                 Objects.equals(password, user.password) &&
-                Objects.equals(phone, user.phone) &&
                 Objects.equals(userid, user.userid);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, dateOfBirth, email, firstName, lastName, occupation, password, phone, userid);
+        return Objects.hash(id, email, password, userid);
     }
 
   @ManyToMany(fetch = FetchType.EAGER)

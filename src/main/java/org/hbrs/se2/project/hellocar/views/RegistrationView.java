@@ -22,6 +22,8 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import org.hbrs.se2.project.hellocar.dtos.impl.UserDTOImpl;
+import org.hbrs.se2.project.hellocar.util.AccountType;
 import org.hbrs.se2.project.hellocar.util.Globals;
 
 @Route(value = "registration" )
@@ -31,19 +33,63 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
 
     // ToDo: Validierung; weitere Felder / Varibalen; Variablen umbenennen.
     // c / 0 Sascha Alda in Kooperation mit dem Team NoCode
-    private TextField brand = new TextField("UserName");
-    private TextField model = new TextField("E-Mail");
-    private TextField description = new TextField("Passwort");
-    private TextField price = new TextField("Passwort (Wdh)");
+    private TextField email = new TextField("E-Mail");
+    private TextField password = new TextField("Passwort");
+    private ComboBox<AccountType> accountType = new ComboBox<>("Firma/Student");
+
+    private TextField companyName = new TextField("Firmenname");
+    private DatePicker foundingDate = new DatePicker("Gründungsdatum");
+    private TextField employees = new TextField("Anzahl Mitarbeiter");
+
+    private TextField firstname = new TextField("Vorname");
+    private TextField lastname = new TextField("Nachname");
+    private DatePicker birthday = new DatePicker("Geburtsdatum");
 
     private Button register = new Button("Register");
 
-    private Binder<CarDTOImpl> binder = new Binder(CarDTOImpl.class);
+    private Binder<UserDTOImpl> binder = new Binder(UserDTOImpl.class);
 
     public RegistrationView( ManageCarControl carService) {
         //ToDo: RegistrationControl; UserDTO, Binding; ExceptionHandling;
 
         addClassName("enter-car-view");
+        accountType.setItems(AccountType.values());
+
+        //Default Case
+        accountType.setVisible(true);
+        password.setVisible(true);
+        email.setVisible(true);
+
+        companyName.setVisible(false);
+        foundingDate.setVisible(false);
+        employees.setVisible(false);
+        firstname.setVisible(false);
+        lastname.setVisible(false);
+        birthday.setVisible(false);
+
+        accountType.addValueChangeListener(e -> {
+            if(e.getValue() == AccountType.STUDENT){
+                accountType.setVisible(true);
+
+                companyName.setVisible(false);
+                foundingDate.setVisible(false);
+                employees.setVisible(false);
+                firstname.setVisible(true);
+                lastname.setVisible(true);
+                birthday.setVisible(true);
+
+            }
+            if(e.getValue() == AccountType.UNTERNEHMEN){
+                accountType.setVisible(true);
+
+                companyName.setVisible(true);
+                foundingDate.setVisible(true);
+                employees.setVisible(true);
+                firstname.setVisible(false);
+                lastname.setVisible(false);
+                birthday.setVisible(false);
+            }
+        });
 
         add(createTitle());
         add(createFormLayout());
@@ -65,12 +111,12 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
             clearForm();
 
             // Navigation
-            UI.getCurrent().navigate( Globals.Pages.LOGIN_VIEW );
+            //UI.getCurrent().navigate( Globals.Pages.LOGIN_VIEW );
         });
     }
 
     private void clearForm() {
-        binder.setBean(new CarDTOImpl());
+        binder.setBean(new UserDTOImpl());
     }
 
     private Component createTitle() {
@@ -79,7 +125,7 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
 
     private Component createFormLayout() {
         FormLayout formLayout = new FormLayout();
-        formLayout.add(brand, model, description, price);
+        formLayout.add(email, password, accountType, companyName, foundingDate, employees, firstname, lastname, birthday);
         return formLayout;
     }
 
