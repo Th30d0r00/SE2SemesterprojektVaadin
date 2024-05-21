@@ -1,16 +1,15 @@
 package org.hbrs.se2.project.hellocar.views;
 
-import com.vaadin.flow.component.ComponentEvent;
-import com.vaadin.flow.component.ComponentEventListener;
-import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.*;
+import org.hbrs.se2.demo.registration.RegistrationResult;
 import org.hbrs.se2.project.hellocar.control.ManageCarControl;
-import org.hbrs.se2.project.hellocar.dtos.impl.CarDTOImpl;
+import org.hbrs.se2.project.hellocar.control.RegistrationControl;
+import org.hbrs.se2.project.hellocar.dtos.CompanyDTO;
+import org.hbrs.se2.project.hellocar.dtos.StudentDTO;
 import org.hbrs.se2.project.hellocar.dtos.UserDTO;
-import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.customfield.CustomField;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -22,20 +21,21 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import org.hbrs.se2.project.hellocar.dtos.impl.CompanyDTOImpl;
+import org.hbrs.se2.project.hellocar.dtos.impl.StudentDTOImpl;
 import org.hbrs.se2.project.hellocar.dtos.impl.UserDTOImpl;
 import org.hbrs.se2.project.hellocar.util.AccountType;
-import org.hbrs.se2.project.hellocar.util.Globals;
 
 @Route(value = "registration" )
 @PageTitle("User Registration")
 @CssImport("./styles/views/entercar/enter-car-view.css")
 public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Vererbung)
 
-    // ToDo: Validierung; weitere Felder / Varibalen; Variablen umbenennen.
-    // c / 0 Sascha Alda in Kooperation mit dem Team NoCode
+    //Formfelder & Registrierungsbutton
+    private ComboBox<AccountType> accountType = new ComboBox<>("Firma/Student");
     private TextField email = new TextField("E-Mail");
     private TextField password = new TextField("Passwort");
-    private ComboBox<AccountType> accountType = new ComboBox<>("Firma/Student");
+    private TextField userId = new TextField("Nutzername");
 
     private TextField companyName = new TextField("Firmenname");
     private DatePicker foundingDate = new DatePicker("Gründungsdatum");
@@ -49,45 +49,23 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
 
     private Binder<UserDTOImpl> binder = new Binder(UserDTOImpl.class);
 
+    //RegistrationView
     public RegistrationView( ManageCarControl carService) {
         //ToDo: RegistrationControl; UserDTO, Binding; ExceptionHandling;
 
         addClassName("enter-car-view");
         accountType.setItems(AccountType.values());
 
-        //Default Case
-        accountType.setVisible(true);
-        password.setVisible(true);
-        email.setVisible(true);
-
-        companyName.setVisible(false);
-        foundingDate.setVisible(false);
-        employees.setVisible(false);
-        firstname.setVisible(false);
-        lastname.setVisible(false);
-        birthday.setVisible(false);
+        DefaultVisibility();
 
         accountType.addValueChangeListener(e -> {
             if(e.getValue() == AccountType.STUDENT){
                 accountType.setVisible(true);
-
-                companyName.setVisible(false);
-                foundingDate.setVisible(false);
-                employees.setVisible(false);
-                firstname.setVisible(true);
-                lastname.setVisible(true);
-                birthday.setVisible(true);
-
+                StudentVisibility();
             }
             if(e.getValue() == AccountType.UNTERNEHMEN){
                 accountType.setVisible(true);
-
-                companyName.setVisible(true);
-                foundingDate.setVisible(true);
-                employees.setVisible(true);
-                firstname.setVisible(false);
-                lastname.setVisible(false);
-                birthday.setVisible(false);
+                CompanyVisibility();
             }
         });
 
@@ -100,18 +78,32 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
         binder.bindInstanceFields(this); // Nr. 1 API-Methode
         clearForm();
 
+        //Wenn RegisterButton gedrückt wird
         register.addClickListener(e -> {
-            // Speicherung der Daten über das zuhörige Control-Object.
-            // Daten des Autos werden aus Formular erfasst und als DTO übergeben.
-            // Zusätzlich wird das aktuelle UserDTO übergeben.
-            // UserDTO userDTO = (UserDTO) UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER);
-            // carService.createCar(binder.getBean() ,  userDTO );
 
-            Notification.show("User wurde registriert.");
-            clearForm();
+            boolean formComplete = CheckIfFormComplete();
 
-            // Navigation
-            //UI.getCurrent().navigate( Globals.Pages.LOGIN_VIEW );
+            if(formComplete){
+                RegistrationControl regControl = new RegistrationControl();
+                UserDTO userDTO = new UserDTOImpl();
+
+                if(accountType.getValue() == AccountType.STUDENT){
+                    FillUserDtoAsStudent(userDTO);
+                }
+                if(accountType.getValue() == AccountType.UNTERNEHMEN){
+                    FillUserDtoAsCompany(userDTO);
+                }
+
+                RegistrationResult result = regControl.registerUser(userDTO);
+
+                Notification.show(result.getMessage());
+                clearForm();
+
+                //UI.getCurrent().navigate( Globals.Pages.LOGIN_VIEW );
+            }
+            else{
+                Notification.show("Junge, füll die Form halt korrekt aus.");
+            }
         });
     }
 
@@ -137,4 +129,62 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
         return buttonLayout;
     }
 
+    private void DefaultVisibility(){
+        accountType.setVisible(true);
+        password.setVisible(true);
+        email.setVisible(true);
+
+        companyName.setVisible(false);
+        foundingDate.setVisible(false);
+        employees.setVisible(false);
+        firstname.setVisible(false);
+        lastname.setVisible(false);
+        birthday.setVisible(false);
+    }
+
+    private void StudentVisibility(){
+        companyName.setVisible(false);
+        foundingDate.setVisible(false);
+        employees.setVisible(false);
+        firstname.setVisible(true);
+        lastname.setVisible(true);
+        birthday.setVisible(true);
+    }
+
+    private void CompanyVisibility(){
+        companyName.setVisible(true);
+        foundingDate.setVisible(true);
+        employees.setVisible(true);
+        firstname.setVisible(false);
+        lastname.setVisible(false);
+        birthday.setVisible(false);
+    }
+
+    private void FillUserDtoAsStudent(UserDTO userDTO){
+        userDTO.setEmail(email.getValue());
+        userDTO.setPassword(password.getValue());
+        userDTO.setUserId(userId.getValue());
+
+        StudentDTO studentDTO = new StudentDTOImpl();
+        studentDTO.setFirstname(firstname.getValue());
+        studentDTO.setLastname(lastname.getValue());
+        studentDTO.setBirthday(birthday.getValue());
+
+        userDTO.setStudent(studentDTO);
+    }
+
+    private void FillUserDtoAsCompany(UserDTO userDTO){
+        userDTO.setEmail(email.getValue());
+        userDTO.setPassword(password.getValue());
+        userDTO.setUserId(userId.getValue());
+
+        CompanyDTO companyDTO = new CompanyDTOImpl();
+        companyDTO.setCompanyName(companyName.getValue());
+        companyDTO.setFoundingDate(foundingDate.getValue());
+        companyDTO.setEmployees( Integer.parseInt(employees.getValue()));
+    }
+
+    private boolean CheckIfFormComplete(){
+        return true;
+    }
 }

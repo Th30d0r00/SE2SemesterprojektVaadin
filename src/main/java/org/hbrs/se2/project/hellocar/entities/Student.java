@@ -5,7 +5,7 @@ import jakarta.persistence.Column;
 
 import java.time.LocalDate;
 
-public class Student extends User{
+public class Student{
     private String firstname;
     private String lastname;
     private int age;

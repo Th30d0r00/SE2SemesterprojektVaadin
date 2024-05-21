@@ -1,6 +1,8 @@
 package org.hbrs.se2.project.hellocar.dtos;
 
+import org.hbrs.se2.project.hellocar.entities.Company;
 import org.hbrs.se2.project.hellocar.entities.Rolle;
+import org.hbrs.se2.project.hellocar.entities.Student;
 import org.hbrs.se2.project.hellocar.util.AccountType;
 
 import java.time.LocalDate;
@@ -15,16 +17,16 @@ public interface UserDTO {
     public String getPassword();
     public List<RolleDTO> getRoles();
     public AccountType getAccountType();
+    public StudentDTO getStudent();
+    public CompanyDTO getCompany();
 
-    //Company
-    public String getCompanyName();
-    public LocalDate getFoundingDate();
-    public int getEmployees();
-
-    //Student
-    public String getLastname();
-    public String getFirstname();
-    public LocalDate getBirthday();
-    public int getAge();
+    public void setId(int id);
+    public void setUserId(String userId);
+    public void setEmail(String email);
+    public void setPassword(String password);
+    public void setRoles(List<RolleDTO> roles);
+    public void setAccountType(AccountType accountType);
+    public void setStudent(StudentDTO student);
+    public void setCompany(CompanyDTO company);
 }
 

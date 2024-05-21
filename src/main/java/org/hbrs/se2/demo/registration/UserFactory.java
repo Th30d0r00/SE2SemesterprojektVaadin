@@ -4,7 +4,7 @@ public class UserFactory {
 	
 	public static UserDTO createNewUserWithNameAndPassword( String name, String password ) {
 		UserDTO dto = new UserDTO();
-		dto.setName(name);
+		//dto.setName(name);
 		dto.setPassword(password);
 		return dto;
 	}
@@ -18,7 +18,7 @@ public class UserFactory {
 	public static UserDTO createDefaultUserWithNoPasswordAndNoAddress() {
 		UserDTO dto = UserFactory.getDefaultUser();
 		dto.setPassword("");
-		dto.setAddress("");
+		//dto.setAddress("");
 		return dto;
 	}
 
@@ -29,10 +29,10 @@ public class UserFactory {
 	 */
 	private static UserDTO getDefaultUser() {
 		UserDTO dto = new UserDTO();
-		dto.setName("Stefan Meyer");
-		dto.setPassword("abc99");
-		dto.setAddress("Bonn");
-		dto.setGebDatum("25.9.1999");
+		//dto.setName("Stefan Meyer");
+		//dto.setPassword("abc99");
+		//dto.setAddress("Bonn");
+		//dto.setGebDatum("25.9.1999");
 		dto.setUserID("meyer1");
 		return dto;
 	}

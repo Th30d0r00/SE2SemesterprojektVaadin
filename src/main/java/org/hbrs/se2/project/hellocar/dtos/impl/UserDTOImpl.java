@@ -1,11 +1,11 @@
 package org.hbrs.se2.project.hellocar.dtos.impl;
 
+import org.hbrs.se2.project.hellocar.dtos.CompanyDTO;
 import org.hbrs.se2.project.hellocar.dtos.RolleDTO;
+import org.hbrs.se2.project.hellocar.dtos.StudentDTO;
 import org.hbrs.se2.project.hellocar.dtos.UserDTO;
 import org.hbrs.se2.project.hellocar.util.AccountType;
-import org.springframework.cglib.core.Local;
 
-import java.time.LocalDate;
 import java.util.List;
 
 public class UserDTOImpl implements UserDTO {
@@ -17,24 +17,14 @@ public class UserDTOImpl implements UserDTO {
     private String password;
     private List<RolleDTO> roles;
     private AccountType accountType;
-
-    //Company
-    private String companyName;
-    private LocalDate foundingDate;
-    private int employees;
-
-    //Student
-    private String firstname;
-    private String lastname;
-    private LocalDate birthday;
-    private int age;
+    private StudentDTO student;
+    private CompanyDTO company;
 
     @Override
     public String toString() {
         return "UserDTOImpl{" +
                 "id=" + id +
-                ", firstname='" + firstname + '\'' +
-                ", lastname='" + lastname + '\'' +
+                "email: " + email +
                 ", roles=" + roles +
                 '}';
     }
@@ -54,6 +44,7 @@ public class UserDTOImpl implements UserDTO {
         return email;
     }
 
+    @Override
     public void setEmail(String email) {
         this.email = email;
     }
@@ -63,6 +54,7 @@ public class UserDTOImpl implements UserDTO {
         return password;
     }
 
+    @Override
     public void setPassword(String password) {
         this.password = password;
     }
@@ -77,74 +69,42 @@ public class UserDTOImpl implements UserDTO {
         return accountType;
     }
 
+    @Override
     public void setAccountType(AccountType accountType) {
         this.accountType = accountType;
     }
 
     @Override
-    public String getCompanyName() {
-        return companyName;
-    }
-
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
+    public StudentDTO getStudent() {
+        return student;
     }
 
     @Override
-    public LocalDate getFoundingDate() {
-        return foundingDate;
-    }
-
-    public void setFoundingDate(LocalDate foundingDate) {
-        this.foundingDate = foundingDate;
+    public CompanyDTO getCompany() {
+        return company;
     }
 
     @Override
-    public int getEmployees() {
-        return employees;
-    }
-
-    public void setEmployees(int employees) {
-        this.employees = employees;
+    public void setId(int id) {
+        this.id = id;
     }
 
     @Override
-    public String getLastname() {
-        return lastname;
-    }
-
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
+    public void setUserId(String userId) {
+        this.userid = userId;
     }
 
     @Override
-    public String getFirstname() {
-        return firstname;
-    }
-
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
+    public void setStudent(StudentDTO student) {
+        this.student = student;
     }
 
     @Override
-    public LocalDate getBirthday() {
-        return birthday;
-    }
-
-    public void setBirthday(LocalDate birthday) {
-        this.birthday = birthday;
+    public void setCompany(CompanyDTO company) {
+        this.company = company;
     }
 
     @Override
-    public int getAge() {
-        return age;
-    }
-
-    public void setId(int userId) {
-        this.id = userId;
-    }
-
-
     public void setRoles(List<RolleDTO> roles) {
         this.roles = roles;
     }

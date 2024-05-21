@@ -221,7 +221,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
     }
 
     private String getCurrentNameOfUser() {
-        return getCurrentUser().getFirstname();
+        return getCurrentUser().getStudent().getFirstname();
     }
 
     private UserDTO getCurrentUser() {

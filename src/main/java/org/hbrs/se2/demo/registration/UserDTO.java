@@ -1,24 +1,32 @@
 package org.hbrs.se2.demo.registration;
 
+import org.hbrs.se2.project.hellocar.entities.Company;
+import org.hbrs.se2.project.hellocar.entities.Rolle;
+import org.hbrs.se2.project.hellocar.entities.Student;
+
+import java.util.List;
+
 public class UserDTO {
 
-	private String name;
-	private String userID;
+	private int id;
+	private String userid;
 	private String password;
-	private String gebDatum;
-	private String address;
+	private String email;
+	private List<Rolle> roles;
+	private Student studentenInfos;
+	private Company companyInfos;
 	
-	public String getName() {
-		return name;
+	public int getId() {
+		return id;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setId(int id) {
+		this.id = id;
 	}
 	public String getUserID() {
-		return userID;
+		return userid;
 	}
-	public void setUserID(String userID) {
-		this.userID = userID;
+	public void setUserID(String userid) {
+		this.userid = userid;
 	}
 	public String getPassword() {
 		return password;
@@ -26,23 +34,34 @@ public class UserDTO {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public String getGebDatum() {
-		return gebDatum;
+	public String getEmail() {
+		return email;
 	}
-	public void setGebDatum(String gebDatum) {
-		this.gebDatum = gebDatum;
+	public void setEmail(String email) {
+		this.email = email;
 	}
-	public String getAddress() {
-		return address;
+	public List<Rolle> getRolle() {
+		return roles;
 	}
-	public void setAddress(String address) {
-		this.address = address;
+	public void setRolle(List<Rolle> roles) {
+		this.roles = roles;
+	}
+	public Student getStudentenInfos() {
+		return studentenInfos;
+	}
+	public void SetStudentenInfos(Student studentenInfos) {
+		this.studentenInfos = studentenInfos;
+	}
+	public Company getCompanyInfos() {
+		return companyInfos;
+	}
+	public void SetCompanyInfos(Company companyInfos) {
+		this.companyInfos = companyInfos;
 	}
 
 	@Override
 	public String toString() {
-		return "UserDTO [name=" + name + ", userID=" + userID + ", password=" + password + ", gebDatum=" + gebDatum
-				+ ", [opt] address=" + address + "]";
+		return "UserDTO [userID=" + userid + ", email=" + email + ", rollen=" + roles +"]";
 	}
 
 	@Override
@@ -54,30 +73,15 @@ public class UserDTO {
 		if (getClass() != obj.getClass())
 			return false;
 		UserDTO other = (UserDTO) obj;
-		if (address == null) {
-			if (other.address != null)
-				return false;
-		} else if (!address.equals(other.address))
-			return false;
-		if (gebDatum == null) {
-			if (other.gebDatum != null)
-				return false;
-		} else if (!gebDatum.equals(other.gebDatum))
-			return false;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
 		if (password == null) {
 			if (other.password != null)
 				return false;
 		} else if (!password.equals(other.password))
 			return false;
-		if (userID == null) {
-			if (other.userID != null)
+		if (userid == null) {
+			if (other.userid != null)
 				return false;
-		} else if (!userID.equals(other.userID))
+		} else if (!userid.equals(other.userid))
 			return false;
 		return true;
 	}

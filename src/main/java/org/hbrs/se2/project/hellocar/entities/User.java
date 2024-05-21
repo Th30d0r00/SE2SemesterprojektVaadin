@@ -25,6 +25,8 @@ public class User {
     private List<Rolle> roles;
     private AccountType accountType;
     private String userid;
+    private Student studentenInfos;
+    private Company firmenInfos;
 
     @Id
     @GeneratedValue

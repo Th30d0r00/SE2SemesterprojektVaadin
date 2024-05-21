@@ -61,8 +61,8 @@ public class UserDAO {
 
                 user = new UserDTOImpl();
                 user.setId( set.getInt(1));
-                user.setFirstname( set.getString(3) );
-                user.setLastname(set.getString(4));
+                user.getStudent().setFirstname( set.getString(3) );
+                user.getStudent().setLastname(set.getString(4));
 
                 // Beziehe die Rollen eines Users:
                 RolleDAO rolleDAO = new RolleDAO();
@@ -87,6 +87,11 @@ public class UserDAO {
         } finally {
             JDBCConnection.getInstance().closeConnection();
         }
+    }
+
+    public UserDTO FindUserByEmail(String email) {
+        UserDTO user = new UserDTOImpl();
+        return user;
     }
 
 
