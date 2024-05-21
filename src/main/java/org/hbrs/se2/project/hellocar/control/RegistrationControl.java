@@ -12,7 +12,7 @@ public class RegistrationControl
         UserDAO userDAO = new UserDAO();
 
         //check if User with this Email already exists
-        UserDTO existingUser = userDAO.FindUserByEmail(userDTO.getEmail());
+        UserDTO existingUser = userDAO.FindUserByEmail(userDTO.getEmail()); //handle DatabaseLayerException
         if(existingUser == null)
         {
             result.setSuccess(false);

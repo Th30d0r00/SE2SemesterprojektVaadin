@@ -8,6 +8,7 @@ import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerExcepti
 import org.hbrs.se2.project.hellocar.util.Globals;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.hbrs.se2.project.hellocar.util.Security;
 
 
 @Component
@@ -33,9 +34,74 @@ public class LoginControl {
         return true;
     }
 
+    /**
+     * Vergleicht Hash des eingegebenen Passworts mit dem Passwort-Hash in der Datenbank
+     * Dazu muss vom UserDTO der Salt und Hashwert aus der DB geliefert werden
+     * @throws DatabaseLayerException
+     * Julian N
+     */
+    public boolean authenticateWithHash(String email, String password) throws DatabaseLayerException {
+        try {
+            UserDTO tmpUser = this.getUserWithJDBC(email);
+        } catch (DatabaseUserException e) {
+            throw new RuntimeException(e);
+        }
+        // Könnte auch Mathode findUserByUserID verwenden
+
+        Security security = new Security();
+        /*
+        if(security.testHash((password), tmpUser.getSalt(), tmpUser.getHashvalue()){
+            return true;
+        } else {
+            return false;
+        }
+        */
+        return false;
+    }
+
+    /**
+     * User nur mit E-Mail-Adresse finden
+     * @param email
+     * @return userDTO
+     * @throws DatabaseUserException
+     * Julian N
+     */
+    private UserDTO getUserWithJDBC( String email) throws DatabaseUserException {
+        UserDTO userTmp = null;
+        UserDAO dao = new UserDAO();
+
+        //try {
+            userDTO = dao.FindUserByEmail(email); //Handling der DatabaseLayerException
+        //}
+        /*
+        catch ( DatabaseLayerException e) {
+
+            // Analyse und Umwandlung der technischen Errors in 'lesbaren' Darstellungen
+            // Durchreichung und Behandlung der Fehler (Chain Of Responsibility Pattern (SE-1))
+            String reason = e.getReason();
+
+            if (reason.equals(Globals.Errors.NOUSERFOUND)) {
+                return userTmp;
+                // throw new DatabaseUserException("No User could be found! Please check your credentials!");
+            }
+            else if ( reason.equals((Globals.Errors.SQLERROR))) {
+                throw new DatabaseUserException("There were problems with the SQL code. Please contact the developer!");
+            }
+            else if ( reason.equals((Globals.Errors.DATABASE ) )) {
+                throw new DatabaseUserException("A failure occured while trying to connect to database with JDBC. " +
+                        "Please contact the admin");
+            }
+            else {
+                throw new DatabaseUserException("A failure occured while");
+            }
+
+        }*/
+        return userDTO;
+
+    }
+
     public UserDTO getCurrentUser(){
         return this.userDTO;
-
     }
 
     private UserDTO getUserWithJDBC( String username , String password ) throws DatabaseUserException {
