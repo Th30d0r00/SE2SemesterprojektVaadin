@@ -25,6 +25,7 @@ import org.hbrs.se2.project.hellocar.dtos.impl.CompanyDTOImpl;
 import org.hbrs.se2.project.hellocar.dtos.impl.StudentDTOImpl;
 import org.hbrs.se2.project.hellocar.dtos.impl.UserDTOImpl;
 import org.hbrs.se2.project.hellocar.util.AccountType;
+import org.hbrs.se2.project.hellocar.util.Security;
 
 @Route(value = "registration" )
 @PageTitle("User Registration")
@@ -161,6 +162,8 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
     }
 
     private void FillUserDtoAsStudent(UserDTO userDTO){
+        userDTO.setSalt(Security.getSalt());
+        userDTO.setHashValue(Security.getHash(password.getValue(), userDTO.getSalt()));
         userDTO.setEmail(email.getValue());
         userDTO.setPassword(password.getValue());
         userDTO.setUserId(userId.getValue());

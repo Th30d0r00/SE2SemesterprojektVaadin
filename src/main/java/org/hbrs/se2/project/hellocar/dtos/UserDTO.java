@@ -12,6 +12,8 @@ public interface UserDTO {
 
     //General User
     public int getId();
+    public byte[] getSalt();
+    public byte[] getHashValue();
     public String getUserId();
     public String getEmail();
     public String getPassword();
@@ -21,6 +23,8 @@ public interface UserDTO {
     public CompanyDTO getCompany();
 
     public void setId(int id);
+    public void setSalt(byte[] salt);
+    public void setHashValue(byte[] hash);
     public void setUserId(String userId);
     public void setEmail(String email);
     public void setPassword(String password);

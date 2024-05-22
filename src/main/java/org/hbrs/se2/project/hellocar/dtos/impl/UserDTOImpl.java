@@ -12,6 +12,8 @@ public class UserDTOImpl implements UserDTO {
 
     //General User
     private int id;
+    private byte[] salt;
+    private byte[] hashValue;
     private String userid;
     private String email;
     private String password;
@@ -32,6 +34,16 @@ public class UserDTOImpl implements UserDTO {
     @Override
     public int getId() {
         return id;
+    }
+
+    @Override
+    public byte[] getSalt() {
+        return new byte[0];
+    }
+
+    @Override
+    public byte[] getHashValue() {
+        return new byte[0];
     }
 
     @Override
@@ -87,6 +99,16 @@ public class UserDTOImpl implements UserDTO {
     @Override
     public void setId(int id) {
         this.id = id;
+    }
+
+    @Override
+    public void setSalt(byte[] salt) {
+
+    }
+
+    @Override
+    public void setHashValue(byte[] hash) {
+
     }
 
     @Override
