@@ -48,7 +48,6 @@ public class LoginControl {
         }
         // Könnte auch Mathode findUserByUserID verwenden
 
-        Security security = new Security();
         /*
         if(security.testHash((password), tmpUser.getSalt(), tmpUser.getHashvalue()){
             return true;

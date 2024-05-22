@@ -17,7 +17,7 @@ public class Security {
      * Salt generieren, der in der Datenbank zusammen mit dem erstellten Hashwert (getHash()) gespeichert wird
      * und in die Berechnung des Hashwertes mit eingeht
      */
-    public byte[] getSalt() {
+    public static byte[] getSalt() {
         SecureRandom random = new SecureRandom();
         byte[] salt = new byte[16];
         random.nextBytes(salt);
@@ -27,7 +27,7 @@ public class Security {
     /**
      * Generiert einen Hashwert der länge 256Bit mit 10000 Runden und einem zuvor generierten Salt
      */
-    public byte[] getHash(String password, byte[] salt) {
+    public static byte[] getHash(String password, byte[] salt) {
         byte[] hash = new byte[0];
         try {
             char[] passwordChar = password.toCharArray();
@@ -48,7 +48,7 @@ public class Security {
      * Aus dem eingegebenen Passwort (passwordToConfirm) und dem Salt des Nutzers wird ein Hashwert berechnet und mit dem
      * in der DB gespeicherten Hash verglichen. Bei Positiven Vergleich kann der Nutzer authentifiziert werden.
      */
-    public Boolean testHash(String passwordToConfirm, byte[] storedSalt, byte[] storedHash) {
+    public static Boolean testHash(String passwordToConfirm, byte[] storedSalt, byte[] storedHash) {
         byte[] testHash = new byte[0];
         try {
             char[] passwordChar = passwordToConfirm.toCharArray();
@@ -63,6 +63,5 @@ public class Security {
         }
         return MessageDigest.isEqual(storedHash, testHash);
     }
-
 }
 
