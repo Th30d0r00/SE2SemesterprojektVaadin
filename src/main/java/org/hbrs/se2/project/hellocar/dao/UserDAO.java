@@ -121,7 +121,6 @@ public class UserDAO {
                 user.setId( set.getInt("id"));
                 user.setUserId(set.getString("userid"));
                 user.setEmail( set.getString("email") );
-                user.setPassword(set.getString("password"));
                 user.setAccountType(AccountType.valueOf(set.getString("accounttype")));
 
                 // Beziehe die Rollen eines Users:
