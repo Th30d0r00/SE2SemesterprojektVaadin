@@ -69,9 +69,12 @@ public class LoginControl {
         UserDTO userTmp = null;
         UserDAO dao = new UserDAO();
 
-        //try {
+        try {
             userDTO = dao.FindUserByEmail(email); //Handling der DatabaseLayerException
-        //}
+        }
+        catch (DatabaseLayerException e){
+            String error = e.getMessage();
+        }
         /*
         catch ( DatabaseLayerException e) {
 
