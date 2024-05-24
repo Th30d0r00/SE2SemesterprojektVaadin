@@ -15,15 +15,21 @@ public class RegistrationControl
         //check if User with this Email already exists
         try{
             UserDTO existingUser = userDAO.FindUserByEmail(userDTO.getEmail()); //handle DatabaseLayerException
-            if(existingUser == null && userDAO.AddUser(userDTO))
+            if(existingUser == null)
             {
-                result.setSuccess(false);
-                result.setMessage("User with email " + userDTO.getEmail() + " already exists");
+                if(userDAO.AddUser(userDTO)){
+                    result.setSuccess(true);
+                    result.setMessage("User successfully registered.");
+                }
+                else{
+                    result.setSuccess(false);
+                    result.setMessage("Couldn't register user.");
+                }
             }
             else
             {
                 result.setSuccess(false);
-                result.setMessage("User sucessfully registered");
+                result.setMessage("User with email " + userDTO.getEmail() + " already exists");
             }
         }
         catch(DatabaseLayerException e){
