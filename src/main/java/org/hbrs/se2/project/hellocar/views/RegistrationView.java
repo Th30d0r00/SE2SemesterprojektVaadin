@@ -88,15 +88,18 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
                 RegistrationControl regControl = new RegistrationControl();
                 UserDTO userDTO = new UserDTOImpl();
 
-                if(accountType.getValue() == AccountType.STUDENT){
-                    FillUserDtoAsStudent(userDTO);
-                }
-                if(accountType.getValue() == AccountType.UNTERNEHMEN){
-                    FillUserDtoAsCompany(userDTO);
+                try{
+                    if(accountType.getValue() == AccountType.STUDENT){
+                        FillUserDtoAsStudent(userDTO);
+                    }
+                    if(accountType.getValue() == AccountType.UNTERNEHMEN){
+                        FillUserDtoAsCompany(userDTO);
+                    }
+                } catch (NumberFormatException nfe){
+                    Notification.show("Irgendwo fehlerhafte Eingabe");
                 }
 
                 RegistrationResult result = regControl.registerUser(userDTO);
-
                 Notification.show(result.getMessage());
                 clearForm();
 
@@ -118,7 +121,8 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
 
     private Component createFormLayout() {
         FormLayout formLayout = new FormLayout();
-        formLayout.add(email, password, accountType, companyName, foundingDate, employees, firstname, lastname, birthday);
+        formLayout.add(email, userId, password, accountType, companyName,
+                foundingDate, employees, firstname, lastname, birthday);
         return formLayout;
     }
 
@@ -134,6 +138,7 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
         accountType.setVisible(true);
         password.setVisible(true);
         email.setVisible(true);
+        userId.setVisible(true);
 
         companyName.setVisible(false);
         foundingDate.setVisible(false);
@@ -162,8 +167,8 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
     }
 
     private void FillUserDtoAsStudent(UserDTO userDTO){
-        userDTO.setSalt(Security.getSalt());
-        userDTO.setHashValue(Security.getHash(password.getValue(), userDTO.getSalt()));
+        //userDTO.setSalt(Security.getSalt());
+        //userDTO.setHashValue(Security.getHash(password.getValue(), userDTO.getSalt()));
         userDTO.setEmail(email.getValue());
         userDTO.setPassword(password.getValue());
         userDTO.setUserId(userId.getValue());
@@ -179,7 +184,6 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
     private void FillUserDtoAsCompany(UserDTO userDTO){
         userDTO.setEmail(email.getValue());
         userDTO.setPassword(password.getValue());
-        userDTO.setUserId(userId.getValue());
 
         CompanyDTO companyDTO = new CompanyDTOImpl();
         companyDTO.setCompanyName(companyName.getValue());
@@ -188,6 +192,53 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
     }
 
     private boolean CheckIfFormComplete(){
-        return true;
+        boolean formComplete = true;
+
+        if(accountType.getValue() == null){
+            formComplete = false;
+            return formComplete;
+        }
+        if(email.getValue().isEmpty()){
+            formComplete = false;
+            return formComplete;
+        }
+        if(password.getValue().isEmpty()){
+            formComplete = false;
+            return formComplete;
+        }
+        if(userId.getValue().isEmpty()){
+            formComplete = false;
+            return formComplete;
+        }
+
+        if(accountType.getValue() == AccountType.STUDENT){
+            if(firstname.getValue().isEmpty()){
+                formComplete = false;
+                return formComplete;
+            }
+            if(lastname.getValue().isEmpty()) {
+                formComplete = false;
+                return formComplete;
+            }
+            if(birthday.getValue() == null){
+                formComplete = false;
+                return formComplete;
+            }
+        }
+        if(accountType.getValue() == AccountType.UNTERNEHMEN){
+            if(companyName.getValue().isEmpty()){
+                formComplete = false;
+                return formComplete;
+            }
+            if(foundingDate.getValue() == null){
+                formComplete = false;
+                return formComplete;
+            }
+            if(employees.getValue().isEmpty()){
+                formComplete = false;
+                return formComplete;
+            }
+        }
+        return formComplete;
     }
 }

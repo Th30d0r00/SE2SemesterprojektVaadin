@@ -27,7 +27,7 @@ public class RegistrationControl
             }
         }
         catch(DatabaseLayerException e){
-            String error = e.getMessage();
+            System.out.println("DatabaseLayerException");
         }
         return result;
     }
