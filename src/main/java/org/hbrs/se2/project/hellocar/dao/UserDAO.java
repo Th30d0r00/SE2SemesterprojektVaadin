@@ -147,4 +147,8 @@ public class UserDAO {
             JDBCConnection.getInstance().closeConnection();
         }
     }
+
+    public boolean AddUser(UserDTO user) throws DatabaseLayerException {
+        return true;
+    }
 }

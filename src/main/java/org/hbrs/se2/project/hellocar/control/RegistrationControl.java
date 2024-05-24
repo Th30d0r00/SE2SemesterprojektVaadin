@@ -15,7 +15,7 @@ public class RegistrationControl
         //check if User with this Email already exists
         try{
             UserDTO existingUser = userDAO.FindUserByEmail(userDTO.getEmail()); //handle DatabaseLayerException
-            if(existingUser == null)
+            if(existingUser == null && userDAO.AddUser(userDTO))
             {
                 result.setSuccess(false);
                 result.setMessage("User with email " + userDTO.getEmail() + " already exists");
