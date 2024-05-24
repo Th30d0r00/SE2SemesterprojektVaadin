@@ -6,6 +6,10 @@ import java.sql.*;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 
 /**
@@ -16,13 +20,13 @@ public class JDBCConnection {
 
     private static JDBCConnection connection = null;
 
-    private String url = "jdbc:postgresql://dumbo.inf.h-brs.de/demouser";
+    private String url = "jdbc:postgresql://dumbo.inf.h-brs.de/ewagen2s";
 
     private Connection conn;
 
-    private String login = "demouser";
+    private String login = "ewagen2s";
 
-    private String password = "demouser";
+    private String password = "ewagen2s";
 
     public static JDBCConnection getInstance() throws DatabaseLayerException {
 
@@ -53,8 +57,8 @@ public class JDBCConnection {
 
         try {
             Properties props = new Properties();
-            props.setProperty("user", "demouser" );
-            props.setProperty("password", "demouser" );
+            props.setProperty("user", "ewagen2s" );
+            props.setProperty("password", "ewagen2s" );
 
 
             this.conn = DriverManager.getConnection(this.url, props);
@@ -101,6 +105,11 @@ public class JDBCConnection {
             Logger.getLogger(JDBCConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+
+    //unendlich rekursiv?
+    public static PreparedStatement prepareStatement(String sql) throws SQLException {
+        return connection.prepareStatement(sql);
     }
 
 

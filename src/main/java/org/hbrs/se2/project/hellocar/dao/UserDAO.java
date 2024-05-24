@@ -8,10 +8,15 @@ import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerExcepti
 import org.hbrs.se2.project.hellocar.util.AccountType;
 import org.hbrs.se2.project.hellocar.util.Globals;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
+import org.hbrs.se2.project.hellocar.dtos.UserDTO;
+import org.hbrs.se2.project.hellocar.dtos.impl.UserDTOImpl;
+import org.hbrs.se2.project.hellocar.services.db.JDBCConnection;
+import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerException;
 
 public class UserDAO {
 
@@ -149,6 +154,26 @@ public class UserDAO {
     }
 
     public boolean AddUser(UserDTO user) throws DatabaseLayerException {
-        return true;
+        boolean successfullyAddedUser;
+        //neue User einfügen
+        String sql = "INSERT INTO collahbrs.user (email, password, userid, accounttype) VALUES (?, ?, ?, ?)";
+
+        try {
+            PreparedStatement preparedStatement = JDBCConnection.getInstance().prepareStatement(sql);
+            preparedStatement.setString(1, user.getEmail());
+            preparedStatement.setString(2, user.getPassword());
+            preparedStatement.setString(3, user.getUserId());
+            preparedStatement.setString(4, user.getAccountType().toString());
+
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+            //an dieser stelle evtl. checken ob user dann auch existiert
+            successfullyAddedUser = true;
+        } catch (SQLException e) {
+            successfullyAddedUser = false;
+            throw new DatabaseLayerException("Fehler beim Registrieren des Benutzers: " + e.getMessage());
+
+        }
+        return successfullyAddedUser;
     }
 }
