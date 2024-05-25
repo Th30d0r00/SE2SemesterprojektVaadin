@@ -140,7 +140,7 @@ public class UserDAO {
                 return user;
 
             } else {
-                // Error Handling
+                // Error Handling, falls kein User gefunden wird
                 DatabaseLayerException e = new DatabaseLayerException("No User Could be found");
                 e.setReason(Globals.Errors.NOUSERFOUND);
                 throw e;
@@ -166,26 +166,29 @@ public class UserDAO {
             }
 
             // Fügt einen neuen Studenten in die Datenbank ein
-            // id noch automatisch setzen!
             if(userDTO.getStudent() != null) {
-                statement.executeUpdate("INSERT INTO collabhbrs.student (id, firstname, lastname, birthday) " +
-                        "VALUES ("
-                        + userDTO.getStudent().getId() + ", '"
-                        + userDTO.getStudent().getFirstname() + "', '"
-                        + userDTO.getStudent().getLastname() + "', '"
-                        + userDTO.getStudent().getBirthday() + "')");
+                statement.executeUpdate(
+                        "INSERT INTO collabhbrs.student (firstname, lastname, birthday) " +
+                                "VALUES ('" + userDTO.getStudent().getFirstname() + "', '" +
+                                userDTO.getStudent().getLastname() + "', '" +
+                                userDTO.getStudent().getBirthday() + "')", Statement.RETURN_GENERATED_KEYS
+                );
             }
 
+            // holt sich den automatisch generierten Primary Key des Studenten
+            ResultSet keys = statement.getGeneratedKeys();
+            keys.next();
+            int newKey = keys.getInt(1);
+
             //Füge einen neuen User in die Datenbank ein
-            statement.executeUpdate("INSERT INTO collabhbrs.users (id, userid, email, password, roles, accounttype, student_id) " +
-                    "VALUES ("
-                    + userDTO.getId() + ", '"
-                    + userDTO.getUserId() + "', '"
-                    + userDTO.getEmail() + "', '"
-                    + userDTO.getPassword() + "', '"
-                    + userDTO.getRoles() + "', '"
-                    + userDTO.getAccountType() + "', '"
-                    + userDTO.getStudent().getId() + "')");
+            statement.executeUpdate(
+                    "INSERT INTO collabhbrs.users (userid, email, password, accounttype, student_id) " +
+                            "VALUES ('" + userDTO.getUserId() + "', '" +
+                            userDTO.getEmail() + "', '" +
+                            userDTO.getPassword() + "', '" +
+                            userDTO.getAccountType() + "', " +
+                            newKey + ")"
+            );
 
             //an dieser Stelle evtl. checken ob user dann auch existiert
             successfullyAddedUser = true;

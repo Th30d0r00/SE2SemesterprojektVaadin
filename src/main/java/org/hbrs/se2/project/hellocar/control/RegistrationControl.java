@@ -33,6 +33,7 @@ public class RegistrationControl
             }
         }
         catch(DatabaseLayerException e){
+            e.printStackTrace();
             System.out.println("DatabaseLayerException");
         }
         return result;
