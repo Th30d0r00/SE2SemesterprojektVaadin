@@ -102,6 +102,7 @@ public class UserDAO {
                 e.printStackTrace();
             }
 
+            //Suche den user über seine email
             set = statement.executeQuery(
                     "SELECT * "
                             + "FROM collabhbrs.users "
@@ -154,26 +155,53 @@ public class UserDAO {
         }
     }
 
-    public boolean AddUser(UserDTO user) throws DatabaseLayerException {
-        boolean successfullyAddedUser;
-        //neue User einfügen
-        String sql = "INSERT INTO collahbrs.user (email, password, userid, accounttype) VALUES (?, ?, ?, ?)";
-
+    public boolean AddUser(UserDTO userDTO) throws DatabaseLayerException {
+        boolean successfullyAddedUser = false;
         try {
-            PreparedStatement preparedStatement = JDBCConnection.getInstance().prepareStatement(sql);
-            preparedStatement.setString(1, user.getEmail());
-            preparedStatement.setString(2, user.getPassword());
-            preparedStatement.setString(3, user.getUserId());
-            preparedStatement.setString(4, user.getAccountType().toString());
+            Statement statement = null;
+            try {
+                statement = JDBCConnection.getInstance().getStatement();
+            } catch (DatabaseLayerException e) {
+                e.printStackTrace();
+            }
 
-            preparedStatement.executeUpdate();
-            preparedStatement.close();
-            //an dieser stelle evtl. checken ob user dann auch existiert
+            // Fügt einen neuen Studenten in die Datenbank ein
+            // id noch automatisch setzen!
+            if(userDTO.getStudent() != null) {
+                statement.executeUpdate("INSERT INTO collabhbrs.student (id, firstname, lastname, birthday) " +
+                        "VALUES ("
+                        + userDTO.getStudent().getId() + ", '"
+                        + userDTO.getStudent().getFirstname() + "', '"
+                        + userDTO.getStudent().getLastname() + "', '"
+                        + userDTO.getStudent().getBirthday() + "')");
+            }
+
+            //Füge einen neuen User in die Datenbank ein
+            statement.executeUpdate("INSERT INTO collabhbrs.users (id, userid, email, password, roles, accounttype, student_id) " +
+                    "VALUES ("
+                    + userDTO.getId() + ", '"
+                    + userDTO.getUserId() + "', '"
+                    + userDTO.getEmail() + "', '"
+                    + userDTO.getPassword() + "', '"
+                    + userDTO.getRoles() + "', '"
+                    + userDTO.getAccountType() + "', '"
+                    + userDTO.getStudent().getId() + "')");
+
+            //an dieser Stelle evtl. checken ob user dann auch existiert
             successfullyAddedUser = true;
-        } catch (SQLException e) {
-            successfullyAddedUser = false;
-            throw new DatabaseLayerException("Fehler beim Registrieren des Benutzers: " + e.getMessage());
 
+        } catch (SQLException ex) {
+            DatabaseLayerException e = new DatabaseLayerException("Fehler im SQL-Befehl!");
+            e.setReason(Globals.Errors.SQLERROR);
+            throw e;
+        }
+        catch (NullPointerException ex) {
+            DatabaseLayerException e = new DatabaseLayerException("Fehler bei Datenbankverbindung!");
+            e.setReason(Globals.Errors.DATABASE);
+            throw e;
+        }
+        finally {
+                JDBCConnection.getInstance().closeConnection();
         }
         return successfullyAddedUser;
     }

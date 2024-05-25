@@ -18,7 +18,7 @@ public class RolleDTOImpl implements RolleDTO {
     @Override
     public String toString() {
         return "RolleDTOImpl{" +
-                "bezeichnung='" + bezeichnung + '\'' +
+                "bezeichnung=" + bezeichnung  +
                 '}';
     }
 }

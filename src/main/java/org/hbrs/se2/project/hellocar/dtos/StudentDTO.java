@@ -4,6 +4,10 @@ import java.time.LocalDate;
 
 public interface StudentDTO
 {
+
+    public int getId();
+    void setId(int id);
+
     public String getLastname();
 
     void setLastname(String lastname);
