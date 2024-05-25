@@ -149,7 +149,9 @@ public class UserDAO {
             DatabaseLayerException e = new DatabaseLayerException("Probleme mit der Datenbank");
             e.setReason(Globals.Errors.DATABASE);
             throw e;
-
+        } catch (DatabaseLayerException e) {
+            user = null;
+            return user;
         } finally {
             JDBCConnection.getInstance().closeConnection();
         }
@@ -173,6 +175,13 @@ public class UserDAO {
                                 userDTO.getStudent().getLastname() + "', '" +
                                 userDTO.getStudent().getBirthday() + "')", Statement.RETURN_GENERATED_KEYS
                 );
+            } else { // Fügt eine Company hinzu
+                statement.executeUpdate(
+                        "INSERT INTO collabhbrs.company (companyName, foundingDate, employees) " +
+                                "VALUES ('" + userDTO.getCompany().getCompanyName() + "', '" +
+                                userDTO.getCompany().getFoundingDate() + "', '" +
+                                userDTO.getCompany().getEmployees() + "')", Statement.RETURN_GENERATED_KEYS
+                );
             }
 
             // holt sich den automatisch generierten Primary Key des Studenten
@@ -186,7 +195,7 @@ public class UserDAO {
                             "VALUES ('" + userDTO.getUserId() + "', '" +
                             userDTO.getEmail() + "', '" +
                             userDTO.getPassword() + "', '" +
-                            userDTO.getAccountType() + "', " +
+                            userDTO.getAccountType().toString() + "', " +
                             newKey + ")"
             );
 
