@@ -10,7 +10,7 @@ import java.util.List;
 @Component
 /**
  * JPA-Repository für die Abfrage von registrierten User. Die Bezeichnung einer Methode
- * bestimmt dabei die Selektionsbedingung (den WHERE-Teil). Der Rückgabewert einer
+ *  * bestimmt dabei die Selektionsbedingung (den WHERE-Teil). Der Rückgabewert einer
  * Methode bestimmt den Projectionsbedingung (den SELECT-Teil).
  * Mehr Information über die Entwicklung von Queries in JPA:
  * https://www.baeldung.com/spring-data-jpa-projections

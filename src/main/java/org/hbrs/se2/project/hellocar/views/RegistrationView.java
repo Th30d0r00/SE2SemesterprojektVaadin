@@ -1,6 +1,7 @@
 package org.hbrs.se2.project.hellocar.views;
 
 import com.vaadin.flow.component.*;
+import com.vaadin.flow.component.textfield.PasswordField;
 import org.hbrs.se2.demo.registration.RegistrationResult;
 import org.hbrs.se2.project.hellocar.control.ManageCarControl;
 import org.hbrs.se2.project.hellocar.control.RegistrationControl;
@@ -27,6 +28,10 @@ import org.hbrs.se2.project.hellocar.dtos.impl.UserDTOImpl;
 import org.hbrs.se2.project.hellocar.util.AccountType;
 import org.hbrs.se2.project.hellocar.util.Security;
 
+import java.time.LocalDate;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 @Route(value = "registration" )
 @PageTitle("User Registration")
 @CssImport("./styles/views/entercar/enter-car-view.css")
@@ -35,7 +40,7 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
     //Formfelder & Registrierungsbutton
     private ComboBox<AccountType> accountType = new ComboBox<>("Firma/Student");
     private TextField email = new TextField("E-Mail");
-    private TextField password = new TextField("Passwort");
+    private PasswordField password = new PasswordField("Passwort");
     private TextField userId = new TextField("Nutzername");
 
     private TextField companyName = new TextField("Firmenname");
@@ -104,9 +109,6 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
                 clearForm();
 
                 //UI.getCurrent().navigate( Globals.Pages.LOGIN_VIEW );
-            }
-            else{
-                Notification.show("Junge, füll die Form halt korrekt aus.");
             }
         });
     }
@@ -194,51 +196,93 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
     private boolean CheckIfFormComplete(){
         boolean formComplete = true;
 
-        if(accountType.getValue() == null){
+        AccountType form_type = accountType.getValue();
+        String form_mail = email.getValue();
+        String form_pw = password.getValue();
+        String form_userId = userId.getValue();
+
+        if(form_type == null){
             formComplete = false;
-            return formComplete;
+            Notification.show("Bitte wählen Sie ein Kundenkonto aus (Student/Unternehmen).");
         }
-        if(email.getValue().isEmpty()){
+        if(form_mail == null){
             formComplete = false;
-            return formComplete;
+            Notification.show("Bitte geben Sie eine E-Mail Adresse an.");
         }
-        if(password.getValue().isEmpty()){
+        if(!ValidEmail(form_mail)){
             formComplete = false;
-            return formComplete;
+            Notification.show("Bitte geben Sie eine gültige E-Mail Adresse an.");
         }
-        if(userId.getValue().isEmpty()){
+        if (form_pw == null) {
             formComplete = false;
-            return formComplete;
+            Notification.show("Bitte geben Sie ein Passwort ein.");
+        }
+        if(form_pw != null && form_pw.length() < 8){
+            formComplete = false;
+            Notification.show("Ihr Passwort muss mindestens 8 Zeichen lang sein.");
+        }
+        if(form_userId == null){
+            formComplete = false;
+            Notification.show("Bitte geben Sie einen Nutzernamen an.");
+        }
+        if(form_userId != null && (form_userId.length() < 8 || form_userId.length() > 24)){
+            formComplete = false;
+            Notification.show("Ihr Nutzername muss zwischen 8 und 24 Zeichen lang sein.");
         }
 
-        if(accountType.getValue() == AccountType.STUDENT){
-            if(firstname.getValue().isEmpty()){
+        if(form_type == AccountType.STUDENT){
+            String form_firstname = firstname.getValue();
+            String form_lastname = lastname.getValue();
+            LocalDate form_birthday = birthday.getValue();
+
+            if(form_firstname == null){
                 formComplete = false;
-                return formComplete;
+                Notification.show("Bitte geben Sie einen Vornamen ein.");
             }
-            if(lastname.getValue().isEmpty()) {
+
+            if(form_firstname != null && form_firstname.length() > 64){
                 formComplete = false;
-                return formComplete;
+                Notification.show("Ihr Vorname darf nicht länger als 64 Zeichen sein.");
             }
-            if(birthday.getValue() == null){
+
+            if(form_lastname == null){
                 formComplete = false;
-                return formComplete;
+                Notification.show("Bitte geben Sie einen Nachnamen ein.");
+            }
+
+            if(form_lastname != null && form_lastname.length() > 64){
+                formComplete = false;
+                Notification.show("Ihr Nachname darf nicht länger als 64 Zeichen sein.");
+            }
+
+            //Birthdate muss mindestens 16 Jahre zurückliegen
+        }
+
+        if(form_type == AccountType.UNTERNEHMEN){
+            String form_companyName = companyName.getValue();
+            LocalDate form_foundingDate = foundingDate.getValue();
+
+            if(form_companyName == null){
+                formComplete = false;
+                Notification.show("Bitte geben Sie einen Firmennamen an.");
+            }
+
+            if(form_companyName != null && form_companyName.length() > 64){
+                formComplete = false;
+                Notification.show("Ihr Firmenname darf nicht länger als 64 Zeichen sein.");
             }
         }
-        if(accountType.getValue() == AccountType.UNTERNEHMEN){
-            if(companyName.getValue().isEmpty()){
-                formComplete = false;
-                return formComplete;
-            }
-            if(foundingDate.getValue() == null){
-                formComplete = false;
-                return formComplete;
-            }
-            if(employees.getValue().isEmpty()){
-                formComplete = false;
-                return formComplete;
-            }
-        }
+
         return formComplete;
     }
+
+    //100% not stolen from Stackoverflow
+    public boolean ValidEmail(String emailStr) {
+        Pattern VALID_EMAIL_ADDRESS_REGEX =
+                Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+
+        Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailStr);
+        return matcher.matches();
+    }
+
 }
