@@ -191,13 +191,27 @@ public class UserDAO {
 
             //Füge einen neuen User in die Datenbank ein
             statement.executeUpdate(
-                    "INSERT INTO collabhbrs.users (userid, email, password, accounttype, student_id) " +
+                    "INSERT INTO collabhbrs.users (userid, email, password, accounttype) " +
                             "VALUES ('" + userDTO.getUserId() + "', '" +
                             userDTO.getEmail() + "', '" +
                             userDTO.getPassword() + "', '" +
-                            userDTO.getAccountType().toString() + "', " +
-                            newKey + ")"
+                            userDTO.getAccountType().toString() + "')"
             );
+
+            //verbinde user mit student/company (Referenz erstellen)
+            if(userDTO.getStudent() != null) {
+                statement.executeUpdate(
+                        "UPDATE collabhbrs.users " +
+                                "SET student_id = " + newKey + " " +
+                                "WHERE email = '" + userDTO.getEmail() + "'"
+                );
+            } else {
+                statement.executeUpdate(
+                        "UPDATE collabhbrs.users " +
+                                "SET company_id = " + newKey + " " +
+                                "WHERE email = '" + userDTO.getEmail() + "'"
+                );
+            }
 
             //an dieser Stelle evtl. checken ob user dann auch existiert
             successfullyAddedUser = true;

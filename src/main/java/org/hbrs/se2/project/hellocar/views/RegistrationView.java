@@ -193,6 +193,8 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
         companyDTO.setCompanyName(companyName.getValue());
         companyDTO.setFoundingDate(foundingDate.getValue());
         companyDTO.setEmployees( Integer.parseInt(employees.getValue()));
+
+        userDTO.setCompany(companyDTO);
     }
 
     private boolean CheckIfFormComplete(){
