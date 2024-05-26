@@ -186,6 +186,7 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
 
     private void FillUserDtoAsCompany(UserDTO userDTO){
         userDTO.setEmail(email.getValue());
+        userDTO.setUserId(userId.getValue());
         userDTO.setPassword(password.getValue());
         userDTO.setAccountType(accountType.getValue());
 
