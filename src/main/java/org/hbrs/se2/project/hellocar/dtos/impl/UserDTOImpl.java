@@ -38,12 +38,12 @@ public class UserDTOImpl implements UserDTO {
 
     @Override
     public byte[] getSalt() {
-        return new byte[0];
+        return salt;
     }
 
     @Override
     public byte[] getHashValue() {
-        return new byte[0];
+        return hashValue;
     }
 
     @Override
@@ -103,12 +103,12 @@ public class UserDTOImpl implements UserDTO {
 
     @Override
     public void setSalt(byte[] salt) {
-
+        this.salt = salt;
     }
 
     @Override
     public void setHashValue(byte[] hash) {
-
+        this.hashValue = hash;
     }
 
     @Override

@@ -11,6 +11,7 @@ import com.vaadin.flow.router.RouterLink;
 import org.hbrs.se2.project.hellocar.control.LoginControl;
 import org.hbrs.se2.project.hellocar.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.hellocar.dtos.UserDTO;
+import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerException;
 import org.hbrs.se2.project.hellocar.util.Globals;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -33,11 +34,11 @@ public class MainView extends VerticalLayout {
 
             boolean isAuthenticated = false;
             try {
-                isAuthenticated = loginControl.authentificate( e.getUsername() , e.getPassword() );
+                isAuthenticated = loginControl.authenticateWithHash( e.getUsername(), e.getPassword());
 
-            } catch (DatabaseUserException databaseException) {
+            } catch (DatabaseLayerException databaseException) {
                 Dialog dialog = new Dialog();
-                dialog.add( new Text( databaseException.getReason()) );
+                dialog.add( new Text( databaseException.getMessage()) );
                 dialog.setWidth("400px");
                 dialog.setHeight("150px");
                 dialog.open();

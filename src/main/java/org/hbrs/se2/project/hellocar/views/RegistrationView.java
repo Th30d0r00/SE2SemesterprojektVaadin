@@ -169,10 +169,10 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
     }
 
     private void FillUserDtoAsStudent(UserDTO userDTO){
-        //userDTO.setSalt(Security.getSalt());
-        //userDTO.setHashValue(Security.getHash(password.getValue(), userDTO.getSalt()));
+        userDTO.setSalt(Security.getSalt());
+        userDTO.setHashValue(Security.getHash(password.getValue(), userDTO.getSalt()));
         userDTO.setEmail(email.getValue());
-        userDTO.setPassword(password.getValue());
+        //userDTO.setPassword(password.getValue());
         userDTO.setUserId(userId.getValue());
         userDTO.setAccountType(accountType.getValue());
 
@@ -185,9 +185,11 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
     }
 
     private void FillUserDtoAsCompany(UserDTO userDTO){
+        userDTO.setSalt(Security.getSalt());
+        userDTO.setHashValue(Security.getHash(password.getValue(), userDTO.getSalt()));
         userDTO.setEmail(email.getValue());
+        //userDTO.setPassword(password.getValue());
         userDTO.setUserId(userId.getValue());
-        userDTO.setPassword(password.getValue());
         userDTO.setAccountType(accountType.getValue());
 
         CompanyDTO companyDTO = new CompanyDTOImpl();

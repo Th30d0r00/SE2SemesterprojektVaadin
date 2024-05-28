@@ -17,6 +17,7 @@ import org.hbrs.se2.project.hellocar.dtos.UserDTO;
 import org.hbrs.se2.project.hellocar.dtos.impl.UserDTOImpl;
 import org.hbrs.se2.project.hellocar.services.db.JDBCConnection;
 import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerException;
+import org.postgresql.util.PGbytea;
 
 public class UserDAO {
 
@@ -127,7 +128,9 @@ public class UserDAO {
                 user.setId( set.getInt("id"));
                 user.setUserId(set.getString("userid"));
                 user.setEmail( set.getString("email") );
-                user.setPassword( set.getString("password"));
+                user.setSalt(set.getBytes("salt"));
+                user.setHashValue(set.getBytes("hashvalue"));
+                // user.setPassword( set.getString("password"));
                 user.setAccountType(AccountType.valueOf(set.getString("accounttype")));
 
                 // Beziehe die Rollen eines Users:
@@ -189,14 +192,22 @@ public class UserDAO {
             keys.next();
             int newKey = keys.getInt(1);
 
+
+            // Konvertiere Byte-Array in PostgreSQL-Bytea-Format
+            String salt = PGbytea.toPGString(userDTO.getSalt());
+            String hashValue = PGbytea.toPGString(userDTO.getHashValue());
+
+
             //Füge einen neuen User in die Datenbank ein
-            statement.executeUpdate(
-                    "INSERT INTO collabhbrs.users (userid, email, password, accounttype) " +
-                            "VALUES ('" + userDTO.getUserId() + "', '" +
-                            userDTO.getEmail() + "', '" +
-                            userDTO.getPassword() + "', '" +
-                            userDTO.getAccountType().toString() + "')"
-            );
+            String query = "INSERT INTO collabhbrs.users (userid, email, salt, hashvalue, accounttype) " +
+                    "VALUES ('" + userDTO.getUserId() + "', '" +
+                    userDTO.getEmail() + "', " +
+                    "'" + salt + "', " +
+                    "'" + hashValue + "', '" +
+                    userDTO.getAccountType().toString() + "')";
+
+            statement.executeUpdate(query);
+
 
             //verbinde user mit student/company (Referenz erstellen)
             if(userDTO.getStudent() != null) {

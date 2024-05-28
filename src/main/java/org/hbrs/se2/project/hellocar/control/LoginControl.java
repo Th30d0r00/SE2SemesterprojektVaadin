@@ -43,18 +43,14 @@ public class LoginControl {
     public boolean authenticateWithHash(String email, String password) throws DatabaseLayerException {
         try {
             UserDTO tmpUser = this.getUserWithJDBC(email);
+            if(Security.testHash((password), tmpUser.getSalt(), tmpUser.getHashValue())){
+                return true;
+            }
         } catch (DatabaseUserException e) {
             throw new RuntimeException(e);
         }
         // Könnte auch Mathode findUserByUserID verwenden
 
-        /*
-        if(security.testHash((password), tmpUser.getSalt(), tmpUser.getHashvalue()){
-            return true;
-        } else {
-            return false;
-        }
-        */
         return false;
     }
 
@@ -65,12 +61,12 @@ public class LoginControl {
      * @throws DatabaseUserException
      * Julian N
      */
-    private UserDTO getUserWithJDBC( String email) throws DatabaseUserException {
+    public UserDTO getUserWithJDBC( String email) throws DatabaseUserException {
         UserDTO userTmp = null;
         UserDAO dao = new UserDAO();
 
         try {
-            userDTO = dao.FindUserByEmail(email); //Handling der DatabaseLayerException
+            userTmp = dao.FindUserByEmail(email); //Handling der DatabaseLayerException
         }
         catch (DatabaseLayerException e){
             String error = e.getMessage();
@@ -98,7 +94,7 @@ public class LoginControl {
             }
 
         }*/
-        return userDTO;
+        return userTmp;
 
     }
 
