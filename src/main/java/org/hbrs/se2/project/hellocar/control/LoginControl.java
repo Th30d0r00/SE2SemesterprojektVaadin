@@ -50,7 +50,6 @@ public class LoginControl {
         } catch (DatabaseUserException e) {
             throw new RuntimeException(e);
         }
-        // Könnte auch Mathode findUserByUserID verwenden
 
         return false;
     }

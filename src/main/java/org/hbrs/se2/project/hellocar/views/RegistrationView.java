@@ -26,6 +26,7 @@ import org.hbrs.se2.project.hellocar.dtos.impl.CompanyDTOImpl;
 import org.hbrs.se2.project.hellocar.dtos.impl.StudentDTOImpl;
 import org.hbrs.se2.project.hellocar.dtos.impl.UserDTOImpl;
 import org.hbrs.se2.project.hellocar.util.AccountType;
+import org.hbrs.se2.project.hellocar.util.Globals;
 import org.hbrs.se2.project.hellocar.util.Security;
 
 import java.time.LocalDate;
@@ -292,4 +293,9 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
         return matcher.matches();
     }
 
+    private void navigateToMainPage() {
+        //Hier Landing Page einfügen
+        UI.getCurrent().navigate(Globals.Pages.SHOW_CARS);
+
+    }
 }
