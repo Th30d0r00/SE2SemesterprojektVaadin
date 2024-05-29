@@ -44,6 +44,7 @@ public class LoginControl {
         try {
             UserDTO tmpUser = this.getUserWithJDBC(email);
             if(Security.testHash((password), tmpUser.getSalt(), tmpUser.getHashValue())){
+                this.userDTO = tmpUser;
                 return true;
             }
         } catch (DatabaseUserException e) {
