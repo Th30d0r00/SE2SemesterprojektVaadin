@@ -1,5 +1,8 @@
 package org.hbrs.se2.project.hellocar.control;
 
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.router.NavigationTrigger;
 import org.hbrs.se2.project.hellocar.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.hellocar.dao.UserDAO;
 import org.hbrs.se2.project.hellocar.dtos.UserDTO;
@@ -19,6 +22,7 @@ public class LoginControl {
 
     private UserDTO userDTO = null;
 
+    /*
     public boolean authentificate(String username, String password ) throws DatabaseUserException {
         // Standard: User wird mit Spring JPA ausgelesen (Was sind die Vorteile?)
         // UserDTO tmpUser = this.getUserWithJPA( username , password );
@@ -33,7 +37,7 @@ public class LoginControl {
         this.userDTO = tmpUser;
         return true;
     }
-
+    */
     /**
      * Vergleicht Hash des eingegebenen Passworts mit dem Passwort-Hash in der Datenbank
      * Dazu muss vom UserDTO der Salt und Hashwert aus der DB geliefert werden
@@ -43,14 +47,18 @@ public class LoginControl {
     public boolean authenticateWithHash(String email, String password) throws DatabaseLayerException {
         try {
             UserDTO tmpUser = this.getUserWithJDBC(email);
-            if(Security.testHash((password), tmpUser.getSalt(), tmpUser.getHashValue())){
-                this.userDTO = tmpUser;
-                return true;
+            if (tmpUser != null) {
+                if(Security.testHash((password), tmpUser.getSalt(), tmpUser.getHashValue())){
+                    this.userDTO = tmpUser;
+                    return true;
+                }
+            }
+            else{
+                Notification.show("Falsche Kombination aus E-Mail und Passwort");
             }
         } catch (DatabaseUserException e) {
             throw new RuntimeException(e);
         }
-
         return false;
     }
 
@@ -133,6 +141,7 @@ public class LoginControl {
         return userDTO;
     }
 
+    /*
     private UserDTO getUserWithJPA( String username , String password ) throws DatabaseUserException {
         UserDTO userTmp;
         try {
@@ -143,5 +152,5 @@ public class LoginControl {
         }
         return userTmp;
     }
-
+    */
 }
