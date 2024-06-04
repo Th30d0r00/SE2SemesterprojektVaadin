@@ -19,6 +19,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
+import static org.hibernate.validator.internal.util.Contracts.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
@@ -34,13 +36,13 @@ class HellocarApplicationTests {
 
     @Autowired
     private CarRepository carRepository;
-    /*
+
     @Test
     void testRolesOfUser() {
         Optional<User> wrapper = userRepository.findById(1);
         if ( wrapper.isPresent() ) {
             User user = wrapper.get();
-            System.out.println("User: " + user.getLastName());
+            System.out.println("User: " + user.getEmail());
             List<Rolle> list = user.getRoles();
             assertEquals(2 , list.size() , "Anzahl der Rollen");
             Rolle rolle1 = list.get(0);
@@ -48,6 +50,7 @@ class HellocarApplicationTests {
         }
     }
 
+    /*
     @Test
     void testUserDTOByAttribute() {
         UserDTO personDTO = userRepository.getUserByOccupation("Professor").get(0);
@@ -66,8 +69,8 @@ class HellocarApplicationTests {
     @Test
     void testUserDTOAndItsRoles() {
         UserDTO userDTO = userRepository.findUserByUseridAndPassword("sascha" , "abc");
-        System.out.println(userDTO.getFirstName());
-        assertEquals("Sascha", userDTO.getFirstName());
+        System.out.println(userDTO.getUserId());
+        assertEquals("Sascha", userDTO.getUserId());
         List<RolleDTO> list = userDTO.getRoles();
         System.out.println(list.size());
         assertEquals(2 , list.size());
@@ -82,6 +85,7 @@ class HellocarApplicationTests {
         }
     }
 
+     */
     @Test
     void testRoleRepository() {
         List<Rolle> list = roleRepository.findAll();
@@ -95,6 +99,7 @@ class HellocarApplicationTests {
         assertArrayEquals( soll , ist );
     }
 
+    /*
     @Test
     void testFindCarsAndTheirUsers() {
         List<Object[]> list = this.carRepository.findAllCarsAndTheirUsers();
@@ -105,7 +110,18 @@ class HellocarApplicationTests {
             System.out.println("First Name: " + item[3] );
             System.out.println("Last Name: " + item[4] );
         }
+
         // Todo: Definition von passenden Assertions
+        assertNotNull(list);
+        assertTrue(list.size() > 0, "The list should contain car and user data");
+        for (Object[] item : list) {
+            assertEquals(5, item.length, "Each array should contain exactly 5 elements");
+            assertNotNull(item[0], "Brand should not be null");
+            assertNotNull(item[1], "Model should not be null");
+            assertNotNull(item[2], "Price should not be null");
+            assertNotNull(item[3], "First Name should not be null");
+            assertNotNull(item[4], "Last Name should not be null");
+        }
     }
 
     @Test
@@ -117,9 +133,20 @@ class HellocarApplicationTests {
             System.out.println("Price: " + item.getPrice() );
             System.out.println("Phone: " + item.getPhone() );
         }
+
         // Todo: Definition von passenden Assertions
+        assertNotNull(list);
+        assertTrue(list.size() > 0, "The list should contain cars with non-null dates");
+        for (CarDTO item : list) {
+            assertNotNull(item.getBrand(), "Brand should not be null");
+            assertNotNull(item.getModel(), "Model should not be null");
+            assertNotNull(item.getPrice(), "Price should not be null");
+            assertNotNull(item.getPhone(), "Phone should not be null");
+        }
     }
 
+
+     */
     @Test
     void testFindUserWithJDBC() {
         UserDAO userDAO = new UserDAO();
@@ -127,11 +154,10 @@ class HellocarApplicationTests {
             UserDTO userDTO = userDAO.findUserByUseridAndPassword("sascha" , "abc");
             System.out.println(userDTO.toString());
 
-            assertEquals("Sascha", userDTO.getFirstName());
+            assertEquals("Sascha", userDTO.getUserId());
         } catch (DatabaseLayerException e) {
             e.printStackTrace();
         }
 
     }
-    */
 }
