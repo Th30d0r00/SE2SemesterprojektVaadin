@@ -30,6 +30,7 @@ public class MainView extends VerticalLayout {
         setSizeFull();
         LoginForm component = new LoginForm();
 
+
         component.addLoginListener(e -> {
 
             boolean isAuthenticated = false;
@@ -48,7 +49,7 @@ public class MainView extends VerticalLayout {
                 navigateToMainPage();
 
             } else {
-                // Kann noch optimiert werden
+                // Kann noch optimiert werden -> falsche Anmeldedaten Fehlermeldung
                 component.setError(true);
             }
         });

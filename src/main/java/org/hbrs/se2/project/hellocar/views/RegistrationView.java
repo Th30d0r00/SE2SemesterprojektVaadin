@@ -293,6 +293,11 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
         return matcher.matches();
     }
 
+    // Soll mit dem Klick auf "register" den neu angelegten User direkt einloggen
+    // Dafür wird navigateToMainPage() verwendet
+    private void loginUserAfterReg() {
+
+    }
     private void navigateToMainPage(){
         //Hier Landing Page einfügen
         UI.getCurrent().navigate(Globals.Pages.SHOW_CARS);
