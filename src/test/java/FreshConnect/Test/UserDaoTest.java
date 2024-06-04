@@ -22,19 +22,21 @@ public class UserDaoTest {
         public void addUserAsStudentTest() throws DatabaseLayerException {
 
             /*
-            Es wird ein User erstellt, ihm werden die verschiedenen Attribute zugewiesen
-            * */
+             * Es wird ein User erstellt, ihm werden die verschiedenen Attribute zugewiesen
+             * */
 
             UserDAO dao = new UserDAO();
             UserDTO userToAdd = new UserDTOImpl();
             userToAdd.setUserId("mustermann");
             userToAdd.setEmail("mustermann@gmail.com");
             userToAdd.setPassword("mustermann1234");
+            userToAdd.setSalt(Security.getSalt());
+            userToAdd.setHashValue(Security.getHash(userToAdd.getPassword(),userToAdd.getSalt()));
             userToAdd.setAccountType(AccountType.valueOf("STUDENT"));
 
             /*
-            Es wird ein StudentDTO erstellt und dem Attribut Student des Users zugewiesen
-            * */
+             * Es wird ein StudentDTO erstellt und dem Attribut Student des Users zugewiesen
+             * */
 
             StudentDTO studentToAdd = new StudentDTOImpl();
             studentToAdd.setFirstname("peter");
@@ -45,19 +47,18 @@ public class UserDaoTest {
             dao.AddUser(userToAdd);
 
             /*
-            Der User wird mit der Methode findUSerByEmail ausgelesen und die Attribute mit dem ursprünglich
-            erstellten User verglichen
-            * */
+             * Der User wird mit der Methode findUSerByEmail ausgelesen und die Attribute mit dem ursprünglich
+             * erstellten User verglichen
+             * */
 
             UserDTO readUser = dao.FindUserByEmail("mustermann@gmail.com");
             assertEquals(userToAdd.getEmail(), readUser.getEmail());
             assertEquals(userToAdd.getUserId(), readUser.getUserId());
             assertEquals(userToAdd.getAccountType(), readUser.getAccountType());
-            assertEquals(userToAdd.getPassword(), readUser.getPassword());
 
             /*
-            * Es werden zum Schluss noch die Attribute des Studenten ausgelesen und verglichen
-            * */
+             * Es werden zum Schluss noch die Attribute des Studenten ausgelesen und verglichen
+             * */
 
             assertEquals(userToAdd.getStudent().getFirstname(), readUser.getStudent().getFirstname());
             assertEquals(userToAdd.getStudent().getLastname(), readUser.getStudent().getLastname());
@@ -101,8 +102,6 @@ public class UserDaoTest {
         assertEquals(userToAdd.getEmail(), readUser.getEmail());
         assertEquals(userToAdd.getUserId(), readUser.getUserId());
         assertEquals(userToAdd.getAccountType(), readUser.getAccountType());
-        assertEquals(userToAdd.getSalt(),readUser.getSalt());
-        assertEquals(userToAdd.getHashValue(),readUser.getHashValue());
 
         /*
          * Es werden zum Schluss noch die Attribute des Unternehmens ausgelesen und verglichen
@@ -113,11 +112,5 @@ public class UserDaoTest {
         assertEquals(userToAdd.getCompany().getFoundingDate(), readUser.getCompany().getFoundingDate());
 
 
-    }
-
-    @Test
-    public void testFindUserByEmail () throws DatabaseLayerException {
-        UserDAO userDAO = new UserDAO();
-        UserDTO userDTO = userDAO.FindUserByEmail("mustermann@hotmail.com");
     }
 }

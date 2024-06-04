@@ -1,7 +1,8 @@
 package org.hbrs.se2.project.hellocar.dao;
 
-import org.hbrs.se2.project.hellocar.dtos.RolleDTO;
-import org.hbrs.se2.project.hellocar.dtos.UserDTO;
+import org.hbrs.se2.project.hellocar.dtos.*;
+import org.hbrs.se2.project.hellocar.dtos.impl.CompanyDTOImpl;
+import org.hbrs.se2.project.hellocar.dtos.impl.StudentDTOImpl;
 import org.hbrs.se2.project.hellocar.dtos.impl.UserDTOImpl;
 import org.hbrs.se2.project.hellocar.services.db.JDBCConnection;
 import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerException;
@@ -13,6 +14,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
+import java.util.Objects;
+
 import org.hbrs.se2.project.hellocar.dtos.UserDTO;
 import org.hbrs.se2.project.hellocar.dtos.impl.UserDTOImpl;
 import org.hbrs.se2.project.hellocar.services.db.JDBCConnection;
@@ -91,12 +94,16 @@ public class UserDAO {
 
     public UserDTO FindUserByEmail(String email) throws DatabaseLayerException {
         UserDTO user = new UserDTOImpl();
+        StudentDTO student = new StudentDTOImpl();
+        CompanyDTO company = new CompanyDTOImpl();
+        Statement statement = null;
+
         // Set ResultSet to null;
-        ResultSet set = null;
+        ResultSet set;
+        ResultSet set2;
 
         // Set try-clause
         try {
-            Statement statement = null;
             try {
                 statement = JDBCConnection.getInstance().getStatement();
             } catch (DatabaseLayerException e) {
@@ -109,7 +116,6 @@ public class UserDAO {
                             + "FROM collabhbrs.users "
                             + "WHERE collabhbrs.users.email = \'" + email + "\'");
 
-            // JDBCConnection.getInstance().closeConnection();
 
         } catch (SQLException ex) {
             DatabaseLayerException e = new DatabaseLayerException("Fehler im SQL-Befehl!");
@@ -124,14 +130,15 @@ public class UserDAO {
 
         try {
             if (set.next()) {
-                // Durchführung des Object-Relational-Mapping (ORM)
+                // Durchführung des Object-Relational-Mapping (ORM) für user
                 user.setId( set.getInt("id"));
                 user.setUserId(set.getString("userid"));
                 user.setEmail( set.getString("email") );
                 user.setSalt(set.getBytes("salt"));
                 user.setHashValue(set.getBytes("hashvalue"));
-                // user.setPassword( set.getString("password"));
                 user.setAccountType(AccountType.valueOf(set.getString("accounttype")));
+                int studentId = set.getInt("student_id");
+                int companyId = set.getInt("company_id");
 
                 // Beziehe die Rollen eines Users:
                 RolleDAO rolleDAO = new RolleDAO();
@@ -139,6 +146,34 @@ public class UserDAO {
 
                 // Einsetzen der Rollen in ein User-Object
                 user.setRoles(rollen);
+
+                //prüfen ob der User ein Student oder eine Company ist und dementsprechend die Attribute einfügen
+
+                if (user.getAccountType().name().equals("STUDENT")) {
+                    set2 = statement.executeQuery(
+                            "SELECT * "
+                                    + "FROM collabhbrs.student "
+                                    + "WHERE collabhbrs.student.id = \'" + studentId + "\'");
+
+                    if(set2.next()) {
+                        student.setFirstname(set2.getString("firstname"));
+                        student.setLastname(set2.getString("lastname"));
+                        student.setBirthday(set2.getDate("birthday").toLocalDate());
+                        user.setStudent(student);
+                    }
+                } else {
+                    set2 = statement.executeQuery(
+                            "SELECT * "
+                                    + "FROM collabhbrs.company "
+                                    + "WHERE collabhbrs.company.id = \'" + companyId + "\'");
+
+                    if(set2.next()) {
+                        company.setCompanyName(set2.getString("companyname"));
+                        company.setEmployees(set2.getInt("employees"));
+                        company.setFoundingDate(set2.getDate("foundingdate").toLocalDate());
+                        user.setCompany(company);
+                    }
+                }
 
                 return user;
 
