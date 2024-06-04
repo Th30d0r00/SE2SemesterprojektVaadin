@@ -4,6 +4,7 @@ import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.login.LoginForm;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
@@ -49,7 +50,6 @@ public class MainView extends VerticalLayout {
                 navigateToMainPage();
 
             } else {
-                // Kann noch optimiert werden -> falsche Anmeldedaten Fehlermeldung
                 component.setError(true);
             }
         });
@@ -71,6 +71,5 @@ public class MainView extends VerticalLayout {
         // die ein Benutzer besitzt
         // Hier landing Page einfügen
         UI.getCurrent().navigate(Globals.Pages.SHOW_CARS);
-
     }
 }
