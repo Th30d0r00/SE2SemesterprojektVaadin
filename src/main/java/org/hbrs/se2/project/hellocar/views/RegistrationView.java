@@ -39,20 +39,20 @@ import java.util.regex.Pattern;
 public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Vererbung)
 
     //Formfelder & Registrierungsbutton
-    private ComboBox<AccountType> accountType = new ComboBox<>("Firma/Student");
-    private TextField email = new TextField("E-Mail");
-    private PasswordField password = new PasswordField("Passwort");
-    private TextField userId = new TextField("Nutzername");
+    ComboBox<AccountType> accountType = new ComboBox<>("Firma/Student");
+    TextField email = new TextField("E-Mail");
+    PasswordField password = new PasswordField("Passwort");
+    TextField userId = new TextField("Nutzername");
 
-    private TextField companyName = new TextField("Firmenname");
-    private DatePicker foundingDate = new DatePicker("Gründungsdatum");
-    private TextField employees = new TextField("Anzahl Mitarbeiter");
+    TextField companyName = new TextField("Firmenname");
+    DatePicker foundingDate = new DatePicker("Gründungsdatum");
+    TextField employees = new TextField("Anzahl Mitarbeiter");
 
-    private TextField firstname = new TextField("Vorname");
-    private TextField lastname = new TextField("Nachname");
-    private DatePicker birthday = new DatePicker("Geburtsdatum");
+    TextField firstname = new TextField("Vorname");
+    TextField lastname = new TextField("Nachname");
+    DatePicker birthday = new DatePicker("Geburtsdatum");
 
-    private Button register = new Button("Register");
+    Button register = new Button("Register");
 
     private Binder<UserDTOImpl> binder = new Binder(UserDTOImpl.class);
 
@@ -201,7 +201,7 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
         userDTO.setCompany(companyDTO);
     }
 
-    private boolean CheckIfFormComplete(){
+    boolean CheckIfFormComplete(){
         boolean formComplete = true;
 
         AccountType form_type = accountType.getValue();
