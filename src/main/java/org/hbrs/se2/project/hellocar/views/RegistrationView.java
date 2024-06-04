@@ -293,7 +293,7 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
         return matcher.matches();
     }
 
-    private void navigateToMainPage() {
+    private void navigateToMainPage(){
         //Hier Landing Page einfügen
         UI.getCurrent().navigate(Globals.Pages.SHOW_CARS);
 
