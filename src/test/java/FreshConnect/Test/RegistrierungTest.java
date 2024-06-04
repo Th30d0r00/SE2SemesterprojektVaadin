@@ -137,3 +137,4 @@ public class RegistrierungTest {
         assertFalse(result, "Form sollte unvollständig sein aufgrund zu kurzem Benutzernamen");
     }
 }
+*/
