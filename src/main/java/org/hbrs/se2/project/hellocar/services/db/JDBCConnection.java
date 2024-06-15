@@ -107,10 +107,6 @@ public class JDBCConnection {
 
     }
 
-    //unendlich rekursiv?
-    public static PreparedStatement prepareStatement(String sql) throws SQLException {
-        return connection.prepareStatement(sql);
-    }
 
 
 }

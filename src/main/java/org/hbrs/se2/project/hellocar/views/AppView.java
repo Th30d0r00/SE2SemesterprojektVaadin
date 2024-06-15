@@ -52,6 +52,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
     }
 
     public void setUpUI() {
+
         // Anzeige des Toggles über den Drawer
         setPrimarySection(Section.DRAWER);
 
@@ -199,6 +200,14 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
         // Falls der Benutzer nicht eingeloggt ist, dann wird er auf die Startseite gelenkt
         if ( !checkIfUserIsLoggedIn() ) return;
 
+        if (getCurrentUser() != null) {
+            setUpUI();
+        } else {
+            // Hier können Sie eine Fehlerbehandlung oder Weiterleitung hinzufügen,
+            // wenn der Benutzer nicht authentifiziert ist
+            System.out.println("LOG: In Constructor of App View - No User given!");
+        }
+
         // Der aktuell-selektierte Tab wird gehighlighted.
         getTabForComponent(getContent()).ifPresent(menu::setSelectedTab);
 
@@ -221,7 +230,8 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
     }
 
     private String getCurrentNameOfUser() {
-        return getCurrentUser().getStudent().getFirstname();
+        UserDTO currentUser = getCurrentUser();
+        return currentUser.getStudent().getFirstname();
     }
 
     private UserDTO getCurrentUser() {

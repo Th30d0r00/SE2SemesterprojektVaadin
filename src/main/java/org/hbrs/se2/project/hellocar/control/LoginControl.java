@@ -13,9 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.hbrs.se2.project.hellocar.util.Security;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 
 @Component
 public class LoginControl {
@@ -49,10 +46,6 @@ public class LoginControl {
      */
     public boolean authenticateWithHash(String email, String password) throws DatabaseLayerException {
         try {
-            if (!ValidEmail(email)) {
-                Notification.show("Bitte geben Sie eine gültige E-Mail-Adresse ein.");
-                return false;
-            }
             UserDTO tmpUser = this.getUserWithJDBC(email);
             if (tmpUser != null) {
                 if(Security.testHash((password), tmpUser.getSalt(), tmpUser.getHashValue())){
@@ -61,7 +54,7 @@ public class LoginControl {
                 }
             }
             else{
-                Notification.show("Ihre E-Mail-Adresse oder Passwort ist falsch.");
+                Notification.show("Falsche Kombination aus E-Mail und Passwort");
             }
         } catch (DatabaseUserException e) {
             throw new RuntimeException(e);
@@ -147,11 +140,17 @@ public class LoginControl {
         }
         return userDTO;
     }
-    public boolean ValidEmail(String emailStr) {
-        Pattern VALID_EMAIL_ADDRESS_REGEX =
-                Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 
-        Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailStr);
-        return matcher.matches();
+    /*
+    private UserDTO getUserWithJPA( String username , String password ) throws DatabaseUserException {
+        UserDTO userTmp;
+        try {
+            userTmp = repository.findUserByUseridAndPassword(username, password);
+        } catch ( org.springframework.dao.DataAccessResourceFailureException e ) {
+            // Analyse und Umwandlung der technischen Errors in 'lesbaren' Darstellungen (ToDo!)
+           throw new DatabaseUserException("A failure occured while trying to connect to database with JPA");
+        }
+        return userTmp;
     }
+    */
 }
