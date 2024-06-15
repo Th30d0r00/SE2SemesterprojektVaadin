@@ -6,7 +6,7 @@ public class Globals {
     public static String CURRENT_USER = "current_User";
 
     public static class Pages {
-        public static final String SHOW_CARS = "main";
+        public static final String SHOW_CARS = "show";
         public static final String ENTER_CAR = "enter";
 
         public static final String LOGIN_VIEW = "login";

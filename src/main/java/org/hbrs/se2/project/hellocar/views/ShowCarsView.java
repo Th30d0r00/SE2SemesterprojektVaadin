@@ -32,7 +32,7 @@ import java.util.List;
  *
  */
 @Route(value = Globals.Pages.SHOW_CARS, layout = AppView.class)
-@PageTitle("Show Cars")
+@PageTitle(value = "Show Cars")
 @CssImport("./styles/views/showcars/show-cars-view.css")
 public class ShowCarsView extends Div  {
 
