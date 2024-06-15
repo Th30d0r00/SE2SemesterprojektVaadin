@@ -10,9 +10,9 @@
     <version>3.1.0</version>
   </parent>
   <groupId>org.hbrs.se2.project</groupId>
-  <artifactId>hellocarapp</artifactId> <!-- Place your team name here! -->
-  <version>0.0.1-SNAPSHOT</version>
-  <name>hellocar</name>
+  <artifactId>fresh_connect</artifactId> <!-- Place your team name here! -->
+  <version>1.0-SNAPSHOT</version>
+  <name>fresh_connect</name>
   <description>Demo project for SE-2</description>
   <packaging>war</packaging>
 

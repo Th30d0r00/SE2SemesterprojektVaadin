@@ -1,4 +1,4 @@
-package org.hbrs.se2.demo.registration;
+/*package org.hbrs.se2.demo.registration;
 
 public class RegistrationControl {
 	
@@ -20,3 +20,4 @@ public class RegistrationControl {
 	}
 
 }
+*/

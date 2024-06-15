@@ -46,7 +46,7 @@ class HellocarApplicationTests {
             List<Rolle> list = user.getRoles();
             assertEquals(2 , list.size() , "Anzahl der Rollen");
             Rolle rolle1 = list.get(0);
-            assertEquals("admin" , rolle1.getBezeichhnung() );
+            assertEquals("admin" , rolle1.getBezeichhnung());
         }
     }
 
