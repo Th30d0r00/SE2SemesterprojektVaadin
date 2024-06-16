@@ -76,4 +76,3 @@ public class Anzeige {
                 später ausgestellt werden könnte!*/
     }
 }
-

@@ -12,17 +12,17 @@ public interface AnzeigeDTO {
     LocalDateTime getPublicationDate();
     String getJobDescription();
 
-     void setID(int id);
+    void setID(int id);
 
-     void setCompanyName(String companyName);
+    void setCompanyName(String companyName);
 
-     void setJobTitle(String jobTitle);
+    void setJobTitle(String jobTitle);
 
-     void setJobType(String jobType);
+    void setJobType(String jobType);
 
-     void setStandort(String standort);
+    void setStandort(String standort);
 
-     void setPublicationDate(LocalDateTime publicationDate);
+    void setPublicationDate(LocalDateTime publicationDate);
 
-     void setJobDescribtion(String JobDescribtion);
+    void setJobDescribtion(String JobDescribtion);
 }

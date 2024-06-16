@@ -1,5 +1,6 @@
 package org.hbrs.se2.project.hellocar.dao;
 
+import org.hbrs.se2.project.hellocar.dtos.AnzeigeDTO;
 import org.hbrs.se2.project.hellocar.entities.Anzeige;
 import org.hbrs.se2.project.hellocar.services.db.JDBCConnection;
 import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerException;
@@ -10,23 +11,23 @@ import java.util.List;
 
 public class AnzeigeDAO {
 
-    public boolean addAnzeige(Anzeige anzeige) throws DatabaseLayerException {
+    public boolean addAnzeige(AnzeigeDTO anzeigeDTO) throws DatabaseLayerException {
         try {
             Statement statement = JDBCConnection.getInstance().getStatement();
 
             String query = "INSERT INTO collahbrs.anzeige (titel, unternehmen, jobart, standort, veröffentlichung, stellenbeschreibung) " +
-                    "VALUES ('" + anzeige.getJobTitle() + "', '" +
-                    anzeige.getCompanyName() + "', '" +
-                    anzeige.getJobType() + "', '" +
-                    anzeige.getStandort() + "', '" +
-                    Timestamp.valueOf(anzeige.getPublicationDate()) + "', '" +
-                    anzeige.getJobDescription() + "')";
+                    "VALUES ('" + anzeigeDTO.getJobTitle() + "', '" +
+                    anzeigeDTO.getCompanyName() + "', '" +
+                    anzeigeDTO.getJobType() + "', '" +
+                    anzeigeDTO.getStandort() + "', '" +
+                    Timestamp.valueOf(anzeigeDTO.getPublicationDate()) + "', '" +
+                    anzeigeDTO.getJobDescription() + "')";
 
             int result = statement.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
             if (result > 0) {
                 ResultSet keys = statement.getGeneratedKeys();
                 if (keys.next()) {
-                    anzeige.setID(keys.getInt(1));
+                    anzeigeDTO.setID(keys.getInt(1));
                     return true;
                 }
             }
