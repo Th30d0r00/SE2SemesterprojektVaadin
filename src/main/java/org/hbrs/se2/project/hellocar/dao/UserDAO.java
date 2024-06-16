@@ -93,188 +93,150 @@ public class UserDAO {
     }
 
     public UserDTO FindUserByEmail(String email) throws DatabaseLayerException {
-        UserDTO user = new UserDTOImpl();
-        StudentDTO student = new StudentDTOImpl();
-        CompanyDTO company = new CompanyDTOImpl();
+        UserDTO user = null;
         Statement statement = null;
-
-        // Set ResultSet to null;
-        ResultSet set;
-        ResultSet set2;
-
-        // Set try-clause
-        try {
-            try {
-                statement = JDBCConnection.getInstance().getStatement();
-            } catch (DatabaseLayerException e) {
-                e.printStackTrace();
-            }
-
-            //Suche den user über seine email
-            set = statement.executeQuery(
-                    "SELECT * "
-                            + "FROM collabhbrs.users "
-                            + "WHERE collabhbrs.users.email = \'" + email + "\'");
-
-
-        } catch (SQLException ex) {
-            DatabaseLayerException e = new DatabaseLayerException("Fehler im SQL-Befehl!");
-            e.setReason(Globals.Errors.SQLERROR);
-            throw e;
-        }
-        catch (NullPointerException ex) {
-            DatabaseLayerException e = new DatabaseLayerException("Fehler bei Datenbankverbindung!");
-            e.setReason(Globals.Errors.DATABASE);
-            throw e;
-        }
+        ResultSet set = null;
+        ResultSet set2 = null;
 
         try {
+            statement = JDBCConnection.getInstance().getStatement();
+
+            // Suche den User über seine Email
+            String userQuery = "SELECT * FROM collabhbrs.users WHERE email = '" + email + "'";
+            set = statement.executeQuery(userQuery);
+
             if (set.next()) {
                 // Durchführung des Object-Relational-Mapping (ORM) für user
-                user.setId( set.getInt("id"));
+                user = new UserDTOImpl();
+                user.setId(set.getInt("id"));
                 user.setUserId(set.getString("userid"));
-                user.setEmail( set.getString("email") );
+                user.setEmail(set.getString("email"));
                 user.setSalt(set.getBytes("salt"));
                 user.setHashValue(set.getBytes("hashvalue"));
                 user.setAccountType(AccountType.valueOf(set.getString("accounttype")));
-                int studentId = set.getInt("student_id");
-                int companyId = set.getInt("company_id");
 
-                // Beziehe die Rollen eines Users:
+                // Beziehe die Rollen eines Users
                 RolleDAO rolleDAO = new RolleDAO();
                 List<RolleDTO> rollen = rolleDAO.getRolesOfUser(user);
-
-                // Einsetzen der Rollen in ein User-Object
                 user.setRoles(rollen);
 
-                //prüfen ob der User ein Student oder eine Company ist und dementsprechend die Attribute einfügen
+                // Prüfen, ob der User ein Student oder eine Company ist und dementsprechend die Attribute einfügen
+                if (user.getAccountType() == AccountType.STUDENT) {
+                    String studentQuery = "SELECT * FROM collabhbrs.student WHERE id = " + user.getId();
+                    set2 = statement.executeQuery(studentQuery);
 
-                if (user.getAccountType().name().equals("STUDENT")) {
-                    set2 = statement.executeQuery(
-                            "SELECT * "
-                                    + "FROM collabhbrs.student "
-                                    + "WHERE collabhbrs.student.id = \'" + studentId + "\'");
-
-                    if(set2.next()) {
+                    if (set2.next()) {
+                        StudentDTO student = new StudentDTOImpl();
                         student.setFirstname(set2.getString("firstname"));
                         student.setLastname(set2.getString("lastname"));
                         student.setBirthday(set2.getDate("birthday").toLocalDate());
                         user.setStudent(student);
                     }
                 } else {
-                    set2 = statement.executeQuery(
-                            "SELECT * "
-                                    + "FROM collabhbrs.company "
-                                    + "WHERE collabhbrs.company.id = \'" + companyId + "\'");
+                    String companyQuery = "SELECT * FROM collabhbrs.company WHERE id = " + user.getId();
+                    set2 = statement.executeQuery(companyQuery);
 
-                    if(set2.next()) {
-                        company.setCompanyName(set2.getString("companyname"));
+                    if (set2.next()) {
+                        CompanyDTO company = new CompanyDTOImpl();
+                        company.setCompanyName(set2.getString("company_name"));
                         company.setEmployees(set2.getInt("employees"));
-                        company.setFoundingDate(set2.getDate("foundingdate").toLocalDate());
+                        company.setFoundingDate(set2.getDate("founding_date").toLocalDate());
                         user.setCompany(company);
                     }
                 }
-
-                return user;
-
-            } else {
-                // Error Handling, falls kein User gefunden wird
-                DatabaseLayerException e = new DatabaseLayerException("No User Could be found");
-                e.setReason(Globals.Errors.NOUSERFOUND);
-                throw e;
             }
         } catch (SQLException ex) {
-            DatabaseLayerException e = new DatabaseLayerException("Probleme mit der Datenbank");
-            e.setReason(Globals.Errors.DATABASE);
-            throw e;
-        } catch (DatabaseLayerException e) {
-            user = null;
-            return user;
+            throw new DatabaseLayerException("Fehler im SQL-Befehl!");
+        } catch (NullPointerException ex) {
+            throw new DatabaseLayerException("Fehler bei Datenbankverbindung!");
         } finally {
+            // Stelle sicher, dass die ResultSet und Statement geschlossen werden
+            try {
+                if (set != null) {
+                    set.close();
+                }
+                if (set2 != null) {
+                    set2.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
             JDBCConnection.getInstance().closeConnection();
         }
+
+        return user;
     }
+
 
     public boolean AddUser(UserDTO userDTO) throws DatabaseLayerException {
         boolean successfullyAddedUser = false;
+        Statement statement = null;
+
         try {
-            Statement statement = null;
-            try {
-                statement = JDBCConnection.getInstance().getStatement();
-            } catch (DatabaseLayerException e) {
-                e.printStackTrace();
-            }
-
-            // Fügt einen neuen Studenten in die Datenbank ein
-            if(userDTO.getStudent() != null) {
-                statement.executeUpdate(
-                        "INSERT INTO collabhbrs.student (firstname, lastname, birthday) " +
-                                "VALUES ('" + userDTO.getStudent().getFirstname() + "', '" +
-                                userDTO.getStudent().getLastname() + "', '" +
-                                userDTO.getStudent().getBirthday() + "')", Statement.RETURN_GENERATED_KEYS
-                );
-            } else { // Fügt eine Company hinzu
-                statement.executeUpdate(
-                        "INSERT INTO collabhbrs.company (companyName, foundingDate, employees) " +
-                                "VALUES ('" + userDTO.getCompany().getCompanyName() + "', '" +
-                                userDTO.getCompany().getFoundingDate() + "', '" +
-                                userDTO.getCompany().getEmployees() + "')", Statement.RETURN_GENERATED_KEYS
-                );
-            }
-
-            // holt sich den automatisch generierten Primary Key des Studenten
-            ResultSet keys = statement.getGeneratedKeys();
-            keys.next();
-            int newKey = keys.getInt(1);
-
+            statement = JDBCConnection.getInstance().getStatement();
 
             // Konvertiere Byte-Array in PostgreSQL-Bytea-Format
             String salt = PGbytea.toPGString(userDTO.getSalt());
             String hashValue = PGbytea.toPGString(userDTO.getHashValue());
 
-
-            //Füge einen neuen User in die Datenbank ein
-            String query = "INSERT INTO collabhbrs.users (userid, email, salt, hashvalue, accounttype) " +
+            // Füge einen neuen User in die Datenbank ein und erhalte den generierten Key
+            String userQuery = "INSERT INTO collabhbrs.users (userid, email, salt, hashvalue, accounttype) " +
                     "VALUES ('" + userDTO.getUserId() + "', '" +
-                    userDTO.getEmail() + "', " +
-                    "'" + salt + "', " +
-                    "'" + hashValue + "', '" +
+                    userDTO.getEmail() + "', '" +
+                    salt + "', '" +
+                    hashValue + "', '" +
                     userDTO.getAccountType().toString() + "')";
 
-            statement.executeUpdate(query);
+            statement.executeUpdate(userQuery, Statement.RETURN_GENERATED_KEYS);
 
+            // Hole den automatisch generierten Primary Key des Users
+            ResultSet userKeys = statement.getGeneratedKeys();
+            userKeys.next();
+            int userId = userKeys.getInt(1);
 
-            //verbinde user mit student/company (Referenz erstellen)
-            if(userDTO.getStudent() != null) {
-                statement.executeUpdate(
-                        "UPDATE collabhbrs.users " +
-                                "SET student_id = " + newKey + " " +
-                                "WHERE email = '" + userDTO.getEmail() + "'"
-                );
+            // Füge einen neuen Studenten oder eine neue Company in die entsprechende Tabelle ein
+            if (userDTO.getStudent() != null) {
+                String studentQuery = "INSERT INTO collabhbrs.student (id, firstname, lastname, birthday) " +
+                        "VALUES (" + userId + ", '" +
+                        userDTO.getStudent().getFirstname() + "', '" +
+                        userDTO.getStudent().getLastname() + "', '" +
+                        userDTO.getStudent().getBirthday() + "')";
+                statement.executeUpdate(studentQuery);
             } else {
-                statement.executeUpdate(
-                        "UPDATE collabhbrs.users " +
-                                "SET company_id = " + newKey + " " +
-                                "WHERE email = '" + userDTO.getEmail() + "'"
-                );
+                String companyQuery = "INSERT INTO collabhbrs.company (id, company_name, founding_date, employees) " +
+                        "VALUES (" + userId + ", '" +
+                        userDTO.getCompany().getCompanyName() + "', '" +
+                        userDTO.getCompany().getFoundingDate() + "', " +
+                        userDTO.getCompany().getEmployees() + ")";
+                statement.executeUpdate(companyQuery);
             }
 
-            //an dieser Stelle evtl. checken ob user dann auch existiert
+
             successfullyAddedUser = true;
 
         } catch (SQLException ex) {
             DatabaseLayerException e = new DatabaseLayerException("Fehler im SQL-Befehl!");
             e.setReason(Globals.Errors.SQLERROR);
             throw e;
-        }
-        catch (NullPointerException ex) {
+        } catch (NullPointerException ex) {
             DatabaseLayerException e = new DatabaseLayerException("Fehler bei Datenbankverbindung!");
             e.setReason(Globals.Errors.DATABASE);
             throw e;
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            JDBCConnection.getInstance().closeConnection();
         }
-        finally {
-                JDBCConnection.getInstance().closeConnection();
-        }
+
         return successfullyAddedUser;
     }
+
 }

@@ -24,11 +24,11 @@ public class ApplicationDAO {
         try {
             Statement statement = JDBCConnection.getInstance().getStatement();
 
-            String query = "INSERT INTO collahbrs.anzeige (motivationsschreiben, status, stellenanzeige, student, veröffentlichung) " +
+            String query = "INSERT INTO collabhbrs.application (motivationsschreiben, status, stellenanzeige, student, veröffentlichung) " +
                     "VALUES ('" + applicationDTO.getMotivationsschreiben() + "', '" +
                     applicationDTO.getStatus() + "', '" +
-                    applicationDTO.getStellenanzeige() + "', '" +
-                    applicationDTO.getStudent() + "', '" +
+                    applicationDTO.getStellenanzeige().getID() + "', '" +
+                    applicationDTO.getStudent().getId() + "', '" +
                     Timestamp.valueOf(applicationDTO.getAppliedAt()) + "')";
 
             int result = statement.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);

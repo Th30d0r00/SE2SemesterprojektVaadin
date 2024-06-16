@@ -15,7 +15,7 @@ public class AnzeigeDAO {
         try {
             Statement statement = JDBCConnection.getInstance().getStatement();
 
-            String query = "INSERT INTO collahbrs.anzeige (titel, unternehmen, jobart, standort, veröffentlichung, stellenbeschreibung) " +
+            String query = "INSERT INTO collabhbrs.anzeige (titel, unternehmen, jobart, standort, veröffentlichung, stellenbeschreibung) " +
                     "VALUES ('" + anzeigeDTO.getJobTitle() + "', '" +
                     anzeigeDTO.getCompanyName() + "', '" +
                     anzeigeDTO.getJobType() + "', '" +
