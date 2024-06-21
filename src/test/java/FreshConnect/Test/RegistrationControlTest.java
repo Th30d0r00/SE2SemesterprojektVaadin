@@ -1,4 +1,4 @@
-/*
+
 package FreshConnect.Test;
 
 import static org.mockito.Mockito.*;
@@ -37,7 +37,6 @@ public class RegistrationControlTest {
         RegistrationControl registrationControl = new RegistrationControl();
 
         UserDTO userToAdd = new UserDTOImpl();
-        userToAdd.setUserId("PeterMustermann");
         userToAdd.setEmail("adadad@gdddmail.com");
         userToAdd.setPassword("kakaadadddad1234");
         userToAdd.setSalt(Security.getSalt());
@@ -76,7 +75,6 @@ public class RegistrationControlTest {
         RegistrationControl registrationControl = new RegistrationControl();
 
         UserDTO userToAdd = new UserDTOImpl();
-        userToAdd.setUserId("PeterMustermann");
         userToAdd.setEmail("adadad@gdddmail.com");
         userToAdd.setPassword("kakaadadddad1234");
         userToAdd.setSalt(Security.getSalt());
@@ -97,7 +95,6 @@ public class RegistrationControlTest {
         RegistrationControl registrationControl2 = new RegistrationControl();
 
         UserDTO userToAdd2 = new UserDTOImpl();
-        userToAdd2.setUserId("PeterMustermann");
         userToAdd2.setEmail("adadad@gdddmail.com");
         userToAdd2.setPassword("kakaadadddad1234");
         userToAdd2.setSalt(Security.getSalt());
@@ -135,7 +132,6 @@ public class RegistrationControlTest {
         RegistrationControl registrationControl = new RegistrationControl();
 
         UserDTO userToAdd = new UserDTOImpl();
-        userToAdd.setUserId("Penn");
         userToAdd.setEmail("adadad@gdddmail.com");
         userToAdd.setPassword("ka");
         userToAdd.setSalt(Security.getSalt());
@@ -170,4 +166,4 @@ public class RegistrationControlTest {
     //@Test
     //public void testRegisterUser_DatabaseLayerException() throws DatabaseLayerException {}
 }
-*/
+

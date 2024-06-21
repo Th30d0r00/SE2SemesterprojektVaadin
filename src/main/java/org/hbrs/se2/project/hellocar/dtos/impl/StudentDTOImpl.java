@@ -6,10 +6,19 @@ import java.time.LocalDate;
 
 public class StudentDTOImpl implements StudentDTO
 {
+    private int id;
     private String firstname;
     private String lastname;
     private LocalDate birthday;
     private int fachsemester;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     @Override
     public String getLastname() {

@@ -3,10 +3,20 @@ package org.hbrs.se2.project.hellocar.entities;
 import java.time.LocalDate;
 
 public class Student{
+
+    private int id;
     private String firstname;
     private String lastname;
     private LocalDate birthday;
     private int fachsemester;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getFirstname() {
         return firstname;

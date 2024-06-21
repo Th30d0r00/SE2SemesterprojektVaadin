@@ -4,7 +4,8 @@ import java.time.LocalDate;
 
 public interface StudentDTO
 {
-
+    int getId();
+    void setId(int id);
     public String getLastname();
 
     void setLastname(String lastname);

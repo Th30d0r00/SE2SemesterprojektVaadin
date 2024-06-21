@@ -12,7 +12,7 @@ import java.sql.Timestamp;
 public class ApplicationDAO {
 
     /**
-     * Fügt eine neue Application in die Datenbank ein (Tabelle muss noch erstellt werden).
+     * Fügt eine neue Application in die Datenbank ein.
      * Die Verlinkung zu Student (eindeutig) und zu einer Stellenanzeige (darf null sein bei Initiativb.)
      * müsste noch richtig implementiert werden.
      * @param applicationDTO
@@ -27,7 +27,7 @@ public class ApplicationDAO {
             String query = "INSERT INTO collabhbrs.application (motivationsschreiben, status, stellenanzeige, student, veröffentlichung) " +
                     "VALUES ('" + applicationDTO.getMotivationsschreiben() + "', '" +
                     applicationDTO.getStatus() + "', '" +
-                    applicationDTO.getStellenanzeige().getID() + "', '" +
+                    applicationDTO.getStellenanzeige().getId() + "', '" +
                     applicationDTO.getStudent().getId() + "', '" +
                     Timestamp.valueOf(applicationDTO.getAppliedAt()) + "')";
 
