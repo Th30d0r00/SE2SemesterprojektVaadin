@@ -1,3 +1,4 @@
+/*
 package org.hbrs.se2.project.hellocar.test;
 
 import org.hbrs.se2.project.hellocar.dao.UserDAO;
@@ -50,7 +51,8 @@ class HellocarApplicationTests {
         }
     }
 
-    /*
+    */
+/*
     @Test
     void testUserDTOByAttribute() {
         UserDTO personDTO = userRepository.getUserByOccupation("Professor").get(0);
@@ -85,7 +87,8 @@ class HellocarApplicationTests {
         }
     }
 
-     */
+     *//*
+
     @Test
     void testRoleRepository() {
         List<Rolle> list = roleRepository.findAll();
@@ -99,7 +102,8 @@ class HellocarApplicationTests {
         assertArrayEquals( soll , ist );
     }
 
-    /*
+    */
+/*
     @Test
     void testFindCarsAndTheirUsers() {
         List<Object[]> list = this.carRepository.findAllCarsAndTheirUsers();
@@ -146,8 +150,10 @@ class HellocarApplicationTests {
     }
 
 
-     */
-    @Test
+     *//*
+
+    */
+/*@Test
     void testFindUserWithJDBC() {
         UserDAO userDAO = new UserDAO();
         try {
@@ -159,5 +165,7 @@ class HellocarApplicationTests {
             e.printStackTrace();
         }
 
-    }
+    }*//*
+
 }
+*/

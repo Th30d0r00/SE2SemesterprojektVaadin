@@ -10,14 +10,12 @@ import jakarta.persistence.Table;
 import java.util.List;
 import java.util.Objects;
 
-@Entity
-@Table( name ="rolle" , schema = "carlook" )
+
 public class Rolle {
     private String bezeichhnung;
     private List<User> users;
 
-    @Id
-    @Column(name = "bezeichhnung")
+
     public String getBezeichhnung() {
         return bezeichhnung;
     }
@@ -37,11 +35,6 @@ public class Rolle {
     @Override
     public int hashCode() {
         return Objects.hash(bezeichhnung);
-    }
-
-    @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER )
-    public List<User> getUsers() {
-        return users;
     }
 
     public void setUsers(List<User> users) {

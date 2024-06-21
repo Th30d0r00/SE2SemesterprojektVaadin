@@ -177,7 +177,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
        // (Alternative: Verwendung der Methode 'isUserisAllowedToAccessThisFeature')
        if ( this.authorizationControl.isUserInRole( this.getCurrentUser() , Globals.Roles.ADMIN ) ) {
            System.out.println("User is Admin!");
-           tabs = Utils.append( tabs , createTab("Enter Car", EnterCarView.class)  );
+//           tabs = Utils.append( tabs , createTab("Enter Car", EnterCarView.class)  );
        }
 
        // ToDo für die Teams: Weitere Tabs aus ihrem Projekt hier einfügen!
@@ -206,7 +206,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
         viewTitle.setText(getCurrentPageTitle());
 
         // Setzen des Vornamens von dem aktuell eingeloggten Benutzer
-        helloUser.setText("Hello my dear old friend!! Wie geht's dir, "  + this.getCurrentNameOfUser() );
+        helloUser.setText("Hello my dear old friend!! Wie geht's dir, "  + this.getCurrentEmailOfUser() );
 
     }
 
@@ -220,8 +220,8 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
         return title == null ? "" : title.value();
     }
 
-    private String getCurrentNameOfUser() {
-        return getCurrentUser().getStudent().getFirstname();
+    private String getCurrentEmailOfUser() {
+        return getCurrentUser().getEmail();
     }
 
     private UserDTO getCurrentUser() {

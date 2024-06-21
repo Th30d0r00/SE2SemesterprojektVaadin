@@ -14,7 +14,6 @@ public interface UserDTO {
     public int getId();
     public byte[] getSalt();
     public byte[] getHashValue();
-    public String getUserId();
     public String getEmail();
     public String getPassword();
     public List<RolleDTO> getRoles();
@@ -25,7 +24,6 @@ public interface UserDTO {
     public void setId(int id);
     public void setSalt(byte[] salt);
     public void setHashValue(byte[] hash);
-    public void setUserId(String userId);
     public void setEmail(String email);
     public void setPassword(String password);
     public void setRoles(List<RolleDTO> roles);

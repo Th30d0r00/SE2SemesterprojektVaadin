@@ -1,7 +1,5 @@
-//package FreshConnect.Test;
-
 /*
-package org.hbrs.se2.project.hellocar.views;
+package FreshConnect.Test;
 
 import org.hbrs.se2.project.hellocar.control.ManageCarControl;
 import org.hbrs.se2.project.hellocar.util.AccountType;
@@ -37,7 +35,7 @@ public class RegistrierungTest {
     @Test
     public void testFormCompleteFürStudent() {
         // Formulardaten für einen Studenten setzen
-        registrationView.accountType.setValue(AccountType.valueOf("STUDENT"));
+        registrationView.accountType.setValue(AccountType.STUDENT);
         registrationView.email.setValue("student@test.de");
         registrationView.password.setValue("sicheresPasswort");
         registrationView.userId.setValue("studentBenutzername");

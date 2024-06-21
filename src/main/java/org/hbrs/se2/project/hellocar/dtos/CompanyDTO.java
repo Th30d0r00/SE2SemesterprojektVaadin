@@ -4,6 +4,10 @@ import java.time.LocalDate;
 
 public interface CompanyDTO {
 
+    int getId();
+
+    void setId(int id);
+
     public String getCompanyName();
 
     void setCompanyName(String companyName);

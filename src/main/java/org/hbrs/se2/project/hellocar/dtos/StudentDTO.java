@@ -17,5 +17,8 @@ public interface StudentDTO
 
     void setBirthday(LocalDate birthday);
 
-    public int getAge();
+    int getFachsemester();
+
+    void setFachsemester(int fachsemester);
+
 }

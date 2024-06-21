@@ -1,3 +1,4 @@
+/*
 package org.hbrs.se2.project.hellocar.views;
 
 import com.vaadin.flow.component.Component;
@@ -154,3 +155,4 @@ public class EnterCarView extends Div { // 3. Form (Spezialisierung / Vererbung)
     }
   }
 }
+*/

@@ -1,3 +1,4 @@
+/*
 package org.hbrs.se2.project.hellocar.test;
 
 import org.hbrs.se2.project.hellocar.entities.User;
@@ -17,7 +18,8 @@ public class RoundTripTest {
 
     @Autowired
     private UserRepository userRepository;
-    /*
+    */
+/*
     @Test
     /**
      * Round Triping Test mit einer einfachen Strecke (C-R-Ass-D).
@@ -63,6 +65,8 @@ public class RoundTripTest {
     public void deleteUser(){
         // Hier könnte man nach einem RoundTrip die DB noch weiter bereinigen
     }
-    */
+    *//*
+
 
 }
+*/

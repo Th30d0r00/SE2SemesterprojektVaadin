@@ -8,20 +8,30 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface ApplicationDTO {
-    public int getId();
-    public String getMotivationsschreiben();
-    public LocalDateTime getAppliedAt();
-    public String getStatus();
-    public Anzeige getStellenanzeige();
-    public Student getStudent();
-    public List<ApplicationFile> getFiles();
+    int getId();
+    String getTelefonnummer();
+    String getBeschaeftigung();
+    LocalDateTime getVerfuegbar();
+    String getWohnort();
+    String getMotivationsschreiben();
+    String getLebenslauf();
+    LocalDateTime getAppliedAt();
+    String getStatus();
+    Anzeige getStellenanzeige();
+    Student getStudent();
+    List<ApplicationFile> getFiles();
 
-    public void setId(int id);
-    public void setMotivationsschreiben(String motivationsschreiben);
-    public void setAppliedAt(LocalDateTime appliedAt);
-    public void setStatus(String status);
-    public void setStellenanzeige(Anzeige stellenanzeige);
-    public void setStudent(Student student);
-    public void setFiles(List<ApplicationFile> files);
+    void setId(int id);
+    void setTelefonnummer(String telefonnummer);
+    void setBeschaeftigung(String beschaeftigung);
+    void setVerfuegbar(LocalDateTime verfuegbar);
+    void setWohnort(String wohnort);
+    void setMotivationsschreiben(String motivationsschreiben);
+    void setLebenslauf(String lebenslauf);
+    void setAppliedAt(LocalDateTime appliedAt);
+    void setStatus(String status);
+    void setStellenanzeige(Anzeige stellenanzeige);
+    void setStudent(Student student);
+    void setFiles(List<ApplicationFile> files);
 
 }

@@ -3,7 +3,6 @@ package org.hbrs.se2.project.hellocar.views;
 import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.textfield.PasswordField;
 import org.hbrs.se2.demo.registration.RegistrationResult;
-import org.hbrs.se2.project.hellocar.control.ManageCarControl;
 import org.hbrs.se2.project.hellocar.control.RegistrationControl;
 import org.hbrs.se2.project.hellocar.dtos.CompanyDTO;
 import org.hbrs.se2.project.hellocar.dtos.StudentDTO;
@@ -42,8 +41,6 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
     ComboBox<AccountType> accountType = new ComboBox<>("Firma/Student");
     TextField email = new TextField("E-Mail");
     PasswordField password = new PasswordField("Passwort");
-    TextField userId = new TextField("Nutzername");
-
     TextField companyName = new TextField("Firmenname");
     DatePicker foundingDate = new DatePicker("Gründungsdatum");
     TextField employees = new TextField("Anzahl Mitarbeiter");
@@ -51,13 +48,14 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
     TextField firstname = new TextField("Vorname");
     TextField lastname = new TextField("Nachname");
     DatePicker birthday = new DatePicker("Geburtsdatum");
+    TextField fachsemester = new TextField("Fachsemester");
 
     Button register = new Button("Register");
 
     private Binder<UserDTOImpl> binder = new Binder(UserDTOImpl.class);
 
     //RegistrationView
-    public RegistrationView( ManageCarControl carService) {
+    public RegistrationView() {
         //ToDo: RegistrationControl; UserDTO, Binding; ExceptionHandling;
 
         addClassName("enter-car-view");
@@ -109,7 +107,7 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
                 Notification.show(result.getMessage());
                 clearForm();
 
-                //UI.getCurrent().navigate( Globals.Pages.LOGIN_VIEW );
+                UI.getCurrent().navigate( Globals.Pages.LOGIN_VIEW );
             }
         });
     }
@@ -124,8 +122,8 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
 
     private Component createFormLayout() {
         FormLayout formLayout = new FormLayout();
-        formLayout.add(email, userId, password, accountType, companyName,
-                foundingDate, employees, firstname, lastname, birthday);
+        formLayout.add(email, password, accountType, companyName,
+                foundingDate, employees, firstname, lastname, birthday, fachsemester);
         return formLayout;
     }
 
@@ -141,7 +139,6 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
         accountType.setVisible(true);
         password.setVisible(true);
         email.setVisible(true);
-        userId.setVisible(true);
 
         companyName.setVisible(false);
         foundingDate.setVisible(false);
@@ -149,6 +146,7 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
         firstname.setVisible(false);
         lastname.setVisible(false);
         birthday.setVisible(false);
+        fachsemester.setVisible(false);
     }
 
     private void StudentVisibility(){
@@ -158,6 +156,7 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
         firstname.setVisible(true);
         lastname.setVisible(true);
         birthday.setVisible(true);
+        fachsemester.setVisible(true);
     }
 
     private void CompanyVisibility(){
@@ -174,13 +173,13 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
         userDTO.setHashValue(Security.getHash(password.getValue(), userDTO.getSalt()));
         userDTO.setEmail(email.getValue());
         //userDTO.setPassword(password.getValue());
-        userDTO.setUserId(userId.getValue());
         userDTO.setAccountType(accountType.getValue());
 
         StudentDTO studentDTO = new StudentDTOImpl();
         studentDTO.setFirstname(firstname.getValue());
         studentDTO.setLastname(lastname.getValue());
         studentDTO.setBirthday(birthday.getValue());
+        studentDTO.setFachsemester(Integer.parseInt(fachsemester.getValue()));
 
         userDTO.setStudent(studentDTO);
     }
@@ -190,7 +189,6 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
         userDTO.setHashValue(Security.getHash(password.getValue(), userDTO.getSalt()));
         userDTO.setEmail(email.getValue());
         //userDTO.setPassword(password.getValue());
-        userDTO.setUserId(userId.getValue());
         userDTO.setAccountType(accountType.getValue());
 
         CompanyDTO companyDTO = new CompanyDTOImpl();
@@ -207,7 +205,6 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
         AccountType form_type = accountType.getValue();
         String form_mail = email.getValue();
         String form_pw = password.getValue();
-        String form_userId = userId.getValue();
 
         if(form_type == null){
             formComplete = false;
@@ -229,19 +226,12 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
             formComplete = false;
             Notification.show("Ihr Passwort muss mindestens 8 Zeichen lang sein.");
         }
-        if(form_userId == null){
-            formComplete = false;
-            Notification.show("Bitte geben Sie einen Nutzernamen an.");
-        }
-        if(form_userId != null && (form_userId.length() < 8 || form_userId.length() > 24)){
-            formComplete = false;
-            Notification.show("Ihr Nutzername muss zwischen 8 und 24 Zeichen lang sein.");
-        }
 
         if(form_type == AccountType.STUDENT){
             String form_firstname = firstname.getValue();
             String form_lastname = lastname.getValue();
             LocalDate form_birthday = birthday.getValue();
+            int form_fachsemester = Integer.parseInt(fachsemester.getValue());
 
             if(form_firstname == null){
                 formComplete = false;
@@ -261,6 +251,11 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
             if(form_lastname != null && form_lastname.length() > 64){
                 formComplete = false;
                 Notification.show("Ihr Nachname darf nicht länger als 64 Zeichen sein.");
+            }
+
+            if(form_fachsemester == 0){
+                formComplete = false;
+                Notification.show("Bitte geben Sie ein fachsemester an");
             }
 
             //Birthdate muss mindestens 16 Jahre zurückliegen

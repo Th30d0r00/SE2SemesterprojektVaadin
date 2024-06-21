@@ -9,7 +9,7 @@ public class StudentDTOImpl implements StudentDTO
     private String firstname;
     private String lastname;
     private LocalDate birthday;
-    private int age;
+    private int fachsemester;
 
     @Override
     public String getLastname() {
@@ -42,7 +42,11 @@ public class StudentDTOImpl implements StudentDTO
     }
 
     @Override
-    public int getAge() {
-        return age;
+    public int getFachsemester() {
+        return fachsemester;
+    }
+    @Override
+    public void setFachsemester(int fachsemester) {
+        this.fachsemester = fachsemester;
     }
 }
