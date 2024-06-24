@@ -8,7 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class CompanyDao {
+public class CompanyDAO {
     public Company getCompanyById(int companyId) throws SQLException {
         Company company = null;
         String sql = "SELECT * FROM collabhbrs.company WHERE id = " + companyId;

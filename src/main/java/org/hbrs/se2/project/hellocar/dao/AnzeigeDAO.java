@@ -84,7 +84,7 @@ public class AnzeigeDAO {
 
     private Anzeige mapResultSetToAnzeige(ResultSet set) throws SQLException {
         Anzeige anzeige = new Anzeige();
-        CompanyDao companyDao = new CompanyDao();
+        CompanyDAO companyDao = new CompanyDAO();
         anzeige.setId(set.getInt("id"));
         anzeige.setJobTitle(set.getString("Titel"));
         anzeige.setJobType(set.getString("Jobart"));
