@@ -231,11 +231,13 @@
   "Frontend/generated/jar-resources/virtualListConnector.js",
   "Frontend/styles/shared-styles.js",
   "Frontend/styles/views/entercar/enter-car-view.css",
+  "Frontend/styles/views/enterjobposting/enter-job-posting-view.css",
   "Frontend/styles/views/main/main-view.css",
   "Frontend/styles/views/showcars/show-cars-view.css"
  ],
  "frontendHashes": {
   "styles/views/main/main-view.css": "6fa27862fc9e132f2fca148280cff249c87d513fbbd8d051470de81faec779b8",
+  "styles/views/enterjobposting/enter-job-posting-view.css": "fef7c8e3e8d5b4a04712ff8005a31748430a2f94cd66b6416fe049d3ccf4d886",
   "styles/views/entercar/enter-car-view.css": "55decd3c08b2ddd5bf356c8a8baeb774a24dc603c1d7a1e1bd79248321f40680",
   "styles/views/showcars/show-cars-view.css": "04c197a03c73e8e465329961ab3b5d3c1c4efef387c026342d0a0e3fcb6bbb52",
   "styles/shared-styles.js": "6c26270ffcbdcbf543e82ca5534d70043525cad9fcd71299a073b84b74c01a01",
@@ -260,12 +262,12 @@
  },
  "themeJsonContents": {},
  "entryScripts": [
-  "VAADIN/build/indexhtml-110c1b6e.js"
+  "VAADIN/build/indexhtml-a02a07de.js"
  ],
  "webComponents": [],
  "cvdlModules": {},
  "packageJsonHash": "dab916f7568ddf7c1412f4539935b9d88d4892f427f21fb6e65617c49fa18309",
  "indexHtmlGenerated": [
-  "  <script type=\"module\" crossorigin src=\"./VAADIN/build/indexhtml-110c1b6e.js\"></script>"
+  "  <script type=\"module\" crossorigin src=\"./VAADIN/build/indexhtml-a02a07de.js\"></script>"
  ]
 }

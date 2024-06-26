@@ -16,9 +16,9 @@ public class AnzeigeDAO {
         try {
             Statement statement = JDBCConnection.getInstance().getStatement();
 
-            String query = "INSERT INTO collabhbrs.anzeige (titel, company_id, jobart, standort, veröffentlichung, stellenbeschreibung) " +
-                    "VALUES ('" + anzeigeDTO.getJobTitle() + "', '" +
-                    anzeigeDTO.getCompany().getId() + "', '" +
+            String query = "INSERT INTO collabhbrs.anzeige (titel, company_id, jobart, standort, veroeffentlichung, stellenbeschreibung) " +
+                    "VALUES ('" + anzeigeDTO.getJobTitle() + "', " +
+                    anzeigeDTO.getCompany().getId() + ", '" +
                     anzeigeDTO.getJobType() + "', '" +
                     anzeigeDTO.getStandort() + "', '" +
                     Timestamp.valueOf(anzeigeDTO.getPublicationDate()) + "', '" +
@@ -41,6 +41,7 @@ public class AnzeigeDAO {
         }
         return false;
     }
+
 
     public Anzeige findAnzeigeById(int id) throws DatabaseLayerException {
         Anzeige anzeige = null;

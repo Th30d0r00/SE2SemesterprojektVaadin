@@ -2,6 +2,8 @@ package org.hbrs.se2.project.hellocar.dtos.impl;
 
 
 import org.hbrs.se2.project.hellocar.dtos.AnzeigeDTO;
+import org.hbrs.se2.project.hellocar.dtos.CompanyDTO;
+import org.hbrs.se2.project.hellocar.dtos.UserDTO;
 import org.hbrs.se2.project.hellocar.entities.Company;
 
 import java.time.LocalDateTime;
@@ -11,7 +13,7 @@ public class AnzeigeDTOImpl implements AnzeigeDTO {
     private String jobTitle;
     private String standort;
     private String jobType;
-    private Company company;
+    private UserDTO company;
     private String jobDescription;
     private LocalDateTime publicationDate;
 
@@ -56,12 +58,12 @@ public class AnzeigeDTOImpl implements AnzeigeDTO {
     }
 
     @Override
-    public Company getCompany() {
+    public UserDTO getCompany() {
         return company;
     }
 
     @Override
-    public void setCompany(Company company) {
+    public void setCompany(UserDTO company) {
         this.company = company;
     }
 
