@@ -27,7 +27,6 @@ public class UserDaoTest {
 
             UserDAO dao = new UserDAO();
             UserDTO userToAdd = new UserDTOImpl();
-            userToAdd.setUserId("mustermann");
             userToAdd.setEmail("mustermann@gmail.com");
             userToAdd.setPassword("mustermann1234");
             userToAdd.setSalt(Security.getSalt());
@@ -53,7 +52,6 @@ public class UserDaoTest {
 
             UserDTO readUser = dao.FindUserByEmail("mustermann@gmail.com");
             assertEquals(userToAdd.getEmail(), readUser.getEmail());
-            assertEquals(userToAdd.getUserId(), readUser.getUserId());
             assertEquals(userToAdd.getAccountType(), readUser.getAccountType());
 
             /*
@@ -74,7 +72,6 @@ public class UserDaoTest {
 
         UserDAO dao = new UserDAO();
         UserDTO userToAdd = new UserDTOImpl();
-        userToAdd.setUserId("musterfirma");
         userToAdd.setEmail("mustermann@hotmail.com");
         userToAdd.setPassword("musterfirma1234");
         userToAdd.setSalt(Security.getSalt());
@@ -100,7 +97,6 @@ public class UserDaoTest {
 
         UserDTO readUser = dao.FindUserByEmail("mustermann@hotmail.com");
         assertEquals(userToAdd.getEmail(), readUser.getEmail());
-        assertEquals(userToAdd.getUserId(), readUser.getUserId());
         assertEquals(userToAdd.getAccountType(), readUser.getAccountType());
 
         /*

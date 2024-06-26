@@ -1,3 +1,4 @@
+/*
 package org.hbrs.se2.project.hellocar.repository;
 
 import org.hbrs.se2.project.hellocar.dtos.CarDTO;
@@ -11,6 +12,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Component
+*/
 /**
  * JPA-Repository für die Verwaltung von Autos (cars). Die Bezeichnung einer Methode
  * bestimmt dabei die Selektionsbedingung (den WHERE-Teil). Der Rückgabewert einer
@@ -19,7 +21,8 @@ import java.util.List;
  * https://www.baeldung.com/spring-data-jpa-projections
  * https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods
  *
- */
+ *//*
+
 public interface CarRepository extends JpaRepository<Car, Integer> {
 
     @Query("  SELECT c.brand, c.model, c.price" +
@@ -33,4 +36,4 @@ public interface CarRepository extends JpaRepository<Car, Integer> {
 
     List<CarDTO> findCarsByDateIsNotNull();
 
- }
+ }*/

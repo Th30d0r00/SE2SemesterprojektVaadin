@@ -8,14 +8,12 @@ import jakarta.persistence.Id;
 import java.time.LocalDate;
 
 public class Company{
+
+    private int id;
     private String companyName;
     private LocalDate foundingDate;
     private int employees;
-    private int id;
 
-    @Id
-    @GeneratedValue
-    @Column(name = "id")
     public int getId() {
         return id;
     }
@@ -24,8 +22,6 @@ public class Company{
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "companyName")
     public String getCompanyName() {
         return companyName;
     }
@@ -34,8 +30,6 @@ public class Company{
         this.companyName = companyName;
     }
 
-    @Basic
-    @Column(name = "foundingDate")
     public LocalDate getFoundingDate() {
         return foundingDate;
     }
@@ -44,8 +38,6 @@ public class Company{
         this.foundingDate = foundingDate;
     }
 
-    @Basic
-    @Column(name = "employees")
     public int getEmployees() {
         return employees;
     }

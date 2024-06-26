@@ -1,3 +1,4 @@
+/*
 package org.hbrs.se2.project.hellocar.repository;
 
 import org.hbrs.se2.project.hellocar.entities.*;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
+*/
 /**
  * JPA-Repository für die Abfrage von registrierten User. Die Bezeichnung einer Methode
  *  * bestimmt dabei die Selektionsbedingung (den WHERE-Teil). Der Rückgabewert einer
@@ -16,7 +18,8 @@ import java.util.List;
  * https://www.baeldung.com/spring-data-jpa-projections
  * https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods
  *
- */
+ *//*
+
 public interface UserRepository extends JpaRepository<User, Integer> {
 
     // SELECT firstname, lastname, id
@@ -31,4 +34,4 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
 
 
-}
+}*/

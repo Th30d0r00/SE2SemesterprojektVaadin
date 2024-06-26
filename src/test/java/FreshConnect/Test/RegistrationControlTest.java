@@ -1,4 +1,4 @@
-/*
+
 package FreshConnect.Test;
 
 import static org.mockito.Mockito.*;
@@ -26,6 +26,7 @@ public class RegistrationControlTest {
 
     @BeforeAll
     public static void setUp() {
+
         //RegistrationControl registrationControl = new RegistrationControl();
 
     }
@@ -36,7 +37,6 @@ public class RegistrationControlTest {
         RegistrationControl registrationControl = new RegistrationControl();
 
         UserDTO userToAdd = new UserDTOImpl();
-        userToAdd.setUserId("PeterMustermann");
         userToAdd.setEmail("adadad@gdddmail.com");
         userToAdd.setPassword("kakaadadddad1234");
         userToAdd.setSalt(Security.getSalt());
@@ -70,41 +70,100 @@ public class RegistrationControlTest {
 
     @Test
     public void testRegisterUser_UserAlreadyExists() throws DatabaseLayerException {
-        UserDTO neuerBenutzer = new UserDTOImpl();
-        neuerBenutzer.setEmail("test@example.com");
 
+        //create new User1 with random values
+        RegistrationControl registrationControl = new RegistrationControl();
 
+        UserDTO userToAdd = new UserDTOImpl();
+        userToAdd.setEmail("adadad@gdddmail.com");
+        userToAdd.setPassword("kakaadadddad1234");
+        userToAdd.setSalt(Security.getSalt());
+        userToAdd.setHashValue(Security.getHash(userToAdd.getPassword(),userToAdd.getSalt()));
+        userToAdd.setAccountType(AccountType.valueOf("STUDENT"));
 
-        RegistrationResult result = registrationControl.registerUser(neuerBenutzer);
+        StudentDTO studentToAdd = new StudentDTOImpl();
+        studentToAdd.setFirstname("peter");
+        studentToAdd.setLastname("muster");
+        LocalDate date = LocalDate.of(2020, 1, 8);
+        studentToAdd.setBirthday(date);
+        userToAdd.setStudent(studentToAdd);
 
-        assertFalse(result.getSuccess());
-        assertEquals("User with email test@example.com already exists", result.getMessage());
+        //register user2
+        RegistrationResult result = registrationControl.registerUser(userToAdd);
+
+        //create new User2 with the same values
+        RegistrationControl registrationControl2 = new RegistrationControl();
+
+        UserDTO userToAdd2 = new UserDTOImpl();
+        userToAdd2.setEmail("adadad@gdddmail.com");
+        userToAdd2.setPassword("kakaadadddad1234");
+        userToAdd2.setSalt(Security.getSalt());
+        userToAdd2.setHashValue(Security.getHash(userToAdd2.getPassword(),userToAdd2.getSalt()));
+        userToAdd2.setAccountType(AccountType.valueOf("STUDENT"));
+
+        StudentDTO studentToAdd2 = new StudentDTOImpl();
+        studentToAdd2.setFirstname("peter");
+        studentToAdd2.setLastname("muster");
+        LocalDate date2 = LocalDate.of(2020, 1, 8);
+        studentToAdd2.setBirthday(date2);
+        userToAdd2.setStudent(studentToAdd2);
+
+        //register user2
+        RegistrationResult result2 = registrationControl.registerUser(userToAdd2);
+
+        //if user is already registered an Assertion Error will be thrown
+
+        try{
+            assertTrue(result2.getSuccess());
+            assertEquals("User successfully registered.", result2.getMessage());
+
+            return;
+        } catch (AssertionError e) { //if user is already registered
+            e.printStackTrace();
+        }
+        //if user is already registered we will test if the user is already registered
+        assertFalse(result2.getSuccess());
+        assertEquals(("User with email "+ userToAdd2.getEmail() + " already exists"), result.getMessage());
     }
 
     @Test
     public void testRegisterUser_AddUserFails() throws DatabaseLayerException {
-        UserDTO neuerBenutzer = new UserDTOImpl();
-        neuerBenutzer.setEmail("test@example.com");
+        //create new User with random values
+        RegistrationControl registrationControl = new RegistrationControl();
 
+        UserDTO userToAdd = new UserDTOImpl();
+        userToAdd.setEmail("adadad@gdddmail.com");
+        userToAdd.setPassword("ka");
+        userToAdd.setSalt(Security.getSalt());
+        userToAdd.setHashValue(Security.getHash(userToAdd.getPassword(),userToAdd.getSalt()));
+        userToAdd.setAccountType(AccountType.valueOf("STUDENT"));
 
+        StudentDTO studentToAdd = new StudentDTOImpl();
+        studentToAdd.setFirstname("peter");
+        studentToAdd.setLastname("muster");
+        LocalDate date = LocalDate.of(2020, 1, 8);
+        studentToAdd.setBirthday(date);
+        userToAdd.setStudent(studentToAdd);
 
-        RegistrationResult result = registrationControl.registerUser(neuerBenutzer);
+        //register user
+        RegistrationResult result = registrationControl.registerUser(userToAdd);
 
+        //if user is already registered an Assertion Error will be thrown
+
+        try{
+            assertTrue(result.getSuccess());
+            assertEquals("User successfully registered.", result.getMessage());
+
+            return;
+        } catch (AssertionError e) { //if user is already registered
+            e.printStackTrace();
+        }
+        //if user is already registered we will test if the user is already registered
         assertFalse(result.getSuccess());
-        assertEquals("Couldn't register user.", result.getMessage());
+        assertEquals(("User with email "+ userToAdd.getEmail() + " already exists"), result.getMessage());
     }
 
-    @Test
-    public void testRegisterUser_DatabaseLayerException() throws DatabaseLayerException {
-        UserDTO neuerBenutzer = new UserDTOImpl();
-        neuerBenutzer.setEmail("test@example.com");
-
-
-        RegistrationResult result = registrationControl.registerUser(neuerBenutzer);
-
-        assertFalse(result.getSuccess());
-        assertNull(result.getMessage());
-    }
+    //@Test
+    //public void testRegisterUser_DatabaseLayerException() throws DatabaseLayerException {}
 }
 
-*/

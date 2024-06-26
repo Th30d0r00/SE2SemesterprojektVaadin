@@ -1,4 +1,4 @@
-package org.hbrs.se2.project.hellocar.control;
+/*package org.hbrs.se2.project.hellocar.control;
 
 import org.hbrs.se2.project.hellocar.control.factories.CarFactory;
 import org.hbrs.se2.project.hellocar.dtos.CarDTO;
@@ -18,7 +18,6 @@ public class ManageCarControl {
     @Autowired
     private CarRepository repository;
 
-
     public void createCar( CarDTO carDTO , UserDTO userDTO ) {
         // Hier könnte man noch die Gültigkeit der Daten überprüfen
         // check( carDTO );
@@ -34,4 +33,4 @@ public class ManageCarControl {
         return repository.findCarsByDateIsNotNull();
     }
 
-}
+}*/

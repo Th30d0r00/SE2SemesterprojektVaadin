@@ -109,7 +109,6 @@ public class UserDAO {
                 // Durchführung des Object-Relational-Mapping (ORM) für user
                 user = new UserDTOImpl();
                 user.setId(set.getInt("id"));
-                user.setUserId(set.getString("userid"));
                 user.setEmail(set.getString("email"));
                 user.setSalt(set.getBytes("salt"));
                 user.setHashValue(set.getBytes("hashvalue"));
@@ -183,9 +182,8 @@ public class UserDAO {
             String hashValue = PGbytea.toPGString(userDTO.getHashValue());
 
             // Füge einen neuen User in die Datenbank ein und erhalte den generierten Key
-            String userQuery = "INSERT INTO collabhbrs.users (userid, email, salt, hashvalue, accounttype) " +
-                    "VALUES ('" + userDTO.getUserId() + "', '" +
-                    userDTO.getEmail() + "', '" +
+            String userQuery = "INSERT INTO collabhbrs.users (email, salt, hashvalue, accounttype) " +
+                    "VALUES ('" + userDTO.getEmail() + "', '" +
                     salt + "', '" +
                     hashValue + "', '" +
                     userDTO.getAccountType().toString() + "')";
@@ -199,11 +197,12 @@ public class UserDAO {
 
             // Füge einen neuen Studenten oder eine neue Company in die entsprechende Tabelle ein
             if (userDTO.getStudent() != null) {
-                String studentQuery = "INSERT INTO collabhbrs.student (id, firstname, lastname, birthday) " +
+                String studentQuery = "INSERT INTO collabhbrs.student (id, firstname, lastname, birthday, fachsemester) " +
                         "VALUES (" + userId + ", '" +
                         userDTO.getStudent().getFirstname() + "', '" +
                         userDTO.getStudent().getLastname() + "', '" +
-                        userDTO.getStudent().getBirthday() + "')";
+                        userDTO.getStudent().getBirthday() + "', '" +
+                        userDTO.getStudent().getFachsemester() + "')";
                 statement.executeUpdate(studentQuery);
             } else {
                 String companyQuery = "INSERT INTO collabhbrs.company (id, company_name, founding_date, employees) " +

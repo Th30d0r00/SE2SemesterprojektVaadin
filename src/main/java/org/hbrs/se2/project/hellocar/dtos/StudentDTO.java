@@ -4,7 +4,8 @@ import java.time.LocalDate;
 
 public interface StudentDTO
 {
-
+    int getId();
+    void setId(int id);
     public String getLastname();
 
     void setLastname(String lastname);
@@ -17,5 +18,8 @@ public interface StudentDTO
 
     void setBirthday(LocalDate birthday);
 
-    public int getAge();
+    int getFachsemester();
+
+    void setFachsemester(int fachsemester);
+
 }

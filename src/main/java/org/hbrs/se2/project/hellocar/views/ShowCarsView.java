@@ -15,10 +15,8 @@ import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.apache.commons.lang3.StringUtils;
-import org.hbrs.se2.project.hellocar.control.ManageCarControl;
 import org.hbrs.se2.project.hellocar.dtos.CarDTO;
 import org.hbrs.se2.project.hellocar.dtos.UserDTO;
-import org.hbrs.se2.project.hellocar.repository.CarRepository;
 import org.hbrs.se2.project.hellocar.util.Globals;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -38,7 +36,7 @@ public class ShowCarsView extends Div  {
 
     private List<CarDTO> personList;
 
-    public ShowCarsView( ManageCarControl carControl ) {
+    /*public ShowCarsView( ManageCarControl carControl ) {
             addClassName("show-cars-view");
 
             // Auslesen alle abgespeicherten Autos aus der DB (über das Control)
@@ -49,7 +47,7 @@ public class ShowCarsView extends Div  {
 
             // Hinzufügen der Tabelle (bei Vaadin: ein Grid)
             add(this.createGridTable());
-    }
+    }*/
 
     private Component createGridTable() {
         Grid<CarDTO> grid = new Grid<>();

@@ -6,9 +6,18 @@ import java.time.LocalDate;
 
 public class CompanyDTOImpl implements CompanyDTO {
 
+    private int id;
     private String companyName;
     private LocalDate foundingDate;
     private int employees;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     @Override
     public String getCompanyName() {
