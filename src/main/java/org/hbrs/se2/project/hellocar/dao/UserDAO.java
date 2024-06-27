@@ -238,4 +238,32 @@ public class UserDAO {
         return successfullyAddedUser;
     }
 
+    public UserDTO findUserById(int id) throws DatabaseLayerException {
+        UserDTO user = null;
+        try {
+            Statement statement = JDBCConnection.getInstance().getStatement();
+            ResultSet set = statement.executeQuery(
+                    "SELECT * FROM collabhbrs.users WHERE id = " + id
+            );
+
+            if (set.next()) {
+                user = new UserDTOImpl();
+                user.setId(set.getInt("id"));
+                user.setEmail(set.getString("email"));
+                user.setSalt(set.getBytes("salt"));
+                user.setHashValue(set.getBytes("hashvalue"));
+                user.setAccountType(AccountType.valueOf(set.getString("accounttype")));
+
+                // Beziehe die Rollen eines Users
+                RolleDAO rolleDAO = new RolleDAO();
+                List<RolleDTO> rollen = rolleDAO.getRolesOfUser(user);
+                user.setRoles(rollen);
+            }
+        } catch (SQLException | DatabaseLayerException e) {
+            e.printStackTrace();
+    } finally {
+        JDBCConnection.getInstance().closeConnection();
+    } return user;
+    }
+
 }

@@ -1,6 +1,10 @@
 package org.hbrs.se2.project.hellocar.dao;
 
 import org.hbrs.se2.project.hellocar.dtos.AnzeigeDTO;
+import org.hbrs.se2.project.hellocar.dtos.CompanyDTO;
+import org.hbrs.se2.project.hellocar.dtos.UserDTO;
+import org.hbrs.se2.project.hellocar.dtos.impl.AnzeigeDTOImpl;
+import org.hbrs.se2.project.hellocar.dtos.impl.UserDTOImpl;
 import org.hbrs.se2.project.hellocar.entities.Anzeige;
 import org.hbrs.se2.project.hellocar.entities.Company;
 import org.hbrs.se2.project.hellocar.services.db.JDBCConnection;
@@ -43,8 +47,8 @@ public class AnzeigeDAO {
     }
 
 
-    public Anzeige findAnzeigeById(int id) throws DatabaseLayerException {
-        Anzeige anzeige = null;
+    public AnzeigeDTO findAnzeigeById(int id) throws DatabaseLayerException {
+        AnzeigeDTO anzeige = null;
         try {
             Statement statement = JDBCConnection.getInstance().getStatement();
             ResultSet set = statement.executeQuery(
@@ -64,8 +68,8 @@ public class AnzeigeDAO {
         return anzeige;
     }
 
-    public List<Anzeige> getAllAnzeigen() throws DatabaseLayerException {
-        List<Anzeige> anzeigen = new ArrayList<>();
+    public List<AnzeigeDTO> getAllAnzeigen() throws DatabaseLayerException {
+        List<AnzeigeDTO> anzeigen = new ArrayList<>();
         try {
             Statement statement = JDBCConnection.getInstance().getStatement();
             ResultSet set = statement.executeQuery("SELECT * FROM collabhbrs.anzeige");
@@ -83,18 +87,18 @@ public class AnzeigeDAO {
         return anzeigen;
     }
 
-    private Anzeige mapResultSetToAnzeige(ResultSet set) throws SQLException {
-        Anzeige anzeige = new Anzeige();
-        CompanyDAO companyDao = new CompanyDAO();
+    private AnzeigeDTO mapResultSetToAnzeige(ResultSet set) throws SQLException, DatabaseLayerException {
+        AnzeigeDTO anzeige = new AnzeigeDTOImpl();
+        UserDAO user = new UserDAO();
         anzeige.setId(set.getInt("id"));
         anzeige.setJobTitle(set.getString("Titel"));
         anzeige.setJobType(set.getString("Jobart"));
         anzeige.setStandort(set.getString("Standort"));
-        anzeige.setPublicationDate(set.getTimestamp("Veröffentlichung").toLocalDateTime());
+        anzeige.setPublicationDate(set.getTimestamp("Veroeffentlichung").toLocalDateTime());
         anzeige.setJobDescription(set.getString("Stellenbeschreibung"));
 
         int companyId = set.getInt("company_id");
-        Company company = companyDao.getCompanyById(companyId);
+        UserDTO company = user.findUserById(companyId);
         anzeige.setCompany(company);
 
         return anzeige;

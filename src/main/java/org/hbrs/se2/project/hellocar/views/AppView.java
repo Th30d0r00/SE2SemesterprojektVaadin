@@ -25,7 +25,6 @@ import org.hbrs.se2.project.hellocar.dtos.UserDTO;
 import org.hbrs.se2.project.hellocar.util.AccountType;
 import org.hbrs.se2.project.hellocar.util.Globals;
 import org.hbrs.se2.project.hellocar.util.Utils;
-
 import java.util.Arrays;
 import java.util.Optional;
 
