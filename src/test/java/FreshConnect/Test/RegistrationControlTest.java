@@ -61,7 +61,6 @@ public class RegistrationControlTest {
 
             return;
         } catch (AssertionError e) { //if user is already registered
-            e.printStackTrace();
         }
         //if user is already registered we will test if the user is already registered
         assertFalse(result.getSuccess());
@@ -91,39 +90,11 @@ public class RegistrationControlTest {
         //register user2
         RegistrationResult result = registrationControl.registerUser(userToAdd);
 
-        //create new User2 with the same values
-        RegistrationControl registrationControl2 = new RegistrationControl();
 
-        UserDTO userToAdd2 = new UserDTOImpl();
-        userToAdd2.setEmail("adadad@gdddmail.com");
-        userToAdd2.setPassword("kakaadadddad1234");
-        userToAdd2.setSalt(Security.getSalt());
-        userToAdd2.setHashValue(Security.getHash(userToAdd2.getPassword(),userToAdd2.getSalt()));
-        userToAdd2.setAccountType(AccountType.valueOf("STUDENT"));
+        assertFalse(result.getSuccess());
+        assertEquals(("User with email "+ userToAdd.getEmail() + " already exists"), result.getMessage());
 
-        StudentDTO studentToAdd2 = new StudentDTOImpl();
-        studentToAdd2.setFirstname("peter");
-        studentToAdd2.setLastname("muster");
-        LocalDate date2 = LocalDate.of(2020, 1, 8);
-        studentToAdd2.setBirthday(date2);
-        userToAdd2.setStudent(studentToAdd2);
 
-        //register user2
-        RegistrationResult result2 = registrationControl.registerUser(userToAdd2);
-
-        //if user is already registered an Assertion Error will be thrown
-
-        try{
-            assertTrue(result2.getSuccess());
-            assertEquals("User successfully registered.", result2.getMessage());
-
-            return;
-        } catch (AssertionError e) { //if user is already registered
-            e.printStackTrace();
-        }
-        //if user is already registered we will test if the user is already registered
-        assertFalse(result2.getSuccess());
-        assertEquals(("User with email "+ userToAdd2.getEmail() + " already exists"), result.getMessage());
     }
 
     @Test
