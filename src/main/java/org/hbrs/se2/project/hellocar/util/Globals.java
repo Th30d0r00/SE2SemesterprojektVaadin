@@ -16,6 +16,8 @@ public class Globals {
 
         public static final String SHOW_COMPANIES = "showcompanies";
 
+        //public static final COMPANY_DETAILS = "companydetails";
+
     }
 
     public static class Roles {

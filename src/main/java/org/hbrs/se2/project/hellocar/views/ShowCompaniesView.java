@@ -49,20 +49,23 @@ public class ShowCompaniesView extends Div{
     private Component createGridTable() {
         Grid<CompanyDTO> grid = new Grid<>();
 
-        // Befüllen der Tabelle mit den zuvor ausgelesenen Jobanzeigen
+        // Befüllen der Tabelle mit den zuvor ausgelesenen Companies
         ListDataProvider<CompanyDTO> dataProvider = new ListDataProvider<>(companiesList);
         grid.setDataProvider(dataProvider);
 
         Grid.Column<CompanyDTO> nameColumn = grid.addColumn(CompanyDTO::getCompanyName).setHeader("Unternehmensname");
-        Grid.Column<CompanyDTO> locationsColumn = grid.addColumn(CompanyDTO::getStandorte).setHeader("Standorte");
+        Grid.Column<CompanyDTO> locationsColumn = grid.addColumn(CompanyDTO::getlocations).setHeader("Standorte");
         Grid.Column<CompanyDTO> foundingdateColumn = grid.addColumn(CompanyDTO::getFoundingDate).setHeader("Gründungsdatum");
         Grid.Column<CompanyDTO> employeesColumn = grid.addColumn(CompanyDTO::getEmployees).setHeader("Anzahl der Mitarbeiter");
 
         // Click listener for rows
         grid.addItemClickListener(event -> {
             CompanyDTO selectedcompany = event.getItem();
-            // Redirect to job detail view
-            //UI.getCurrent().navigate(JobDetailView.class, selectedJob.getId()); //companyDetailView
+            System.out.println(selectedcompany.getId());
+            // Redirect to company detail view
+            UI.getCurrent().navigate(CompanyDetailView.class,selectedcompany.getId()); //companyDetailView
+            //UI.getCurrent().navigate(CompanyDetailView.class, 2);
+            //getUI().ifPresent(ui -> ui.navigate(CompanyDetailView.class, selectedcompany.getId()));
         });
 
         HeaderRow filterRow = grid.appendHeaderRow();
@@ -79,7 +82,7 @@ public class ShowCompaniesView extends Div{
         // Filter for Standort
         TextField standortField = new TextField();
         standortField.addValueChangeListener(event -> dataProvider.addFilter(
-                company -> StringUtils.containsIgnoreCase(company.getStandorte(), standortField.getValue())));
+                company -> StringUtils.containsIgnoreCase(company.getlocations(), standortField.getValue())));
         standortField.setValueChangeMode(ValueChangeMode.EAGER);
         filterRow.getCell(locationsColumn).setComponent(standortField);
         standortField.setSizeFull();

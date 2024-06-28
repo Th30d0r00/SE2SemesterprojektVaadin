@@ -45,6 +45,7 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
     DatePicker foundingDate = new DatePicker("Gründungsdatum");
     TextField employees = new TextField("Anzahl Mitarbeiter");
     TextField locations = new TextField("Standorte");
+    TextField description = new TextField("Beschreiben Sie Ihr Unternehmen in 2 Sätzen");
 
     TextField firstname = new TextField("Vorname");
     TextField lastname = new TextField("Nachname");
@@ -143,6 +144,7 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
         foundingDate.setVisible(false);
         employees.setVisible(false);
         locations.setVisible(false);
+        description.setVisible(false);
         firstname.setVisible(false);
         lastname.setVisible(false);
         birthday.setVisible(false);
@@ -154,6 +156,7 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
         foundingDate.setVisible(false);
         employees.setVisible(false);
         locations.setVisible(false);
+        description.setVisible(false);
         firstname.setVisible(true);
         lastname.setVisible(true);
         birthday.setVisible(true);
@@ -165,6 +168,7 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
         foundingDate.setVisible(true);
         employees.setVisible(true);
         locations.setVisible(true);
+        description.setVisible(true);
         firstname.setVisible(false);
         lastname.setVisible(false);
         birthday.setVisible(false);
@@ -197,7 +201,8 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
         companyDTO.setCompanyName(companyName.getValue());
         companyDTO.setFoundingDate(foundingDate.getValue());
         companyDTO.setEmployees( Integer.parseInt(employees.getValue()));
-        companyDTO.setStandorte(locations.getValue());
+        companyDTO.setlocations(locations.getValue());
+        companyDTO.setDescription(description.getValue());
         userDTO.setCompany(companyDTO);
     }
 
@@ -268,6 +273,7 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
             LocalDate form_foundingDate = foundingDate.getValue();
             String form_employees = employees.getValue();
             String form_locations = locations.getValue();
+            String form_description = description.getValue();
 
             if(form_companyName == null){
                 formComplete = false;
@@ -285,6 +291,14 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
             if(form_locations == null) {
                 formComplete = false;
                 Notification.show("Geben Sie mindestens einen Standort ein.");
+            }
+            if(form_foundingDate == null) {
+                formComplete = false;
+                Notification.show("Wählen Sie bitte Ihr Gründungsdatum aus.");
+            }
+            if(form_description == null || form_description.length() > 500) {
+                formComplete = false;
+                Notification.show("Geben Sie eine kurze Beschreibung Ihres Unternehmens ein, die bis zu 500 Zeichen lang ist.");
             }
         }
 

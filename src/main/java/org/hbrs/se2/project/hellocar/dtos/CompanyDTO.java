@@ -20,7 +20,11 @@ public interface CompanyDTO {
 
     void setEmployees(int employees);
 
-    public String getStandorte();
+    public String getlocations();
 
-    void setStandorte(String standorte);
+    void setlocations(String standorte);
+
+    public String getdescription();
+
+    void setDescription(String description);
 }
