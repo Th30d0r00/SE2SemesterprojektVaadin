@@ -3,9 +3,9 @@ package FreshConnect.Test;
 
 import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
-import org.hbrs.se2.project.hellocar.control.RegistrationControl; //
+import org.hbrs.se2.project.hellocar.control.RegistrationControl;
 import org.hbrs.se2.project.hellocar.dtos.StudentDTO; //
-import org.hbrs.se2.project.hellocar.dtos.impl.StudentDTOImpl; //
+import org.hbrs.se2.project.hellocar.dtos.impl.StudentDTOImpl;
 import org.hbrs.se2.project.hellocar.dtos.impl.UserDTOImpl;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,16 +14,16 @@ import org.hbrs.se2.project.hellocar.dao.UserDAO;
 import org.hbrs.se2.project.hellocar.dtos.UserDTO;
 import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerException;
 import org.junit.jupiter.api.BeforeAll;
-import org.hbrs.se2.project.hellocar.util.Security; //
-import org.hbrs.se2.project.hellocar.util.AccountType;  //
-import java.time.LocalDate; //
-import java.util.UUID; //neu Import
+import org.hbrs.se2.project.hellocar.util.Security;
+import org.hbrs.se2.project.hellocar.util.AccountType;
+import java.time.LocalDate;
+import java.util.UUID;
 
 public class RegistrationControlTest {
     private RegistrationControl registrationControl;
 
     @BeforeAll
-    public static void setUp() { //
+    public static void setUp() {
 
         //RegistrationControl registrationControl = new RegistrationControl(); //
 
@@ -52,19 +52,18 @@ public class RegistrationControlTest {
         //register user2
         RegistrationResult result = registrationControl.registerUser(userToAd);
         //if user is already registered an Assertion Error will be thrown in
-         assertTrue(result.getSuccess());
-        assertEquals("User successfully registered.", result.getMessage());
-
-         /*try{
+         assertTrue(result.getSuccess()); //
+        assertEquals("User successfully registered.", result.getMessage()); //
+         /*try{ //
             assertTrue(result.getSuccess());
             assertEquals("User successfully registered.", result.getMessage());
-            return;//
+            return;
         } catch (AssertionError e) { //if user is already registered/
         }/
         //if user is already registered we will test if the user is already registered
         assertFalse(result.getSuccess());
         assertEquals(("User with email "+ userToAdd.getEmail() + " already exists"), result.getMessage());*/
-    } //
+    }
 
     @Test
     public void testRegisterUser_UserAlreadyExists() throws DatabaseLayerException {
@@ -101,9 +100,9 @@ public class RegistrationControlTest {
         //create new User with random values
         RegistrationControl registrationControl = new RegistrationControl();
 
-        String email = UUID.randomUUID().toString(); //
+        String email = UUID.randomUUID().toString();
         UserDTO userToAdd = new UserDTOImpl();
-        userToAdd.setEmail(email); //
+        userToAdd.setEmail(email);
         userToAdd.setPassword("ka");
         userToAdd.setSalt(Security.getSalt());
         userToAdd.setHashValue(Security.getHash(userToAdd.getPassword(),userToAdd.getSalt()));
