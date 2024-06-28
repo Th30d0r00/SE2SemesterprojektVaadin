@@ -123,7 +123,7 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
     private Component createFormLayout() {
         FormLayout formLayout = new FormLayout();
         formLayout.add(email, password, accountType, companyName, locations,
-                foundingDate, employees, firstname, lastname, birthday, fachsemester);
+                foundingDate, employees, firstname, lastname, birthday, fachsemester, description);
         return formLayout;
     }
 
@@ -201,7 +201,7 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
         companyDTO.setCompanyName(companyName.getValue());
         companyDTO.setFoundingDate(foundingDate.getValue());
         companyDTO.setEmployees( Integer.parseInt(employees.getValue()));
-        companyDTO.setlocations(locations.getValue());
+        companyDTO.setLocations(locations.getValue());
         companyDTO.setDescription(description.getValue());
         userDTO.setCompany(companyDTO);
     }

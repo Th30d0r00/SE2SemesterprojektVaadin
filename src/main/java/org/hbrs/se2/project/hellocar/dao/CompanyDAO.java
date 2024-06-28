@@ -34,7 +34,7 @@ public class CompanyDAO {
         company.setCompanyName(set.getString("company_name"));
         company.setEmployees(set.getInt("employees"));
         company.setFoundingDate(set.getDate("founding_date").toLocalDate());
-        company.setlocations(set.getString("locations"));
+        company.setLocations(set.getString("locations"));
         company.setDescription(set.getString("description"));
         return company;
     }

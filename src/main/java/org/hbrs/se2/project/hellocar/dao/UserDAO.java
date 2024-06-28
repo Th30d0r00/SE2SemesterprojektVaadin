@@ -140,6 +140,8 @@ public class UserDAO {
                         company.setCompanyName(set2.getString("company_name"));
                         company.setEmployees(set2.getInt("employees"));
                         company.setFoundingDate(set2.getDate("founding_date").toLocalDate());
+                        company.setLocations(set2.getString("locations"));
+                        company.setDescription(set2.getString("description"));
                         user.setCompany(company);
                     }
                 }
@@ -205,11 +207,13 @@ public class UserDAO {
                         userDTO.getStudent().getFachsemester() + "')";
                 statement.executeUpdate(studentQuery);
             } else {
-                String companyQuery = "INSERT INTO collabhbrs.company (id, company_name, founding_date, employees) " +
+                String companyQuery = "INSERT INTO collabhbrs.company (id, company_name, founding_date, employees, locations, description) " +
                         "VALUES (" + userId + ", '" +
                         userDTO.getCompany().getCompanyName() + "', '" +
                         userDTO.getCompany().getFoundingDate() + "', " +
-                        userDTO.getCompany().getEmployees() + ")";
+                        userDTO.getCompany().getEmployees() + ", '" +
+                        userDTO.getCompany().getLocations() + "', '" +
+                        userDTO.getCompany().getDescription() + "')";
                 statement.executeUpdate(companyQuery);
             }
 

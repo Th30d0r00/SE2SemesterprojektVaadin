@@ -52,17 +52,17 @@ public class CompanyDTOImpl implements CompanyDTO {
     }
 
     @Override
-    public String getlocations() {
+    public String getLocations() {
         return locations;
     }
 
     @Override
-    public void setlocations(String locations) {
+    public void setLocations(String locations) {
         this.locations = locations;
     }
 
     @Override
-    public String getdescription() {
+    public String getDescription() {
         return description;
     }
 

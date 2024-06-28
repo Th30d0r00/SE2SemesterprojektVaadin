@@ -19,8 +19,8 @@ import org.hbrs.se2.project.hellocar.util.Globals;
 
 import java.sql.SQLException;
 
+@Route(value = "companydetailview", layout = AppView.class)
 @PageTitle(value = "companydetailview")
-@Route("companydetailview")
 public class CompanyDetailView extends VerticalLayout implements HasUrlParameter<Integer> {
     private final UserDAO userDAO;
     private final CompanyDAO companyDAO;
@@ -104,8 +104,8 @@ public class CompanyDetailView extends VerticalLayout implements HasUrlParameter
             emailField.setValue(userDTO.getEmail());
             employeesField.setValue(Integer.toString(companyDTO.getEmployees()));
             foundingdateField.setValue(String.valueOf(companyDTO.getFoundingDate()));
-            locationsField.setValue(companyDTO.getlocations());
-            descriptionField.setValue(companyDTO.getdescription());
+            locationsField.setValue(companyDTO.getLocations());
+            descriptionField.setValue(companyDTO.getDescription());
         }
 
     }
