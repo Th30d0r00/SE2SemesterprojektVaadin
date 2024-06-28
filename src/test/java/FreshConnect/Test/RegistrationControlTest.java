@@ -1,4 +1,3 @@
-
 package FreshConnect.Test;
 
 import static org.mockito.Mockito.*;
@@ -141,4 +140,3 @@ public class RegistrationControlTest {
     //@Test
     //public void testRegisterUser_DatabaseLayerException() throws DatabaseLayerException {}
 }
-
