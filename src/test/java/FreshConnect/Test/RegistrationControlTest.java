@@ -34,26 +34,26 @@ public class RegistrationControlTest {
         //create new User with random value
         RegistrationControl registrationControl = new RegistrationControl(); //
         //generate random string
-        String email2 = UUID.randomUUID().toString();
+        String email = UUID.randomUUID().toString();
 
-        UserDTO userToAd = new UserDTOImpl();
-        userToAd.setEmail(email2);
-        userToAd.setPassword("kakaaaddDdad1234");
-        userToAd.setSalt(Security.getSalt());
-        userToAd.setHashValue(Security.getHash(userToAd.getPassword(),userToAd.getSalt()));
-        userToAd.setAccountType(AccountType.valueOf("STUDENT"));
-        StudentDTO studentToAdd2 = new StudentDTOImpl();
-        studentToAdd2.setFirstname("peter");
-        studentToAdd2.setLastname("muuster");
+        UserDTO userToAdd = new UserDTOImpl();
+        userToAdd.setEmail(email);
+        userToAdd.setPassword("kakaaaddDdad1234");
+        userToAdd.setSalt(Security.getSalt());
+        userToAdd.setHashValue(Security.getHash(userToAdd.getPassword(),userToAdd.getSalt()));
+        userToAdd.setAccountType(AccountType.valueOf("STUDENT"));
+        StudentDTO studentToAdd = new StudentDTOImpl();
+        studentToAdd.setFirstname("peter");
+        studentToAdd.setLastname("muuster");
         LocalDate date = LocalDate.of(2020, 4, 8);
-        studentToAdd2.setBirthday(date);
-        userToAd.setStudent(studentToAdd2);
+        studentToAdd.setBirthday(date);
+        userToAdd.setStudent(studentToAdd);
         //
         //register user2
-        RegistrationResult result = registrationControl.registerUser(userToAd);
+        RegistrationResult result = registrationControl.registerUser(userToAdd);
         //if user is already registered an Assertion Error will be thrown in
          assertTrue(result.getSuccess()); //
-        assertEquals("User successfully registered.", result.getMessage());
+        assertEquals("User successfully registered.", result.getMessage()); //
          /*try{ //
             assertTrue(result.getSuccess()); //
             assertEquals("User successfully registered.", result.getMessage()); //
