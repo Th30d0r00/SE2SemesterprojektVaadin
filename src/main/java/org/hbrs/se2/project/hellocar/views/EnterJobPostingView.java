@@ -56,7 +56,7 @@ public class EnterJobPostingView extends VerticalLayout {
             anzeigeDTO.setStandort(locationField.getValue());
             anzeigeDTO.setJobType(employmentTypeField.getValue());
             anzeigeDTO.setJobDescription(jobDescriptionField.getValue());
-            anzeigeDTO.setCompany(getCurrentUser());
+            anzeigeDTO.setCompany(getCurrentUser()); //UserDTO übergeben
             anzeigeDTO.setPublicationDate(java.time.LocalDateTime.now());
             System.out.println(getCurrentUser().getId());
 

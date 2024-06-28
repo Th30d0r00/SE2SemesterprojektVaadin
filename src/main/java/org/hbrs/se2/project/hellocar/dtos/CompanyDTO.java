@@ -19,4 +19,8 @@ public interface CompanyDTO {
     public int getEmployees();
 
     void setEmployees(int employees);
+
+    public String getStandorte();
+
+    void setStandorte(String standorte);
 }

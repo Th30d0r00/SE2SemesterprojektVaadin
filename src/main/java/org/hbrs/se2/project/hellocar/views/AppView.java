@@ -124,8 +124,9 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
         // Hinzufügen des Logos
         logoLayout.setId("logo");
         logoLayout.setAlignItems(FlexComponent.Alignment.CENTER);
-        logoLayout.add(new Image("images/logo.png", "HelloCar logo"));
-        logoLayout.add(new H1("FreshConnect"));
+        //logoLayout.add(new Image("images/logo.png", "HelloCar logo"));
+        logoLayout.add(new Image("images/freshconnect.png", "freshconnect logo"));
+        //logoLayout.add(new H1("FreshConnect"));
 
         // Hinzufügen des Menus inklusive der Tabs
         layout.add(logoLayout, menu);
@@ -159,12 +160,13 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
         // (Alternative: Verwendung der Methode 'isUserisAllowedToAccessThisFeature')
         if (this.authorizationControl.isUserInAccountType(this.getCurrentUser(), AccountType.UNTERNEHMEN)) {
             System.out.println("User is Unternehmen!");
-            tabs = Utils.append(tabs, createTab("Show Applications", ShowApplicationsView.class));
-            tabs = Utils.append(tabs, createTab("Enter JobPosting", EnterJobPostingView.class));
+            tabs = Utils.append(tabs, createTab("Eingegangene Bewerbungen", ShowApplicationsView.class));
+            tabs = Utils.append(tabs, createTab("Stellenanzeige hinzufügen", EnterJobPostingView.class));
         } else if (this.authorizationControl.isUserInAccountType(this.getCurrentUser(), AccountType.STUDENT)) {
             System.out.println("User is Student!");
-             tabs = Utils.append(tabs, createTab("Show JobPostings", ShowJobPostingsView.class));
-             tabs = Utils.append(tabs, createTab("Enter Application", EnterApplicationView.class));
+             tabs = Utils.append(tabs, createTab("Verfügbare Stellenanzeigen", ShowJobPostingsView.class));
+             tabs = Utils.append(tabs, createTab("Unternehmen finden", ShowCompaniesView.class));
+             //tabs = Utils.append(tabs, createTab("Enter Application", EnterApplicationView.class)); //Bewerbung nicht als Menütab
         }
         return tabs;
     }
@@ -190,6 +192,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
         viewTitle.setText(getCurrentPageTitle());
 
         // Setzen des Vornamens von dem aktuell eingeloggten Benutzer
+        // Stringoperation: Nach @ String abschneiden, .,-_ ersetzen durch Leerzeichen
         helloUser.setText("Hello my dear old friend!! Wie geht's dir, " + this.getCurrentEmailOfUser());
 
     }

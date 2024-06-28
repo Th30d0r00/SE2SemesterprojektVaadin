@@ -13,6 +13,9 @@ public class Globals {
         public static final String MAIN_VIEW = "";
 
         public static final String SHOW_JOBPOSTINGS = "jobpostings";
+
+        public static final String SHOW_COMPANIES = "showcompanies";
+
     }
 
     public static class Roles {
