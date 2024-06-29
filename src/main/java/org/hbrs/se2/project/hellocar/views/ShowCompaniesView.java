@@ -17,8 +17,6 @@ import org.hbrs.se2.project.hellocar.control.ShowCompaniesControl;
 import org.hbrs.se2.project.hellocar.dtos.CompanyDTO;
 import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerException;
 import org.hbrs.se2.project.hellocar.util.Globals;
-import org.hbrs.se2.project.hellocar.views.AppView;
-import org.hbrs.se2.project.hellocar.views.CompanyDetailView;
 
 import java.util.List;
 
@@ -44,7 +42,7 @@ public class ShowCompaniesView extends Div {
             // Ausnahmebehandlung (Benachrichtigung anzeigen, Fehler protokollieren, etc.)
             e.printStackTrace();
             // Beispiel: Mit einer Notification-Komponente eine Fehlermeldung anzeigen
-            // Notification.show("Fehler beim Abrufen der Unternehmen: " + e.getMessage(), 3000, Notification.Position.MIDDLE);
+            Notification.show("Fehler beim Abrufen der Unternehmen: " + e.getMessage(), 3000, Notification.Position.MIDDLE);
         }
     }
 

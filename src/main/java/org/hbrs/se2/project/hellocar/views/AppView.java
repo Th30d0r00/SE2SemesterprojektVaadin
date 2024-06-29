@@ -25,7 +25,6 @@ import org.hbrs.se2.project.hellocar.dtos.UserDTO;
 import org.hbrs.se2.project.hellocar.util.AccountType;
 import org.hbrs.se2.project.hellocar.util.Globals;
 import org.hbrs.se2.project.hellocar.util.Utils;
-import java.util.Arrays;
 import java.util.Optional;
 
 @CssImport("./styles/views/main/main-view.css")
@@ -161,6 +160,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
         if (this.authorizationControl.isUserInAccountType(this.getCurrentUser(), AccountType.UNTERNEHMEN)) {
             System.out.println("User is Unternehmen!");
             tabs = Utils.append(tabs, createTab("Eingegangene Bewerbungen", ShowApplicationsView.class));
+            tabs = Utils.append(tabs, createTab("Meine Stellenanzeigen", ShowMyJobPostingsView.class));
             tabs = Utils.append(tabs, createTab("Stellenanzeige hinzufügen", EnterJobPostingView.class));
         } else if (this.authorizationControl.isUserInAccountType(this.getCurrentUser(), AccountType.STUDENT)) {
             System.out.println("User is Student!");

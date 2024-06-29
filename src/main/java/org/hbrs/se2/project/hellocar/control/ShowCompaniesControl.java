@@ -1,5 +1,6 @@
 package org.hbrs.se2.project.hellocar.control;
 
+import com.vaadin.flow.component.UI;
 import org.hbrs.se2.project.hellocar.dao.CompanyDAO;
 import org.hbrs.se2.project.hellocar.dtos.CompanyDTO;
 import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerException;
@@ -17,5 +18,6 @@ public class ShowCompaniesControl {
 
     public List<CompanyDTO> readAllCompanies() throws DatabaseLayerException{
             return companyDAO.getAllCompanies();
+
     }
 }

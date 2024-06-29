@@ -87,6 +87,27 @@ public class AnzeigeDAO {
         return anzeigen;
     }
 
+    public List<AnzeigeDTO> getAllMyJobPostings(int id) throws DatabaseLayerException{
+        List<AnzeigeDTO> anzeigen = new ArrayList<>();
+        try {
+            Statement statement = JDBCConnection.getInstance().getStatement();
+            ResultSet set = statement.executeQuery("SELECT * "
+                    + "FROM collabhbrs.anzeige "
+                    + "WHERE collabhbrs.anzeige.companyid = \'" + id + "\'" );
+
+            while (set.next()) {
+                anzeigen.add(mapResultSetToAnzeige(set));
+            }
+        } catch (SQLException ex) {
+            throw new DatabaseLayerException("Fehler im SQL-Befehl!");
+        } catch (NullPointerException ex) {
+            throw new DatabaseLayerException("Fehler bei Datenbankverbindung!");
+        } finally {
+            JDBCConnection.getInstance().closeConnection();
+        }
+        return anzeigen;
+    }
+
     private AnzeigeDTO mapResultSetToAnzeige(ResultSet set) throws SQLException, DatabaseLayerException {
         AnzeigeDTO anzeige = new AnzeigeDTOImpl();
         UserDAO user = new UserDAO();
