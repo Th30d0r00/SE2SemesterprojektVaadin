@@ -7,12 +7,15 @@ injectGlobalCss($cssFromFile_0.toString(), 'CSSImport end', document);
 import $cssFromFile_1 from 'Frontend/styles/views/enterjobposting/enter-job-posting-view.css?inline';
 
 injectGlobalCss($cssFromFile_1.toString(), 'CSSImport end', document);
-import $cssFromFile_2 from 'Frontend/styles/views/entercar/enter-car-view.css?inline';
+import $cssFromFile_2 from 'Frontend/styles/views/jobdetail/show-job-detail-view.css?inline';
 
 injectGlobalCss($cssFromFile_2.toString(), 'CSSImport end', document);
-import $cssFromFile_3 from 'Frontend/styles/views/showcars/show-cars-view.css?inline';
+import $cssFromFile_3 from 'Frontend/styles/views/entercar/enter-car-view.css?inline';
 
 injectGlobalCss($cssFromFile_3.toString(), 'CSSImport end', document);
+import $cssFromFile_4 from 'Frontend/styles/views/showcars/show-cars-view.css?inline';
+
+injectGlobalCss($cssFromFile_4.toString(), 'CSSImport end', document);
 import '@vaadin/polymer-legacy-adapter/style-modules.js';
 import '@vaadin/vaadin-lumo-styles/color-global.js';
 import '@vaadin/vaadin-lumo-styles/typography-global.js';

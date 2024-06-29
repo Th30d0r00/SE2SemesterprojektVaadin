@@ -19,6 +19,7 @@ public class Globals {
         //public static final COMPANY_DETAILS = "companydetails";
 
         public static final String SHOW_MY_JOBPOSTINGS = "showmyjobpostings";
+        public static final String JOB_APPLY = "jobapply";
 
     }
 

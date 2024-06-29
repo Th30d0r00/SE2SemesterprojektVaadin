@@ -1,0 +1,29 @@
+/* Stile für die Schaltfläche "bewerben" */
+.apply-button {
+    background-color: #4CAF50; /* Grüner Hintergrund */
+    color: white;              /* Weißer Text */
+    border: none;              /* Kein Rand */
+    padding: 10px 20px;        /* Innenabstand */
+    text-align: center;        /* Text zentriert */
+    text-decoration: none;     /* Keine Unterstreichung */
+    display: inline-block;     /* Inline-Block-Anzeige */
+    font-size: 16px;           /* Schriftgröße */
+    margin: 4px 2px;           /* Außenabstand */
+    cursor: pointer;           /* Mauszeiger als Zeiger */
+    border-radius: 12px;       /* Abgerundete Ecken */
+}
+
+/* Stile für die Schaltfläche "zurück" */
+.back-button {
+    background-color: #007bff; /* Blauer Hintergrund */
+    color: white;              /* Weißer Text */
+    border: none;              /* Kein Rand */
+    padding: 10px 20px;        /* Innenabstand */
+    text-align: center;        /* Text zentriert */
+    text-decoration: none;     /* Keine Unterstreichung */
+    display: inline-block;     /* Inline-Block-Anzeige */
+    font-size: 16px;           /* Schriftgröße */
+    margin: 4px 2px;           /* Außenabstand */
+    cursor: pointer;           /* Mauszeiger als Zeiger */
+    border-radius: 12px;       /* Abgerundete Ecken */
+}
