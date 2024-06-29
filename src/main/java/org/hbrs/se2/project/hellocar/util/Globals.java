@@ -11,6 +11,15 @@ public class Globals {
 
         public static final String LOGIN_VIEW = "login";
         public static final String MAIN_VIEW = "";
+
+        public static final String SHOW_JOBPOSTINGS = "jobpostings";
+
+        public static final String SHOW_COMPANIES = "showcompanies";
+
+        //public static final COMPANY_DETAILS = "companydetails";
+
+        public static final String SHOW_MY_JOBPOSTINGS = "showmyjobpostings";
+
     }
 
     public static class Roles {

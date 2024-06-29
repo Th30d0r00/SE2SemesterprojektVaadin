@@ -10,6 +10,8 @@ public class CompanyDTOImpl implements CompanyDTO {
     private String companyName;
     private LocalDate foundingDate;
     private int employees;
+    private String locations;
+    private String description;
 
     public int getId() {
         return id;
@@ -47,6 +49,26 @@ public class CompanyDTOImpl implements CompanyDTO {
     @Override
     public void setEmployees(int employees) {
         this.employees = employees;
+    }
+
+    @Override
+    public String getLocations() {
+        return locations;
+    }
+
+    @Override
+    public void setLocations(String locations) {
+        this.locations = locations;
+    }
+
+    @Override
+    public String getDescription() {
+        return description;
+    }
+
+    @Override
+    public void setDescription(String description) {
+        this.description = description;
     }
 
 }

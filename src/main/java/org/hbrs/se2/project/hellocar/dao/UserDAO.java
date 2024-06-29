@@ -140,6 +140,8 @@ public class UserDAO {
                         company.setCompanyName(set2.getString("company_name"));
                         company.setEmployees(set2.getInt("employees"));
                         company.setFoundingDate(set2.getDate("founding_date").toLocalDate());
+                        company.setLocations(set2.getString("locations"));
+                        company.setDescription(set2.getString("description"));
                         user.setCompany(company);
                     }
                 }
@@ -205,11 +207,13 @@ public class UserDAO {
                         userDTO.getStudent().getFachsemester() + "')";
                 statement.executeUpdate(studentQuery);
             } else {
-                String companyQuery = "INSERT INTO collabhbrs.company (id, company_name, founding_date, employees) " +
+                String companyQuery = "INSERT INTO collabhbrs.company (id, company_name, founding_date, employees, locations, description) " +
                         "VALUES (" + userId + ", '" +
                         userDTO.getCompany().getCompanyName() + "', '" +
                         userDTO.getCompany().getFoundingDate() + "', " +
-                        userDTO.getCompany().getEmployees() + ")";
+                        userDTO.getCompany().getEmployees() + ", '" +
+                        userDTO.getCompany().getLocations() + "', '" +
+                        userDTO.getCompany().getDescription() + "')";
                 statement.executeUpdate(companyQuery);
             }
 
@@ -236,6 +240,34 @@ public class UserDAO {
         }
 
         return successfullyAddedUser;
+    }
+
+    public UserDTO findUserById(int id) throws DatabaseLayerException {
+        UserDTO user = null;
+        try {
+            Statement statement = JDBCConnection.getInstance().getStatement();
+            ResultSet set = statement.executeQuery(
+                    "SELECT * FROM collabhbrs.users WHERE id = " + id
+            );
+
+            if (set.next()) {
+                user = new UserDTOImpl();
+                user.setId(set.getInt("id"));
+                user.setEmail(set.getString("email"));
+                user.setSalt(set.getBytes("salt"));
+                user.setHashValue(set.getBytes("hashvalue"));
+                user.setAccountType(AccountType.valueOf(set.getString("accounttype")));
+
+                // Beziehe die Rollen eines Users
+                RolleDAO rolleDAO = new RolleDAO();
+                List<RolleDTO> rollen = rolleDAO.getRolesOfUser(user);
+                user.setRoles(rollen);
+            }
+        } catch (SQLException | DatabaseLayerException e) {
+            e.printStackTrace();
+    } finally {
+        JDBCConnection.getInstance().closeConnection();
+    } return user;
     }
 
 }
