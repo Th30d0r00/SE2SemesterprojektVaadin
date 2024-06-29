@@ -20,7 +20,7 @@ import org.hbrs.se2.project.hellocar.util.Globals;
 import java.sql.SQLException;
 
 @Route(value = "companydetailview", layout = AppView.class)
-@PageTitle(value = "companydetailview")
+@PageTitle(value = "Anzeigendetails")
 public class CompanyDetailView extends VerticalLayout implements HasUrlParameter<Integer> {
     private final UserDAO userDAO;
     private final CompanyDAO companyDAO;

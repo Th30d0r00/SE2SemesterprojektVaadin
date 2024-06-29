@@ -104,10 +104,14 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
                 }
 
                 RegistrationResult result = regControl.registerUser(userDTO);
-                Notification.show(result.getMessage());
-                clearForm();
 
-                UI.getCurrent().navigate( Globals.Pages.LOGIN_VIEW );
+                if (!result.getSuccess()) {
+                    Notification.show(result.getMessage());
+                } else {
+                    Notification.show(result.getMessage());
+                    clearForm();
+                    UI.getCurrent().navigate( Globals.Pages.LOGIN_VIEW );
+                }
             }
         });
     }
@@ -234,69 +238,88 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
             Notification.show("Ihr Passwort muss mindestens 8 Zeichen lang sein.");
         }
 
-        if(form_type == AccountType.STUDENT){
+        if (form_type == AccountType.STUDENT) {
             String form_firstname = firstname.getValue();
             String form_lastname = lastname.getValue();
             LocalDate form_birthday = birthday.getValue();
-            int form_fachsemester = Integer.parseInt(fachsemester.getValue());
+            String form_fachsemesterStr = fachsemester.getValue();
+            int form_fachsemester = 0;
 
-            if(form_firstname == null){
+            // Überprüfen, ob form_fachsemesterStr numerisch ist, bevor es geparst wird
+            if (form_fachsemesterStr != null && !form_fachsemesterStr.isEmpty() && isNumeric(form_fachsemesterStr)) {
+                form_fachsemester = Integer.parseInt(form_fachsemesterStr);
+            } else {
                 formComplete = false;
-                Notification.show("Bitte geben Sie einen Vornamen ein.");
+                Notification.show("Bitte geben Sie eine gültige Zahl für das Fachsemester ein.");
             }
 
-            if(form_firstname != null && form_firstname.length() > 64){
+            if (form_firstname == null || form_firstname.isEmpty()) {
+                formComplete = false;
+                Notification.show("Bitte geben Sie einen Vornamen ein.");
+            } else if (form_firstname.length() > 64) {
                 formComplete = false;
                 Notification.show("Ihr Vorname darf nicht länger als 64 Zeichen sein.");
             }
 
-            if(form_lastname == null){
+            if (form_lastname == null || form_lastname.isEmpty()) {
                 formComplete = false;
                 Notification.show("Bitte geben Sie einen Nachnamen ein.");
-            }
-
-            if(form_lastname != null && form_lastname.length() > 64){
+            } else if (form_lastname.length() > 64) {
                 formComplete = false;
                 Notification.show("Ihr Nachname darf nicht länger als 64 Zeichen sein.");
             }
 
-            if(form_fachsemester == 0){
+            if (form_fachsemester <= 0) {
                 formComplete = false;
-                Notification.show("Bitte geben Sie ein fachsemester an");
+                Notification.show("Bitte geben Sie ein gültiges Fachsemester an.");
             }
 
-            //Birthdate muss mindestens 16 Jahre zurückliegen
+            // Überprüfen, ob das Geburtsdatum mindestens 16 Jahre zurückliegt
+            if (form_birthday == null || !isAtLeast16YearsOld(form_birthday)) {
+                formComplete = false;
+                Notification.show("Sie müssen mindestens 16 Jahre alt sein.");
+            }
         }
 
-        if(form_type == AccountType.UNTERNEHMEN){
+
+        if (form_type == AccountType.UNTERNEHMEN) {
             String form_companyName = companyName.getValue();
             LocalDate form_foundingDate = foundingDate.getValue();
             String form_employees = employees.getValue();
             String form_locations = locations.getValue();
             String form_description = description.getValue();
+            int employeeCount = 0;
 
-            if(form_companyName == null){
+            if (form_companyName == null || form_companyName.isEmpty()) {
                 formComplete = false;
                 Notification.show("Bitte geben Sie einen Firmennamen an.");
-            }
-
-            if(form_companyName != null && form_companyName.length() > 64){
+            } else if (form_companyName.length() > 64) {
                 formComplete = false;
                 Notification.show("Ihr Firmenname darf nicht länger als 64 Zeichen sein.");
             }
-            if((form_employees == null) || (form_employees.contains("-"))) {
+
+            if (form_employees == null || form_employees.isEmpty() || !isNumeric(form_employees)) {
                 formComplete = false;
-                Notification.show("Geben Sie bitt ein, wie viele Mitarbeiter Sie haben.");
+                Notification.show("Geben Sie bitte eine gültige Zahl für die Mitarbeiteranzahl ein.");
+            } else {
+                employeeCount = Integer.parseInt(form_employees);
+                if (employeeCount <= 0) {
+                    formComplete = false;
+                    Notification.show("Die Mitarbeiteranzahl muss größer als 0 sein.");
+                }
             }
-            if(form_locations == null) {
+
+            if (form_locations == null || form_locations.isEmpty()) {
                 formComplete = false;
                 Notification.show("Geben Sie mindestens einen Standort ein.");
             }
-            if(form_foundingDate == null) {
+
+            if (form_foundingDate == null) {
                 formComplete = false;
                 Notification.show("Wählen Sie bitte Ihr Gründungsdatum aus.");
             }
-            if(form_description == null || form_description.length() > 500) {
+
+            if (form_description == null || form_description.isEmpty() || form_description.length() > 500) {
                 formComplete = false;
                 Notification.show("Geben Sie eine kurze Beschreibung Ihres Unternehmens ein, die bis zu 500 Zeichen lang ist.");
             }
@@ -313,4 +336,26 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
         Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailStr);
         return matcher.matches();
     }
+
+    // Hilfsmethode, um zu überprüfen, ob eine Zeichenkette numerisch ist
+    private boolean isNumeric(String str) {
+        if (str == null || str.isEmpty()) {
+            return false;
+        }
+        try {
+            Integer.parseInt(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    // Hilfsmethode, um zu überprüfen, ob ein Datum mindestens 16 Jahre zurückliegt
+    private boolean isAtLeast16YearsOld(LocalDate birthdate) {
+        LocalDate today = LocalDate.now();
+        LocalDate thresholdDate = today.minusYears(16);
+        return (birthdate.isBefore(thresholdDate) || birthdate.isEqual(thresholdDate));
+    }
+
+
 }

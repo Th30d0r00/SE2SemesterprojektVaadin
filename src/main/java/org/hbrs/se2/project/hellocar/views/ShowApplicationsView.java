@@ -9,7 +9,7 @@ import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerExcepti
 import java.util.List;
 
 @Route(value = "show-applications", layout = AppView.class)
-@PageTitle("Show Applications")
+@PageTitle("Eingegangene Bewerbungen")
 
 public class ShowApplicationsView extends VerticalLayout {
 

@@ -161,7 +161,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
             System.out.println("User is Unternehmen!");
             tabs = Utils.append(tabs, createTab("Eingegangene Bewerbungen", ShowApplicationsView.class));
             tabs = Utils.append(tabs, createTab("Meine Stellenanzeigen", ShowMyJobPostingsView.class));
-            tabs = Utils.append(tabs, createTab("Stellenanzeige hinzufügen", EnterJobPostingView.class));
+            tabs = Utils.append(tabs, createTab("Stellenanzeige erstellen", EnterJobPostingView.class));
         } else if (this.authorizationControl.isUserInAccountType(this.getCurrentUser(), AccountType.STUDENT)) {
             System.out.println("User is Student!");
              tabs = Utils.append(tabs, createTab("Verfügbare Stellenanzeigen", ShowJobPostingsView.class));
