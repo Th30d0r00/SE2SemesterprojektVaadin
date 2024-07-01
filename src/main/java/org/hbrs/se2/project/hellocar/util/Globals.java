@@ -21,6 +21,7 @@ public class Globals {
         public static final String SHOW_MY_JOBPOSTINGS = "showmyjobpostings";
         public static final String JOB_APPLY = "jobapply";
 
+        public static final String SHOW_SEARCH = "suche";
     }
 
     public static class Roles {
