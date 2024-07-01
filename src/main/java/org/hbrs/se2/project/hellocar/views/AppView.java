@@ -98,6 +98,8 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
         // Logout-Button am rechts-oberen Rand.
         MenuBar bar = new MenuBar();
         MenuItem item = bar.addItem("Logout", e -> logoutUser());
+        //Button: Profil bearbeiten
+        //MenuItem item_editProfil = bar.addItem("Profil bearbeiten", e -> editProfil());
         topRightPanel.add(bar);
 
         layout.add(topRightPanel);
@@ -123,7 +125,6 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
         // Hinzufügen des Logos
         logoLayout.setId("logo");
         logoLayout.setAlignItems(FlexComponent.Alignment.CENTER);
-        //logoLayout.add(new Image("images/logo.png", "HelloCar logo"));
         logoLayout.add(new Image("images/freshconnect.png", "freshconnect logo"));
         //logoLayout.add(new H1("FreshConnect"));
 

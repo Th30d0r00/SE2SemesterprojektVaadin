@@ -15,7 +15,7 @@ public class Application {
     private String status; // z.B. versendet, eingegangen, beantwortet -> Benachrichtigung an Student bei Statusänderung
     private Anzeige stellenanzeige; // Verlinkt mit Stellenanzeige, null bei Initiativbewebrung
     private Student student; // Verlinkt mit Student
-    private List<ApplicationFile> files; // Liste mit den angehängten Files (falls benötigt)
+    private Company company; //Verlinkt mit Company
 
     public int getId() {
         return id;
@@ -105,11 +105,11 @@ public class Application {
         this.student = student;
     }
 
-    public List<ApplicationFile> getFiles() {
-        return files;
+    public Company getCompany() {
+        return company;
     }
 
-    public void setFiles(List<ApplicationFile> files) {
-        this.files = files;
+    public void setCompany(Company company) {
+        this.company = company;
     }
 }

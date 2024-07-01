@@ -28,7 +28,7 @@ public class ShowCompaniesView extends Div {
 
     public ShowCompaniesView(ShowCompaniesControl companiesControl) {
         try {
-            addClassName("show-companies-view");
+            addClassName("Verfügbare Unternehmen");
 
             // Auslesen aller abgespeicherten Unternehmen aus der DB (über das Control)
             companiesList = companiesControl.readAllCompanies();
@@ -40,8 +40,6 @@ public class ShowCompaniesView extends Div {
             add(this.createGridTable());
         } catch (DatabaseLayerException e) {
             // Ausnahmebehandlung (Benachrichtigung anzeigen, Fehler protokollieren, etc.)
-            e.printStackTrace();
-            // Beispiel: Mit einer Notification-Komponente eine Fehlermeldung anzeigen
             Notification.show("Fehler beim Abrufen der Unternehmen: " + e.getMessage(), 3000, Notification.Position.MIDDLE);
         }
     }

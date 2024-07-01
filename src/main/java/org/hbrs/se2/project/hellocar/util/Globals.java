@@ -28,6 +28,7 @@ public class Globals {
         public static final String ADMIN = "admin";
         public static final String USER = "user";
 
+        public static final String SHOW_APPLICATIONS = "showapplications";
     }
 
     public static class Errors {

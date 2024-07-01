@@ -33,7 +33,6 @@ public class ShowMyJobPostingsView extends Div{
         anzeigenListe = showMyJobPostingsControl.readAllMyJobPostings(currentUser.getId());
         add(this.createTitle());
         add(this.createGridTable());
-
     }
 
     private Component createTitle() {
