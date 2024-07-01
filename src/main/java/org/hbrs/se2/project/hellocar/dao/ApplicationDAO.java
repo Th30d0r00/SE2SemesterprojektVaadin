@@ -81,22 +81,28 @@ public class ApplicationDAO {
         UserDTO student = userDAO.findUserById(studentId);
         application.setStudent((Student) student);
 
-        int stellenanzeigeId = set.getInt("stellenanzeige_id");
-        AnzeigeDTO anzeige = anzeigeDAO.findAnzeigeById(stellenanzeigeId);
-        application.setStellenanzeige((Anzeige) anzeige);
-
         //Fremde Attribute aus User, Student und Stellenanzeige hinzufügen:
         UserDTO userDTO = userDAO.findUserById(studentId);
         StudentDTO studentDTO = (StudentDTO) userDAO.findUserById(studentId);
-        AnzeigeDTO anzeigeDTO = anzeigeDAO.findAnzeigeById(stellenanzeigeId);
 
         application.setEmail(userDTO.getEmail());
         application.setFirstname(studentDTO.getFirstname());
         application.setLastname(studentDTO.getLastname());
         application.setFachsemester(studentDTO.getFachsemester());
         application.setBirthday(studentDTO.getBirthday());
-        application.setJobTitel(anzeigeDTO.getJobTitle());
-        application.setStandort(anzeigeDTO.getStandort());
+
+        if(application.getStellenanzeige() == null) {
+            application.setJobTitel("Initiativbewerbung");
+            application.setStandort("-");
+        } else {
+            int stellenanzeigeId = set.getInt("stellenanzeige_id");
+            AnzeigeDTO anzeige = anzeigeDAO.findAnzeigeById(stellenanzeigeId);
+            application.setStellenanzeige((Anzeige) anzeige);
+            AnzeigeDTO anzeigeDTO = anzeigeDAO.findAnzeigeById(stellenanzeigeId);
+            application.setJobTitel(anzeigeDTO.getJobTitle());
+            application.setStandort(anzeigeDTO.getStandort());
+        }
+
 
         // Prüfen auf Null-Werte?
 
