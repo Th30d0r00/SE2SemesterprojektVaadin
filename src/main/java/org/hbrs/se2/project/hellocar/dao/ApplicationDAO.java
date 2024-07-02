@@ -91,10 +91,11 @@ public class ApplicationDAO {
         application.setFachsemester(studentDTO.getFachsemester());
         application.setBirthday(studentDTO.getBirthday());
 
+        //Falls der Verweis auf eine Stellenanzeige null ist, handelt es sich um eine Initiativbewerbung
         if(application.getStellenanzeige() == null) {
             application.setJobTitel("Initiativbewerbung");
             application.setStandort("-");
-        } else {
+        } else { //In diesem Fall ist der Verweis nicht null (Bewerbung auf Stellenanzeige)
             int stellenanzeigeId = set.getInt("stellenanzeige_id");
             AnzeigeDTO anzeige = anzeigeDAO.findAnzeigeById(stellenanzeigeId);
             application.setStellenanzeige((Anzeige) anzeige);
