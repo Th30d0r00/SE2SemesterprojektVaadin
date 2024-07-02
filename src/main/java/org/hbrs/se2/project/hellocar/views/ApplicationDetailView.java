@@ -4,12 +4,17 @@ import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.*;
+import com.vaadin.open.App;
+import org.hbrs.se2.project.hellocar.dao.ApplicationDAO;
+import org.hbrs.se2.project.hellocar.dao.UserDAO;
 import org.hbrs.se2.project.hellocar.dtos.ApplicationDTO;
 import com.vaadin.flow.component.textfield.TextField;
 
 @Route(value = "applicationdetailview", layout = AppView.class)
 @PageTitle(value = "Bewerbungsdetails")
 public class ApplicationDetailView extends VerticalLayout implements HasUrlParameter<Integer> {
+    private final ApplicationDAO applicationDAO;
+    private final UserDAO userDAO;
 
     private TextField jobTitle;
     private TextField standort;
@@ -25,6 +30,9 @@ public class ApplicationDetailView extends VerticalLayout implements HasUrlParam
     private TextField verschicktAm;
 
     public ApplicationDetailView() {
+        this.applicationDAO = new ApplicationDAO();
+        this.userDAO = new UserDAO();
+
         FormLayout formLayout = new FormLayout();
 
         //Erstellen der Textfelder und Labels
@@ -72,18 +80,19 @@ public class ApplicationDetailView extends VerticalLayout implements HasUrlParam
         formLayout.addFormItem(email, "E-Mail-Adresse");
         formLayout.addFormItem(fachsemester, "Fachsemester");
         formLayout.addFormItem(beschaeftigung, "Art der Beschäftigung");
-        formLayout.addFormItem(wohnort, "Kurze Beschreibung des Unternehmens");
-        formLayout.addFormItem(verfuegbar, "Kurze Beschreibung des Unternehmens");
-        formLayout.addFormItem(motivationsschreiben, "Kurze Beschreibung des Unternehmens");
-        formLayout.addFormItem(lebenslauf, "Kurze Beschreibung des Unternehmens");
-        formLayout.addFormItem(verschicktAm, "Kurze Beschreibung des Unternehmens");
+        formLayout.addFormItem(wohnort, "Wohnort");
+        formLayout.addFormItem(verfuegbar, "Verfuegbar ab");
+        formLayout.addFormItem(motivationsschreiben, "Motivationsschreiben");
+        formLayout.addFormItem(lebenslauf, "Lebenslauf");
+        formLayout.addFormItem(verschicktAm, "Verschickt am");
     }
 
     @Override
     public void setParameter(BeforeEvent beforeEvent, @OptionalParameter Integer applicationId) {
         if(applicationId == null) {
-            System.out.println("Null Value not supported");
+            System.out.println("Null Value is not supported");
         }
+        //ApplicationDTO applicationDTO = applicationDAO.get
     }
 
 

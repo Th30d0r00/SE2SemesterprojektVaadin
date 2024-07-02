@@ -48,11 +48,26 @@ public class ShowApplicationsView extends Div {
         ListDataProvider<ApplicationDTO> dataProvider = new ListDataProvider<>(applicationsList);
         grid.setDataProvider(dataProvider);
 
+        /*
         Grid.Column<ApplicationDTO> jobTitleColumn = grid.addColumn(ApplicationDTO::getJobTitle).setHeader("Stellenanzeige"); //Beim Name der Stellenanzeige sollte bei Initiativbewerbungen was anderes stehen
         Grid.Column<ApplicationDTO> studentFirstNameColumn = grid.addColumn(ApplicationDTO::getFirstname).setHeader("Vorname");
         Grid.Column<ApplicationDTO> studentLastNameColumn = grid.addColumn(ApplicationDTO::getLastname).setHeader("Nachname");
         Grid.Column<ApplicationDTO> studentEmailColumn = grid.addColumn(ApplicationDTO::getEmail).setHeader("E-Mail-Adresse");
         Grid.Column<ApplicationDTO> fachsemesterColumn = grid.addColumn(ApplicationDTO::getFachsemester).setHeader("Fachsemester");
+        Grid.Column<ApplicationDTO> beschaeftigungColumn = grid.addColumn(ApplicationDTO::getBeschaeftigung).setHeader("Beschäftigung");
+        Grid.Column<ApplicationDTO> wohnortColumn = grid.addColumn(ApplicationDTO::getWohnort).setHeader("Wohnort");
+        */
+
+        Grid.Column<ApplicationDTO> jobTitleColumn = grid.addColumn(application -> application.getStellenanzeige().getJobTitle())
+                .setHeader("Stellenanzeige");
+        Grid.Column<ApplicationDTO> studentFirstNameColumn = grid.addColumn(application -> application.getStudent().getFirstname())
+                .setHeader("Vorname");
+        Grid.Column<ApplicationDTO> studentLastNameColumn = grid.addColumn(application -> application.getStudent().getLastname())
+                .setHeader("Nachname");
+        Grid.Column<ApplicationDTO> studentEmailColumn = grid.addColumn(application -> ((UserDTO) application.getStudent()).getEmail())
+                .setHeader("E-Mail-Adresse");
+        Grid.Column<ApplicationDTO> fachsemesterColumn = grid.addColumn(application -> application.getStudent().getFachsemester())
+                .setHeader("Fachsemester");
         Grid.Column<ApplicationDTO> beschaeftigungColumn = grid.addColumn(ApplicationDTO::getBeschaeftigung).setHeader("Beschäftigung");
         Grid.Column<ApplicationDTO> wohnortColumn = grid.addColumn(ApplicationDTO::getWohnort).setHeader("Wohnort");
 
@@ -64,10 +79,11 @@ public class ShowApplicationsView extends Div {
 
         HeaderRow filterRow = grid.appendHeaderRow();
 
+        /*
         //Filter für Stellenanzeige
         TextField jobTitleField = new TextField();
         jobTitleField.addValueChangeListener(event -> dataProvider.addFilter(
-                application -> StringUtils.containsIgnoreCase(application.getJobTitle(), jobTitleField.getValue())));
+                applicationDTO -> StringUtils.containsIgnoreCase(application -> applicationDTO.getStellenanzeige().getJobTitle(), jobTitleField.getValue())));
         jobTitleField.setValueChangeMode(ValueChangeMode.EAGER);
         filterRow.getCell(jobTitleColumn).setComponent(jobTitleField);
         jobTitleField.setSizeFull();
@@ -99,7 +115,7 @@ public class ShowApplicationsView extends Div {
         filterRow.getCell(beschaeftigungColumn).setComponent(beschaeftigungField);
         beschaeftigungField.setSizeFull();
         beschaeftigungField.setPlaceholder("Filter nach Beschäftigung");
-
+        */
         return grid;
     }
 }

@@ -87,7 +87,7 @@ public class CompanyDetailView extends VerticalLayout implements HasUrlParameter
     @Override
     public void setParameter(BeforeEvent beforeEvent, @OptionalParameter Integer companyId) {
         if(companyId == null) {
-            System.out.println("Null Value not supported");
+            System.out.println("Null Value is not supported");
         }
         CompanyDTO companyDTO;
         UserDTO userDTO;

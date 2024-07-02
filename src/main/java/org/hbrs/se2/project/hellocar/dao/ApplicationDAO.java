@@ -1,9 +1,7 @@
 package org.hbrs.se2.project.hellocar.dao;
 
-import org.hbrs.se2.project.hellocar.dtos.AnzeigeDTO;
-import org.hbrs.se2.project.hellocar.dtos.ApplicationDTO;
-import org.hbrs.se2.project.hellocar.dtos.StudentDTO;
-import org.hbrs.se2.project.hellocar.dtos.UserDTO;
+import org.hbrs.se2.project.hellocar.dtos.*;
+import org.hbrs.se2.project.hellocar.dtos.impl.AnzeigeDTOImpl;
 import org.hbrs.se2.project.hellocar.dtos.impl.ApplicationDTOImpl;
 import org.hbrs.se2.project.hellocar.entities.Anzeige;
 import org.hbrs.se2.project.hellocar.entities.Company;
@@ -60,6 +58,8 @@ public class ApplicationDAO {
     private ApplicationDTO mapResultSetToApplication(ResultSet set) throws SQLException, DatabaseLayerException {
         UserDAO userDAO = new UserDAO();
         AnzeigeDAO anzeigeDAO = new AnzeigeDAO();
+        CompanyDAO companyDAO = new CompanyDAO();
+        StudentDAO studentDAO = new StudentDAO();
         ApplicationDTO application = new ApplicationDTOImpl();
 
         application.setId(set.getInt("id"));
@@ -74,39 +74,28 @@ public class ApplicationDAO {
 
         //Verweise im DTO auf Company, Student und Anzeige setzen:
         int companyId = set.getInt("company_id");
-        UserDTO company = userDAO.findUserById(companyId);
-        application.setCompany((Company) company);
+        CompanyDTO company = companyDAO.getCompanyById(companyId);
+        application.setCompany(company);
 
         int studentId = set.getInt("student_id");
-        UserDTO student = userDAO.findUserById(studentId);
-        application.setStudent((Student) student);
+        StudentDTO student = studentDAO.getStudentById(studentId);
+        application.setStudent(student);
 
         //Fremde Attribute aus User, Student und Stellenanzeige hinzufügen:
         UserDTO userDTO = userDAO.findUserById(studentId);
         StudentDTO studentDTO = (StudentDTO) userDAO.findUserById(studentId);
 
-        application.setEmail(userDTO.getEmail());
-        application.setFirstname(studentDTO.getFirstname());
-        application.setLastname(studentDTO.getLastname());
-        application.setFachsemester(studentDTO.getFachsemester());
-        application.setBirthday(studentDTO.getBirthday());
-
         //Falls der Verweis auf eine Stellenanzeige null ist, handelt es sich um eine Initiativbewerbung
         if(application.getStellenanzeige() == null) {
-            application.setJobTitel("Initiativbewerbung");
-            application.setStandort("-");
+            AnzeigeDTO anzeigeDTO = new AnzeigeDTOImpl();
+            anzeigeDTO.setJobTitle("Initiativbewerbung");
+            application.setStellenanzeige(anzeigeDTO);
         } else { //In diesem Fall ist der Verweis nicht null (Bewerbung auf Stellenanzeige)
             int stellenanzeigeId = set.getInt("stellenanzeige_id");
             AnzeigeDTO anzeige = anzeigeDAO.findAnzeigeById(stellenanzeigeId);
-            application.setStellenanzeige((Anzeige) anzeige);
-            AnzeigeDTO anzeigeDTO = anzeigeDAO.findAnzeigeById(stellenanzeigeId);
-            application.setJobTitel(anzeigeDTO.getJobTitle());
-            application.setStandort(anzeigeDTO.getStandort());
+            application.setStellenanzeige(anzeige);
         }
-
-
         // Prüfen auf Null-Werte?
-
         return application;
     }
     public List<ApplicationDTO> getReceivedApplications(int companyId) throws DatabaseLayerException {

@@ -1,6 +1,9 @@
 package org.hbrs.se2.project.hellocar.dtos.impl;
 
+import org.hbrs.se2.project.hellocar.dtos.AnzeigeDTO;
 import org.hbrs.se2.project.hellocar.dtos.ApplicationDTO;
+import org.hbrs.se2.project.hellocar.dtos.CompanyDTO;
+import org.hbrs.se2.project.hellocar.dtos.StudentDTO;
 import org.hbrs.se2.project.hellocar.entities.Anzeige;
 import org.hbrs.se2.project.hellocar.entities.ApplicationFile;
 import org.hbrs.se2.project.hellocar.entities.Company;
@@ -20,22 +23,9 @@ public class ApplicationDTOImpl implements ApplicationDTO {
     private String lebenslauf;
     private LocalDateTime appliedAt;
     private String status; // z.B. versendet, eingegangen, beantwortet -> Benachrichtigung an Student bei Statusänderung
-    private Anzeige stellenanzeige; // Verlinkt mit Stellenanzeige, null bei Initiativbewebrung
-    private Student student; // Verlinkt mit Student
-    private Company company;
-
-    //Attribute von Student:
-    private String firstName;
-    private String lastName;
-    private int fachSemester;
-    private LocalDate birthday;
-
-    //Attribute von Stellenanzeige:
-    private String jobTitel;
-    private String standort;
-
-    //Attribute von User:
-    private String email;
+    private AnzeigeDTO stellenanzeige; // Verlinkt mit Stellenanzeige, null bei Initiativbewebrung
+    private StudentDTO student; // Verlinkt mit Student
+    private CompanyDTO company;
 
     @Override
     public int getId() {
@@ -127,102 +117,32 @@ public class ApplicationDTOImpl implements ApplicationDTO {
     }
 
     @Override
-    public Anzeige getStellenanzeige() {
+    public AnzeigeDTO getStellenanzeige() {
         return stellenanzeige;
     }
 
     @Override
-    public void setStellenanzeige(Anzeige stellenanzeige) {
+    public void setStellenanzeige(AnzeigeDTO stellenanzeige) {
         this.stellenanzeige = stellenanzeige;
     }
 
     @Override
-    public Student getStudent() {
+    public StudentDTO getStudent() {
         return student;
     }
 
     @Override
-    public Company getCompany() {
+    public CompanyDTO getCompany() {
         return this.company;
     }
 
     @Override
-    public String getFirstname() {
-        return firstName;
-    }
-
-    @Override
-    public void setFirstname(String firstname) {
-        this.firstName = firstname;
-    }
-
-    @Override
-    public String getLastname() {
-        return lastName;
-    }
-
-    @Override
-    public void setLastname(String lastname) {
-        this.lastName = lastname;
-    }
-
-    @Override
-    public int getFachsemester() {
-        return fachSemester;
-    }
-
-    @Override
-    public void setFachsemester(int fachSemester) {
-        this.fachSemester = fachSemester;
-    }
-
-    @Override
-    public LocalDate getBirthday() {
-        return birthday;
-    }
-
-    @Override
-    public void setBirthday(LocalDate birthday) {
-        this.birthday = birthday;
-    }
-
-    @Override
-    public String getJobTitle() {
-        return jobTitel;
-    }
-
-    @Override
-    public void setJobTitel(String jobTitel) {
-        this.jobTitel = jobTitel;
-    }
-
-    @Override
-    public String getStandort() {
-        return standort;
-    }
-
-    @Override
-    public void setStandort(String standort) {
-        this.standort = standort;
-    }
-
-    @Override
-    public String getEmail() {
-        return email;
-    }
-
-    @Override
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    @Override
-    public void setStudent(Student student) {
+    public void setStudent(StudentDTO student) {
         this.student = student;
     }
 
     @Override
-    public void setCompany(Company company) {
+    public void setCompany(CompanyDTO company) {
         this.company = company;
     }
 }
