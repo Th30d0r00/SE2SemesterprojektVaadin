@@ -21,9 +21,8 @@ import org.hbrs.se2.project.hellocar.util.Globals;
 import java.util.List;
 
 
-@Route(value = Globals.Pages.SHOW_MY_JOBPOSTINGS, layout = AppView.class)
+@Route(value = Globals.Pages.SHOW_APPLICATIONS, layout = AppView.class)
 @PageTitle("Eingegangene Bewerbungen")
-
 public class ShowApplicationsView extends Div {
     private List<ApplicationDTO> applicationsList;
     public ShowApplicationsView(ShowApplicationsControl showApplicationsControl) {

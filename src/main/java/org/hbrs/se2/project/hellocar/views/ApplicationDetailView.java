@@ -8,8 +8,8 @@ import org.hbrs.se2.project.hellocar.dtos.ApplicationDTO;
 import com.vaadin.flow.component.textfield.TextField;
 
 @Route(value = "applicationdetailview", layout = AppView.class)
-@PageTitle(value = "Bewebrungsdetails")
-public class ApplicationDetailView extends VerticalLayout implements HasUrlParameter {
+@PageTitle(value = "Bewerbungsdetails")
+public class ApplicationDetailView extends VerticalLayout implements HasUrlParameter<Integer> {
 
     private TextField jobTitle;
     private TextField standort;
@@ -45,16 +45,46 @@ public class ApplicationDetailView extends VerticalLayout implements HasUrlParam
 
         fachsemester = new TextField();
         fachsemester.setLabel("Fachsemester");
+
+        beschaeftigung = new TextField();
+        beschaeftigung.setLabel("Art der Beschäftigung");
+
+        wohnort = new TextField();
+        wohnort.setLabel("Wohnort");
+
+        verfuegbar = new TextField();
+        verfuegbar.setLabel("Verfügbar ab ...");
+
+        motivationsschreiben = new TextField();
+        motivationsschreiben.setLabel("Motivationsschreiben");
+
+        lebenslauf = new TextField();
+        lebenslauf.setLabel("Lebenslauf");
+
+        verschicktAm = new TextField();
+        verschicktAm.setLabel("Bewerbung abgeschickt am ...");
+
+        // Fügen Sie die Textfelder zum Layout hinzu
+        formLayout.addFormItem(jobTitle, "Job Titel");
+        formLayout.addFormItem(standort, "Standort");
+        formLayout.addFormItem(firstName, "Anzahl der Mitarbeiter");
+        formLayout.addFormItem(lastName, "Gründungsdatum");
+        formLayout.addFormItem(email, "Standorte");
+        formLayout.addFormItem(fachsemester, "Kurze Beschreibung des Unternehmens");
+        formLayout.addFormItem(beschaeftigung, "Kurze Beschreibung des Unternehmens");
+        formLayout.addFormItem(wohnort, "Kurze Beschreibung des Unternehmens");
+        formLayout.addFormItem(verfuegbar, "Kurze Beschreibung des Unternehmens");
+        formLayout.addFormItem(motivationsschreiben, "Kurze Beschreibung des Unternehmens");
+        formLayout.addFormItem(lebenslauf, "Kurze Beschreibung des Unternehmens");
+        formLayout.addFormItem(verschicktAm, "Kurze Beschreibung des Unternehmens");
     }
 
+    @Override
     public void setParameter(BeforeEvent beforeEvent, @OptionalParameter Integer applicationId) {
         if(applicationId == null) {
             System.out.println("Null Value not supported");
         }
     }
 
-    @Override
-    public void setParameter(BeforeEvent beforeEvent, Object o) {
 
-    }
 }
