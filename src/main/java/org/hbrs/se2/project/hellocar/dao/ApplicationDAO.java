@@ -22,10 +22,30 @@ public class ApplicationDAO {
      * Fügt eine neue Application in die Datenbank ein.
      * Die Verlinkung zu Student (eindeutig) und zu einer Stellenanzeige (darf null sein bei Initiativb.)
      * müsste noch richtig implementiert werden.
-     * @param applicationDTO
+     * @param applicationId
      * @return
      * @throws DatabaseLayerException
      */
+    public ApplicationDTO getApplicationById(int applicationId) throws DatabaseLayerException {
+        ApplicationDTO applicationDTO = null;
+        try {
+            Statement statement = JDBCConnection.getInstance().getStatement();
+            ResultSet set = statement.executeQuery(
+                    "SELECT * FROM collabhbrs.application WHERE id = " + applicationId
+            );
+
+            if (set.next()) {
+                applicationDTO = mapResultSetToApplication(set);
+            }
+        } catch (SQLException ex) {
+            throw new DatabaseLayerException("Fehler im SQL-Befehl!");
+        } catch (NullPointerException ex) {
+            throw new DatabaseLayerException("Fehler bei Datenbankverbindung!");
+        } finally {
+            JDBCConnection.getInstance().closeConnection();
+        }
+        return applicationDTO;
+    }
     public Boolean addApplication(ApplicationDTO applicationDTO) throws DatabaseLayerException{
         boolean successfullyAddesApplication = false;
         try {

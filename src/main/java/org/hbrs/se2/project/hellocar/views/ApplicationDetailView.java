@@ -2,6 +2,7 @@ package org.hbrs.se2.project.hellocar.views;
 
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.*;
 import com.vaadin.open.App;
@@ -9,6 +10,11 @@ import org.hbrs.se2.project.hellocar.dao.ApplicationDAO;
 import org.hbrs.se2.project.hellocar.dao.UserDAO;
 import org.hbrs.se2.project.hellocar.dtos.ApplicationDTO;
 import com.vaadin.flow.component.textfield.TextField;
+import org.hbrs.se2.project.hellocar.dtos.UserDTO;
+import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerException;
+
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 @Route(value = "applicationdetailview", layout = AppView.class)
 @PageTitle(value = "Bewerbungsdetails")
@@ -92,7 +98,34 @@ public class ApplicationDetailView extends VerticalLayout implements HasUrlParam
         if(applicationId == null) {
             System.out.println("Null Value is not supported");
         }
-        //ApplicationDTO applicationDTO = applicationDAO.get
+        try {
+            ApplicationDTO applicationDTO = applicationDAO.getApplicationById(applicationId);
+            if (applicationId != null) {
+                final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MMMM uuuu", Locale.ENGLISH);
+
+                jobTitle.setValue(applicationDTO.getStellenanzeige().getJobTitle());
+                standort.setValue(applicationDTO.getStellenanzeige().getStandort());
+                firstName.setValue(applicationDTO.getStudent().getFirstname());
+                lastName.setValue(applicationDTO.getStudent().getLastname());
+                email.setValue(((UserDTO) applicationDTO.getStudent()).getEmail());
+                fachsemester.setValue(String.valueOf(applicationDTO.getStudent().getFachsemester()));
+                beschaeftigung.setValue(applicationDTO.getBeschaeftigung());
+                wohnort.setValue(applicationDTO.getWohnort());
+                verfuegbar.setValue(dtf.format(applicationDTO.getVerfuegbar()));
+                motivationsschreiben.setValue(applicationDTO.getMotivationsschreiben());
+                lebenslauf.setValue(applicationDTO.getLebenslauf());
+                verschicktAm.setValue(dtf.format(applicationDTO.getAppliedAt()));
+
+            } else {
+                Notification.show("ApplicationDTO ist null: ", 3000, Notification.Position.MIDDLE);
+            }
+
+
+        } catch (DatabaseLayerException e) {
+            Notification.show("Fehler beim Abrufen der Application: " + e.getMessage(), 3000, Notification.Position.MIDDLE);
+        } catch (NullPointerException e) {
+            Notification.show("applicationID ist null: " + e.getMessage(), 3000, Notification.Position.MIDDLE);
+        }
     }
 
 

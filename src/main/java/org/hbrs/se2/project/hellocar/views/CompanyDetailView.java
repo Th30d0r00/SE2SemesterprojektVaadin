@@ -2,6 +2,7 @@ package org.hbrs.se2.project.hellocar.views;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.component.button.Button;
@@ -95,19 +96,20 @@ public class CompanyDetailView extends VerticalLayout implements HasUrlParameter
         try {
             companyDTO = companyDAO.getCompanyById(companyId.intValue());
             userDTO = userDAO.findUserById(companyId.intValue());
+            if (userDTO != null && companyDTO != null) {
+                nameField.setValue(companyDTO.getCompanyName());
+                emailField.setValue(userDTO.getEmail());
+                employeesField.setValue(Integer.toString(companyDTO.getEmployees()));
+                foundingdateField.setValue(String.valueOf(companyDTO.getFoundingDate()));
+                locationsField.setValue(companyDTO.getLocations());
+                descriptionField.setValue(companyDTO.getDescription());
+            } else {
+                Notification.show("CompanyDTO oder UserDTO ist null: ", 3000, Notification.Position.MIDDLE);
+            }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            Notification.show("SQLException: " + e.getMessage(), 3000, Notification.Position.MIDDLE);
         } catch (DatabaseLayerException e) {
-            throw new RuntimeException(e);
+            Notification.show("DatabaseLayerException: " + e.getMessage(), 3000, Notification.Position.MIDDLE);
         }
-        if (userDTO != null && companyDTO != null) {
-            nameField.setValue(companyDTO.getCompanyName());
-            emailField.setValue(userDTO.getEmail());
-            employeesField.setValue(Integer.toString(companyDTO.getEmployees()));
-            foundingdateField.setValue(String.valueOf(companyDTO.getFoundingDate()));
-            locationsField.setValue(companyDTO.getLocations());
-            descriptionField.setValue(companyDTO.getDescription());
-        }
-
     }
 }
