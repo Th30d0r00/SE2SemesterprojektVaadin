@@ -1,4 +1,4 @@
-package FreshConnect.Test;
+package FreshConnect.Test.Entities;
 
 import org.hbrs.se2.project.hellocar.entities.Anzeige;
 import org.hbrs.se2.project.hellocar.entities.Application;

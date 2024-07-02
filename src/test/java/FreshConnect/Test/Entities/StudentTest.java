@@ -1,4 +1,4 @@
-package FreshConnect.Test;
+package FreshConnect.Test.Entities;
 
 import org.hbrs.se2.project.hellocar.entities.Student;
 import org.junit.jupiter.api.BeforeAll;
