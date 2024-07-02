@@ -1,4 +1,4 @@
-package FreshConnect.Test;
+package FreshConnect.Test.Control;
 
 import org.hbrs.se2.project.hellocar.control.JobPostingControl;
 import org.hbrs.se2.project.hellocar.dtos.AnzeigeDTO;

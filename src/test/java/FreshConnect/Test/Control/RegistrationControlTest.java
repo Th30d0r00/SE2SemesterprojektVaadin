@@ -1,4 +1,4 @@
-package FreshConnect.Test;
+package FreshConnect.Test.Control;
 
 import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
