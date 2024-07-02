@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-@Route(value = Globals.Pages.SHOW_SEARCH, layout = AppView.class)
+//@Route(value = Globals.Pages.SHOW_SEARCH, layout = AppView.class)
 @PageTitle(value = "suche")
 public class ShowSuchView extends Composite<VerticalLayout> {
 
