@@ -67,11 +67,11 @@ public class ApplicationDetailView extends VerticalLayout implements HasUrlParam
         // Fügen Sie die Textfelder zum Layout hinzu
         formLayout.addFormItem(jobTitle, "Job Titel");
         formLayout.addFormItem(standort, "Standort");
-        formLayout.addFormItem(firstName, "Anzahl der Mitarbeiter");
-        formLayout.addFormItem(lastName, "Gründungsdatum");
-        formLayout.addFormItem(email, "Standorte");
-        formLayout.addFormItem(fachsemester, "Kurze Beschreibung des Unternehmens");
-        formLayout.addFormItem(beschaeftigung, "Kurze Beschreibung des Unternehmens");
+        formLayout.addFormItem(firstName, "Vorname");
+        formLayout.addFormItem(lastName, "Nachname");
+        formLayout.addFormItem(email, "E-Mail-Adresse");
+        formLayout.addFormItem(fachsemester, "Fachsemester");
+        formLayout.addFormItem(beschaeftigung, "Art der Beschäftigung");
         formLayout.addFormItem(wohnort, "Kurze Beschreibung des Unternehmens");
         formLayout.addFormItem(verfuegbar, "Kurze Beschreibung des Unternehmens");
         formLayout.addFormItem(motivationsschreiben, "Kurze Beschreibung des Unternehmens");

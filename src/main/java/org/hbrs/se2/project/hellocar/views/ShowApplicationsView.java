@@ -26,7 +26,7 @@ import java.util.List;
 public class ShowApplicationsView extends Div {
     private List<ApplicationDTO> applicationsList;
     public ShowApplicationsView(ShowApplicationsControl showApplicationsControl) {
-        addClassName("Erhaltene Bewerbungen");
+        addClassName("receivedApplications");
         try {
             UserDTO currentUser = (UserDTO) UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER);
             applicationsList = showApplicationsControl.readApplications(currentUser.getId());

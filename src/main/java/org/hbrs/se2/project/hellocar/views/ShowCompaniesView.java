@@ -28,7 +28,7 @@ public class ShowCompaniesView extends Div {
 
     public ShowCompaniesView(ShowCompaniesControl companiesControl) {
         try {
-            addClassName("Verfügbare Unternehmen");
+            addClassName("showCompanies");
 
             // Auslesen aller abgespeicherten Unternehmen aus der DB (über das Control)
             companiesList = companiesControl.readAllCompanies();
