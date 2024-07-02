@@ -19,13 +19,16 @@ public class Globals {
         //public static final COMPANY_DETAILS = "companydetails";
 
         public static final String SHOW_MY_JOBPOSTINGS = "showmyjobpostings";
+        public static final String JOB_APPLY = "jobapply";
 
+        public static final String SHOW_SEARCH = "suche";
     }
 
     public static class Roles {
         public static final String ADMIN = "admin";
         public static final String USER = "user";
 
+        public static final String SHOW_APPLICATIONS = "showapplications";
     }
 
     public static class Errors {

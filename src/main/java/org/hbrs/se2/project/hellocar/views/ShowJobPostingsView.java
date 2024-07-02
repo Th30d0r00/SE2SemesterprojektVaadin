@@ -24,7 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
 @Route(value = Globals.Pages.SHOW_JOBPOSTINGS, layout = AppView.class)
-@PageTitle(value = "Job Postings")
+@PageTitle(value = "Verfügbare Stellenanzeigen")
 public class ShowJobPostingsView extends Div {
 
     private List<AnzeigeDTO> jobList;
@@ -95,6 +95,6 @@ public class ShowJobPostingsView extends Div {
     }
 
     private Component createTitle() {
-        return new H3("Search for Jobs");
+        return new H3("Suche nach Jobs");
     }
 }

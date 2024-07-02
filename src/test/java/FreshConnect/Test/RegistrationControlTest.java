@@ -50,18 +50,11 @@ public class RegistrationControlTest {
         //
         //register user2
         RegistrationResult result = registrationControl.registerUser(userToAdd);
-        //if user is already registered an Assertion Error will be thrown in
-         assertTrue(result.getSuccess()); //
+
+
+        assertTrue(result.getSuccess()); //
         assertEquals("User successfully registered.", result.getMessage()); //
-         /*try{ //
-            assertTrue(result.getSuccess()); //
-            assertEquals("User successfully registered.", result.getMessage()); //
-            return;
-        } catch (AssertionError e) { //if user is already registered/
-        }/
-        //if user is already registered we will test if the user is already registered
-        assertFalse(result.getSuccess());
-        assertEquals(("User with email "+ userToAdd.getEmail() + " already exists"), result.getMessage());*/
+
     }
 
     @Test

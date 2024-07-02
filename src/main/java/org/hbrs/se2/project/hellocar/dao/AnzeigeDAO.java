@@ -93,7 +93,7 @@ public class AnzeigeDAO {
             Statement statement = JDBCConnection.getInstance().getStatement();
             ResultSet set = statement.executeQuery("SELECT * "
                     + "FROM collabhbrs.anzeige "
-                    + "WHERE collabhbrs.anzeige.companyid = \'" + id + "\'" );
+                    + "WHERE company_id = \'" + id + "\'" );
 
             while (set.next()) {
                 anzeigen.add(mapResultSetToAnzeige(set));

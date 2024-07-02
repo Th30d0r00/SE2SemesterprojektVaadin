@@ -98,6 +98,8 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
         // Logout-Button am rechts-oberen Rand.
         MenuBar bar = new MenuBar();
         MenuItem item = bar.addItem("Logout", e -> logoutUser());
+        //Button: Profil bearbeiten
+        //MenuItem item_editProfil = bar.addItem("Profil bearbeiten", e -> editProfil());
         topRightPanel.add(bar);
 
         layout.add(topRightPanel);
@@ -123,7 +125,6 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
         // Hinzufügen des Logos
         logoLayout.setId("logo");
         logoLayout.setAlignItems(FlexComponent.Alignment.CENTER);
-        //logoLayout.add(new Image("images/logo.png", "HelloCar logo"));
         logoLayout.add(new Image("images/freshconnect.png", "freshconnect logo"));
         //logoLayout.add(new H1("FreshConnect"));
 
@@ -161,7 +162,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
             System.out.println("User is Unternehmen!");
             tabs = Utils.append(tabs, createTab("Eingegangene Bewerbungen", ShowApplicationsView.class));
             tabs = Utils.append(tabs, createTab("Meine Stellenanzeigen", ShowMyJobPostingsView.class));
-            tabs = Utils.append(tabs, createTab("Stellenanzeige hinzufügen", EnterJobPostingView.class));
+            tabs = Utils.append(tabs, createTab("Stellenanzeige erstellen", EnterJobPostingView.class));
         } else if (this.authorizationControl.isUserInAccountType(this.getCurrentUser(), AccountType.STUDENT)) {
             System.out.println("User is Student!");
              tabs = Utils.append(tabs, createTab("Verfügbare Stellenanzeigen", ShowJobPostingsView.class));
