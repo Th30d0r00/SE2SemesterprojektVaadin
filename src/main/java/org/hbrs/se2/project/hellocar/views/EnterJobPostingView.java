@@ -32,9 +32,6 @@ public class EnterJobPostingView extends VerticalLayout {
 
     public EnterJobPostingView() {
 
-        // Erstelle die Überschrift
-        H1 header = new H1("Neue Stellenanzeige erstellen");
-
         // Erstelle die Textfelder
         TextField titleField = new TextField("Titel der Anzeige");
         TextField locationField = new TextField("Standort");
@@ -129,11 +126,7 @@ public class EnterJobPostingView extends VerticalLayout {
         titleLocationLayout.setSpacing(true);
 
         // Füge die Komponenten zum Layout hinzu
-        add(header, titleLocationLayout, employmentTypeField, jobDescriptionField, buttonLayout);
-
-        // Zentriere das Layout
-        setAlignItems(Alignment.CENTER);
-        setJustifyContentMode(JustifyContentMode.CENTER);
+        add(titleLocationLayout, employmentTypeField, jobDescriptionField, buttonLayout);
     }
 
     public UserDTO getCurrentUser() {

@@ -131,7 +131,7 @@ public class ApplicationDetailView extends VerticalLayout implements HasUrlParam
                 standort.setValue(applicationDTO.getStellenanzeige().getStandort());
                 firstName.setValue(applicationDTO.getStudent().getFirstname());
                 lastName.setValue(applicationDTO.getStudent().getLastname());
-                email.setValue(((UserDTO) applicationDTO.getStudent()).getEmail());
+                email.setValue(applicationDTO.getUser().getEmail());
                 fachsemester.setValue(String.valueOf(applicationDTO.getStudent().getFachsemester()));
                 beschaeftigung.setValue(applicationDTO.getBeschaeftigung());
                 wohnort.setValue(applicationDTO.getWohnort());

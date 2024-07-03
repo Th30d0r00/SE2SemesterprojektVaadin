@@ -1,9 +1,6 @@
 package org.hbrs.se2.project.hellocar.dtos.impl;
 
-import org.hbrs.se2.project.hellocar.dtos.AnzeigeDTO;
-import org.hbrs.se2.project.hellocar.dtos.ApplicationDTO;
-import org.hbrs.se2.project.hellocar.dtos.CompanyDTO;
-import org.hbrs.se2.project.hellocar.dtos.StudentDTO;
+import org.hbrs.se2.project.hellocar.dtos.*;
 import org.hbrs.se2.project.hellocar.entities.Anzeige;
 import org.hbrs.se2.project.hellocar.entities.ApplicationFile;
 import org.hbrs.se2.project.hellocar.entities.Company;
@@ -26,6 +23,7 @@ public class ApplicationDTOImpl implements ApplicationDTO {
     private AnzeigeDTO stellenanzeige; // Verlinkt mit Stellenanzeige, null bei Initiativbewebrung
     private StudentDTO student; // Verlinkt mit Student
     private CompanyDTO company;
+    private UserDTO user;
 
     @Override
     public int getId() {
@@ -144,5 +142,15 @@ public class ApplicationDTOImpl implements ApplicationDTO {
     @Override
     public void setCompany(CompanyDTO company) {
         this.company = company;
+    }
+
+    @Override
+    public UserDTO getUser() {
+        return user;
+    }
+
+    @Override
+    public void setUser(UserDTO user) {
+        this.user = user;
     }
 }

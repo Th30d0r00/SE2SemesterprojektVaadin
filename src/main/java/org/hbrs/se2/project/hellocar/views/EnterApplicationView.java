@@ -19,6 +19,7 @@ import com.vaadin.flow.router.Route;
 import org.hbrs.se2.project.hellocar.control.AnzeigeControl;
 import org.hbrs.se2.project.hellocar.control.ApplicationControl;
 import org.hbrs.se2.project.hellocar.control.StudentControl;
+import org.hbrs.se2.project.hellocar.control.UserControl;
 import org.hbrs.se2.project.hellocar.dao.AnzeigeDAO;
 import org.hbrs.se2.project.hellocar.dao.CompanyDAO;
 import org.hbrs.se2.project.hellocar.dao.StudentDAO;
@@ -103,13 +104,6 @@ public class EnterApplicationView extends VerticalLayout implements HasUrlParame
                 applicationDTO.setAppliedAt(java.time.LocalDateTime.now());
                 applicationDTO.setStatus("verschickt");
 
-                StudentDAO studentDAO = new StudentDAO();
-                try {
-                    applicationDTO.setStudent(studentDAO.getStudentById(getCurrentUser().getId()));
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-
                 try {
                     applicationControl.saveApplication(applicationDTO);
                 } catch (DatabaseLayerException e) {
@@ -167,11 +161,13 @@ public class EnterApplicationView extends VerticalLayout implements HasUrlParame
             jobId = parameter;
             AnzeigeControl anzeigeControl = new AnzeigeControl();
             StudentControl studentControl= new StudentControl();
+            UserControl userControl = new UserControl();
             try {
                 AnzeigeDTO anzeigeDTO = anzeigeControl.findAnzeige(jobId);
                 applicationDTO.setCompany(anzeigeDTO.getCompany());
                 applicationDTO.setStellenanzeige(anzeigeDTO);
                 applicationDTO.setStudent(studentControl.findStudent(getCurrentUser().getId()));
+                applicationDTO.setUser(userControl.findUser(getCurrentUser().getId()));
             } catch (DatabaseLayerException e) {
                 e.printStackTrace();
                 Notification.show("Fehler beim Abrufen der Application");

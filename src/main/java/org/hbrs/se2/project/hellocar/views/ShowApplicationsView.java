@@ -64,8 +64,8 @@ public class ShowApplicationsView extends Div {
                 .setHeader("Vorname");
         Grid.Column<ApplicationDTO> studentLastNameColumn = grid.addColumn(application -> application.getStudent().getLastname())
                 .setHeader("Nachname");
-        Grid.Column<ApplicationDTO> studentEmailColumn = grid.addColumn(application -> ((UserDTO) application.getStudent()).getEmail())
-                .setHeader("E-Mail-Adresse");
+        //Grid.Column<ApplicationDTO> studentEmailColumn = grid.addColumn(application -> ((UserDTO) application.getStudent()).getEmail())
+        //         .setHeader("E-Mail-Adresse");
         Grid.Column<ApplicationDTO> fachsemesterColumn = grid.addColumn(application -> application.getStudent().getFachsemester())
                 .setHeader("Fachsemester");
         Grid.Column<ApplicationDTO> beschaeftigungColumn = grid.addColumn(ApplicationDTO::getBeschaeftigung).setHeader("Beschäftigung");

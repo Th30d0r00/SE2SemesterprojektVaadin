@@ -22,6 +22,7 @@ public interface ApplicationDTO {
     AnzeigeDTO getStellenanzeige();
     StudentDTO getStudent();
     CompanyDTO getCompany();
+    UserDTO getUser();
 
     void setId(int id);
     void setTelefonnummer(String telefonnummer);
@@ -35,4 +36,5 @@ public interface ApplicationDTO {
     void setStellenanzeige(AnzeigeDTO stellenanzeige);
     void setStudent(StudentDTO student);
     void setCompany(CompanyDTO company);
+    void setUser(UserDTO user);
 }

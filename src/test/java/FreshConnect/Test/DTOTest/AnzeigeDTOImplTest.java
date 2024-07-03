@@ -1,8 +1,10 @@
 package FreshConnect.Test.DTOTest;
 
 import org.hbrs.se2.project.hellocar.dtos.AnzeigeDTO;
+import org.hbrs.se2.project.hellocar.dtos.CompanyDTO;
 import org.hbrs.se2.project.hellocar.dtos.UserDTO;
 import org.hbrs.se2.project.hellocar.dtos.impl.AnzeigeDTOImpl;
+import org.hbrs.se2.project.hellocar.dtos.impl.CompanyDTOImpl;
 import org.hbrs.se2.project.hellocar.dtos.impl.UserDTOImpl;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
@@ -34,7 +36,7 @@ public class AnzeigeDTOImplTest {
         anzeigeDTO.setPublicationDate(publicationDate);
 
         // Create and set a related UserDTO (company)
-        UserDTO company = new UserDTOImpl();
+        CompanyDTO company = new CompanyDTOImpl();
         // Set properties for company...
         anzeigeDTO.setCompany(company);
     }
@@ -71,7 +73,7 @@ public class AnzeigeDTOImplTest {
 
     @Test
     public void atestGetCompany() {
-        UserDTO company = anzeigeDTO.getCompany();
+        CompanyDTO company = anzeigeDTO.getCompany();
         assertNotNull(company);
     }
 
@@ -114,7 +116,7 @@ public class AnzeigeDTOImplTest {
 
     @Test
     public void testSetCompany() {
-        UserDTO newCompany = new UserDTOImpl();
+        CompanyDTO newCompany = new CompanyDTOImpl();
         anzeigeDTO.setCompany(newCompany);
         assertEquals(newCompany, anzeigeDTO.getCompany());
     }

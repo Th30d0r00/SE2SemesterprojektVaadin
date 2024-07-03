@@ -29,6 +29,7 @@ public class JobDetailView extends Div implements HasUrlParameter<Integer> {
     private TextField jobArtField;
     private TextArea stellenbeschreibungField;
     private TextField veroeffentlichungsdatumField;
+    private Integer jobId;
 
     public JobDetailView() {
         this.anzeigeDAO = new AnzeigeDAO();
@@ -57,7 +58,7 @@ public class JobDetailView extends Div implements HasUrlParameter<Integer> {
 
         Button applyButton = new Button("Bewerben", e -> {
             // Logik zur Bewerbung auf die Jobanzeige
-            UI.getCurrent().navigate(Globals.Pages.JOB_APPLY);
+            UI.getCurrent().navigate(Globals.Pages.JOB_APPLY + "/" + jobId);
         });
 
         Button backButton = new Button("Zurück", e -> {
@@ -79,7 +80,7 @@ public class JobDetailView extends Div implements HasUrlParameter<Integer> {
 
     @Override
     public void setParameter(BeforeEvent event, Integer parameter) {
-        int jobId = parameter;
+        jobId = parameter;
         AnzeigeDTO jobAnzeige = null;
         try {
             jobAnzeige = anzeigeDAO.findAnzeigeById(jobId);

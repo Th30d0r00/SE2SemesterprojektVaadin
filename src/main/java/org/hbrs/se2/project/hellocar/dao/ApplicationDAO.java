@@ -8,6 +8,7 @@ import org.hbrs.se2.project.hellocar.entities.Company;
 import org.hbrs.se2.project.hellocar.entities.Student;
 import org.hbrs.se2.project.hellocar.services.db.JDBCConnection;
 import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerException;
+import org.springframework.data.relational.core.sql.In;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -49,7 +50,7 @@ public class ApplicationDAO {
             Statement statement = JDBCConnection.getInstance().getStatement();
 
             String query = "INSERT INTO collabhbrs.application " +
-                    "(telefonnummer, beschaeftigung, verfuegbar, wohnort, motivationsschreiben, lebenslauf, applied, status, stellenanzeige_id, student_id, company_id) " +
+                    "(telefonnummer, beschaeftigung, verfuegbar, wohnort, motivationsschreiben, lebenslauf, applied, status, stellenanzeige_id, student_id, company_id, user_id) " +
                     "VALUES ('" +
                     applicationDTO.getTelefonnummer() + "', '" +
                     applicationDTO.getBeschaeftigung() + "', '" +
@@ -61,7 +62,8 @@ public class ApplicationDAO {
                     applicationDTO.getStatus() + "', " +
                     applicationDTO.getStellenanzeige().getId() + ", " +
                     applicationDTO.getStudent().getId() + "," +
-                    applicationDTO.getCompany().getId() +
+                    applicationDTO.getCompany().getId() + "," +
+                    applicationDTO.getUser().getId() +
                     ")";
 
 
@@ -109,17 +111,18 @@ public class ApplicationDAO {
         StudentDTO student = studentDAO.getStudentById(studentId);
         application.setStudent(student);
 
-        //Fremde Attribute aus User, Student und Stellenanzeige hinzufügen:
-        UserDTO userDTO = userDAO.findUserById(studentId);
-        StudentDTO studentDTO = (StudentDTO) userDAO.findUserById(studentId);
+        int userId = set.getInt("user_id");
+        UserDTO user = userDAO.findUserById(userId);
+        application.setUser(user);
+
+        Integer stellenanzeigeId = set.getInt("stellenanzeige_id");
 
         //Falls der Verweis auf eine Stellenanzeige null ist, handelt es sich um eine Initiativbewerbung
-        if(application.getStellenanzeige() == null) {
+        if(stellenanzeigeId == null) {
             AnzeigeDTO anzeigeDTO = new AnzeigeDTOImpl();
             anzeigeDTO.setJobTitle("Initiativbewerbung");
             application.setStellenanzeige(anzeigeDTO);
         } else { //In diesem Fall ist der Verweis nicht null (Bewerbung auf Stellenanzeige)
-            int stellenanzeigeId = set.getInt("stellenanzeige_id");
             AnzeigeDTO anzeige = anzeigeDAO.findAnzeigeById(stellenanzeigeId);
             application.setStellenanzeige(anzeige);
         }
