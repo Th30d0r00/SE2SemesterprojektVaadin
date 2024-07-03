@@ -230,6 +230,7 @@
   "Frontend/generated/jar-resources/vaadin-time-picker/timepickerConnector.js",
   "Frontend/generated/jar-resources/virtualListConnector.js",
   "Frontend/styles/shared-styles.js",
+  "Frontend/styles/views/applicationdetailview/application-detail-view.css",
   "Frontend/styles/views/entercar/enter-car-view.css",
   "Frontend/styles/views/enterjobposting/enter-job-posting-view.css",
   "Frontend/styles/views/jobdetail/show-job-detail-view.css",
@@ -238,6 +239,7 @@
  ],
  "frontendHashes": {
   "styles/views/main/main-view.css": "6fa27862fc9e132f2fca148280cff249c87d513fbbd8d051470de81faec779b8",
+  "styles/views/applicationdetailview/application-detail-view.css": "6529917e8468a19713bdbb50f02686b5e8ccea6763a3ce04e4590d97ad980500",
   "styles/views/enterjobposting/enter-job-posting-view.css": "fe20152b1f08259e44c771c2db8c5d0015f35c66e74de4c5719684e48799e6d5",
   "styles/views/jobdetail/show-job-detail-view.css": "5be4942c4da4a17d111527a73ab3dd7f1af1ba7b55bfc5b5a1c70626b04b8bdc",
   "styles/views/entercar/enter-car-view.css": "55decd3c08b2ddd5bf356c8a8baeb774a24dc603c1d7a1e1bd79248321f40680",
@@ -264,12 +266,12 @@
  },
  "themeJsonContents": {},
  "entryScripts": [
-  "VAADIN/build/indexhtml-39b13c05.js"
+  "VAADIN/build/indexhtml-cf6ca2d6.js"
  ],
  "webComponents": [],
  "cvdlModules": {},
  "packageJsonHash": "dab916f7568ddf7c1412f4539935b9d88d4892f427f21fb6e65617c49fa18309",
  "indexHtmlGenerated": [
-  "  <script type=\"module\" crossorigin src=\"./VAADIN/build/indexhtml-39b13c05.js\"></script>"
+  "  <script type=\"module\" crossorigin src=\"./VAADIN/build/indexhtml-cf6ca2d6.js\"></script>"
  ]
 }

@@ -1,4 +1,4 @@
-package FreshConnect.Test;
+package FreshConnect.Test.DAOTest;
 
 import org.hbrs.se2.project.hellocar.dao.AnzeigeDAO;
 import org.hbrs.se2.project.hellocar.dtos.AnzeigeDTO;
