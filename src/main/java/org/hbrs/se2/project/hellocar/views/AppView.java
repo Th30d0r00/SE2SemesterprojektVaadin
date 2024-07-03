@@ -99,11 +99,15 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
         MenuBar bar = new MenuBar();
         MenuItem item = bar.addItem("Logout", e -> logoutUser());
         //Button: Profil bearbeiten
-        //MenuItem item_editProfil = bar.addItem("Profil bearbeiten", e -> editProfil());
+        MenuItem item_editProfil = bar.addItem("Profil bearbeiten", e -> editProfil());
         topRightPanel.add(bar);
 
         layout.add(topRightPanel);
         return layout;
+    }
+
+    private void editProfil() {
+        
     }
 
     private void logoutUser() {
