@@ -110,7 +110,7 @@ public class AnzeigeDAO {
 
     private AnzeigeDTO mapResultSetToAnzeige(ResultSet set) throws SQLException, DatabaseLayerException {
         AnzeigeDTO anzeige = new AnzeigeDTOImpl();
-        UserDAO user = new UserDAO();
+        CompanyDAO companyDAO = new CompanyDAO();
         anzeige.setId(set.getInt("id"));
         anzeige.setJobTitle(set.getString("Titel"));
         anzeige.setJobType(set.getString("Jobart"));
@@ -119,7 +119,7 @@ public class AnzeigeDAO {
         anzeige.setJobDescription(set.getString("Stellenbeschreibung"));
 
         int companyId = set.getInt("company_id");
-        UserDTO company = user.findUserById(companyId);
+        CompanyDTO company = companyDAO.getCompanyById(companyId);
         anzeige.setCompany(company);
 
         return anzeige;

@@ -9,10 +9,7 @@ import org.hbrs.se2.project.hellocar.entities.Student;
 import org.hbrs.se2.project.hellocar.services.db.JDBCConnection;
 import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerException;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,12 +48,22 @@ public class ApplicationDAO {
         try {
             Statement statement = JDBCConnection.getInstance().getStatement();
 
-            String query = "INSERT INTO collabhbrs.application (motivationsschreiben, status, stellenanzeige, student, veröffentlichung) " +
-                    "VALUES ('" + applicationDTO.getMotivationsschreiben() + "', '" +
-                    applicationDTO.getStatus() + "', '" +
-                    applicationDTO.getStellenanzeige().getId() + "', '" +
-                    applicationDTO.getStudent().getId() + "', '" +
-                    Timestamp.valueOf(applicationDTO.getAppliedAt()) + "')";
+            String query = "INSERT INTO collabhbrs.application " +
+                    "(telefonnummer, beschaeftigung, verfuegbar, wohnort, motivationsschreiben, lebenslauf, applied, status, stellenanzeige_id, student_id, company_id) " +
+                    "VALUES ('" +
+                    applicationDTO.getTelefonnummer() + "', '" +
+                    applicationDTO.getBeschaeftigung() + "', '" +
+                    Date.valueOf(applicationDTO.getVerfuegbar()) + "', '" +
+                    applicationDTO.getWohnort() + "', '" +
+                    applicationDTO.getMotivationsschreiben() + "', '" +
+                    applicationDTO.getLebenslauf() + "', '" +
+                    applicationDTO.getAppliedAt() + "', '" +
+                    applicationDTO.getStatus() + "', " +
+                    applicationDTO.getStellenanzeige().getId() + ", " +
+                    applicationDTO.getStudent().getId() + "," +
+                    applicationDTO.getCompany().getId() +
+                    ")";
+
 
             int result = statement.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
             if (result > 0) {
@@ -75,6 +82,7 @@ public class ApplicationDAO {
         }
         return successfullyAddesApplication;
     }
+
     private ApplicationDTO mapResultSetToApplication(ResultSet set) throws SQLException, DatabaseLayerException {
         UserDAO userDAO = new UserDAO();
         AnzeigeDAO anzeigeDAO = new AnzeigeDAO();

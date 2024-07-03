@@ -13,7 +13,7 @@ public class AnzeigeDTOImpl implements AnzeigeDTO {
     private String jobTitle;
     private String standort;
     private String jobType;
-    private UserDTO company;
+    private CompanyDTO company;
     private String jobDescription;
     private LocalDateTime publicationDate;
 
@@ -58,12 +58,12 @@ public class AnzeigeDTOImpl implements AnzeigeDTO {
     }
 
     @Override
-    public UserDTO getCompany() {
+    public CompanyDTO getCompany() {
         return company;
     }
 
     @Override
-    public void setCompany(UserDTO company) {
+    public void setCompany(CompanyDTO company) {
         this.company = company;
     }
 

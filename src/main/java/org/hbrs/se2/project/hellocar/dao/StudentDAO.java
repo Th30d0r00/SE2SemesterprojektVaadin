@@ -27,8 +27,8 @@ public class StudentDAO {
     private StudentDTO mapResultSetToStudent(ResultSet set) throws SQLException {
         StudentDTO student = new StudentDTOImpl();
         student.setId(set.getInt("id"));
-        student.setFirstname(set.getString("first_name"));
-        student.setLastname(set.getString("last_name"));
+        student.setFirstname(set.getString("firstname"));
+        student.setLastname(set.getString("lastname"));
         student.setBirthday(set.getDate("birthday").toLocalDate());
         student.setFachsemester(set.getInt("fachsemester"));
         return student;

@@ -24,6 +24,7 @@ public class Globals {
         //public static final String SHOW_SEARCH = "suche";
 
         public static final String SHOW_APPLICATIONS = "showapplications";
+        public static final String SHOW_SEARCH = "showsearch";
     }
 
     public static class Roles {

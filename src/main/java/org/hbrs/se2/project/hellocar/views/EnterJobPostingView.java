@@ -14,12 +14,15 @@ import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import org.hbrs.se2.project.hellocar.control.CompanyControl;
 import org.hbrs.se2.project.hellocar.control.JobPostingControl;
 import org.hbrs.se2.project.hellocar.dtos.AnzeigeDTO;
 import org.hbrs.se2.project.hellocar.dtos.UserDTO;
 import org.hbrs.se2.project.hellocar.dtos.impl.AnzeigeDTOImpl;
 import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerException;
 import org.hbrs.se2.project.hellocar.util.Globals;
+
+import java.sql.SQLException;
 
 @Route(value = "enter-job-posting", layout = AppView.class)
 @PageTitle("Stellenanzeige erstellen")
@@ -81,13 +84,20 @@ public class EnterJobPostingView extends VerticalLayout {
                 anzeigeDTO.setStandort(locationField.getValue());
                 anzeigeDTO.setJobType(employmentTypeField.getValue());
                 anzeigeDTO.setJobDescription(jobDescriptionField.getValue());
-                anzeigeDTO.setCompany(getCurrentUser()); //UserDTO übergeben
                 anzeigeDTO.setPublicationDate(java.time.LocalDateTime.now());
                 System.out.println(getCurrentUser().getId());
 
                 JobPostingControl jobPostingControl = new JobPostingControl();
+                CompanyControl companyControl = new CompanyControl();
+                try {
+                    anzeigeDTO.setCompany(companyControl.findCompany(getCurrentUser().getId()));
+                } catch (DatabaseLayerException | SQLException e) {
+                    throw new RuntimeException(e);
+                }
+
                 try {
                     jobPostingControl.saveJobPosting(anzeigeDTO);
+                    Notification.show("Anzeige erstellt");
 
                     // Leere die Felder nach erfolgreicher Eingabe
                     titleField.clear();
