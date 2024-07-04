@@ -30,7 +30,7 @@ import java.sql.SQLException;
 @Uses(TextArea.class)
 public class EnterJobPostingView extends VerticalLayout {
 
-    public EnterJobPostingView() {
+    public EnterJobPostingView() { //Control übergeben?
 
         // Erstelle die Textfelder
         TextField titleField = new TextField("Titel der Anzeige");

@@ -100,7 +100,7 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
                         FillUserDtoAsCompany(userDTO);
                     }
                 } catch (NumberFormatException nfe){
-                    Notification.show("Irgendwo fehlerhafte Eingabe");
+                    Notification.show("Fehlerhafte Eingabe beim Aufruf von FillUserDTOAsCompany / AsStudent");
                 }
 
                 RegistrationResult result = regControl.registerUser(userDTO);

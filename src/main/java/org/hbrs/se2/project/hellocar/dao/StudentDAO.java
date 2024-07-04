@@ -8,6 +8,7 @@ import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerExcepti
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 
 public class StudentDAO {
     public StudentDTO getStudentById(int studentId) throws SQLException {
@@ -22,6 +23,14 @@ public class StudentDAO {
             throw new RuntimeException(e);
         }
         return student;
+    }
+
+    public boolean updateStudentProfileInDB(int studentId, String newFirstName, String newLastname,
+                                         LocalDate newBirthday, int newFachsemester) {
+        boolean successfullyUpdatedStudent = false;
+        String sql = ""; //UPDATE TABLE collabhbrs.student WHERE id = studentId  ....
+
+        return successfullyUpdatedStudent;
     }
 
     private StudentDTO mapResultSetToStudent(ResultSet set) throws SQLException {

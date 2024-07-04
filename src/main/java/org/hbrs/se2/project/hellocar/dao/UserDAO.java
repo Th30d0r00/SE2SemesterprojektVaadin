@@ -270,4 +270,10 @@ public class UserDAO {
     } return user;
     }
 
+    public boolean deleteUserProfile(int id) {
+        boolean successfullyDeletedUser = false;
+
+
+        return successfullyDeletedUser;
+    }
 }

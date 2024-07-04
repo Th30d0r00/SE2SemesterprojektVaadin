@@ -10,6 +10,7 @@ import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerExcepti
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +27,14 @@ public class CompanyDAO {
             throw new RuntimeException(e);
         }
         return company;
+    }
+
+    public boolean updateCompanyProfileInDB(int companyId, String newCompanyName, LocalDate newFoundingDate, int newEmployees,
+                                         String newLocations, String newDescription) {
+        boolean successfullyUpdatedCompany = false;
+        String sql = ""; //UPDATE TABLE collabhbrs.company WHERE id = companyId  ....
+
+        return successfullyUpdatedCompany;
     }
 
     private CompanyDTO mapResultSetToCompany(ResultSet set) throws SQLException {

@@ -37,7 +37,7 @@ public class ApplicationDetailView extends VerticalLayout implements HasUrlParam
     private final TextField beschaeftigung = new TextField();
     private final TextField wohnort = new TextField();
     private final TextField verfuegbar = new TextField();
-    private final TextField motivationsschreiben = new TextField();
+    private final TextField motivationsschreiben = new TextField(); //Länge beachten
     private final TextField lebenslauf = new TextField();
     private final TextField verschicktAm = new TextField();
     private final Button acceptButton = new Button("Bewerbung annehmen");
@@ -98,18 +98,18 @@ public class ApplicationDetailView extends VerticalLayout implements HasUrlParam
         lebenslauf.setLabel("Lebenslauf");
         verschicktAm.setLabel("Bewerbung abgeschickt am ...");
 
-        formLayout.addFormItem(jobTitle, "Job Titel");
-        formLayout.addFormItem(standort, "Standort");
-        formLayout.addFormItem(firstName, "Vorname");
-        formLayout.addFormItem(lastName, "Nachname");
-        formLayout.addFormItem(email, "E-Mail-Adresse");
-        formLayout.addFormItem(fachsemester, "Fachsemester");
-        formLayout.addFormItem(beschaeftigung, "Art der Beschäftigung");
-        formLayout.addFormItem(wohnort, "Wohnort");
-        formLayout.addFormItem(verfuegbar, "Verfügbar ab");
-        formLayout.addFormItem(motivationsschreiben, "Motivationsschreiben");
-        formLayout.addFormItem(lebenslauf, "Lebenslauf");
-        formLayout.addFormItem(verschicktAm, "Verschickt am");
+        formLayout.addFormItem(jobTitle, "");
+        formLayout.addFormItem(standort, "");
+        formLayout.addFormItem(firstName, "");
+        formLayout.addFormItem(lastName, "");
+        formLayout.addFormItem(email, "");
+        formLayout.addFormItem(fachsemester, "");
+        formLayout.addFormItem(beschaeftigung, "");
+        formLayout.addFormItem(wohnort, "");
+        formLayout.addFormItem(verfuegbar, "");
+        formLayout.addFormItem(motivationsschreiben, "");
+        formLayout.addFormItem(lebenslauf, "");
+        formLayout.addFormItem(verschicktAm, "");
 
         return formLayout;
     }
