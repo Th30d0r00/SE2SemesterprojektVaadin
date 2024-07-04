@@ -22,9 +22,11 @@ public class Globals {
         public static final String JOB_APPLY = "jobapply";
 
         //public static final String SHOW_SEARCH = "suche";
+        public static final String SHOW_APPLICATION_DETAILS = "applicationdetailview";
 
         public static final String SHOW_APPLICATIONS = "showapplications";
         public static final String SHOW_SEARCH = "showsearch";
+        public static final String SHOW_MY_APPLICATIONS = "showmyapplications";
     }
 
     public static class Roles {

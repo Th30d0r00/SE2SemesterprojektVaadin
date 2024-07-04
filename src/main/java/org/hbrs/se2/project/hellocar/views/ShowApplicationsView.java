@@ -59,6 +59,9 @@ public class ShowApplicationsView extends Div {
                 .setHeader("Beschäftigung");
         Grid.Column<ApplicationDTO> wohnortColumn = grid.addColumn(ApplicationDTO::getWohnort)
                 .setHeader("Wohnort");
+        Grid.Column<ApplicationDTO> verschicktAmColumn = grid.addColumn(ApplicationDTO::getStatus)
+                .setHeader("Status");
+
 
         grid.addItemClickListener(event -> {
             ApplicationDTO selectedApplication = event.getItem();
@@ -133,6 +136,16 @@ public class ShowApplicationsView extends Div {
         filterRow.getCell(wohnortColumn).setComponent(wohnortField);
         wohnortField.setSizeFull();
         wohnortField.setPlaceholder("Filter nach Wohnort");
+
+        //Filter nach Status
+        TextField statusField = new TextField();
+        statusField.addValueChangeListener(event -> dataProvider.addFilter(
+                application -> StringUtils.containsIgnoreCase(application.getStatus(), statusField.getValue())
+        ));
+        statusField.setValueChangeMode(ValueChangeMode.EAGER);
+        filterRow.getCell(verschicktAmColumn).setComponent(statusField);
+        statusField.setSizeFull();
+        statusField.setPlaceholder("Filter nach Status");
 
         return grid;
     }

@@ -167,4 +167,51 @@ public class ApplicationDAO {
         }
         return applications;
     }
+
+    public boolean acceptApplication(int applicationId) throws DatabaseLayerException {
+        try {
+            Statement statement = JDBCConnection.getInstance().getStatement();
+            int result = statement.executeUpdate(
+                    "UPDATE collabhbrs.application SET status = 'angenommen' WHERE id = " + applicationId
+            );
+            return result > 0;
+        } catch (SQLException | DatabaseLayerException ex) {
+            ex.printStackTrace();
+            return false;
+        } finally {
+            JDBCConnection.getInstance().closeConnection();
+        }
+    }
+
+    public boolean refuseApplication(int applicationId) throws DatabaseLayerException {
+        try {
+            Statement statement = JDBCConnection.getInstance().getStatement();
+            int result = statement.executeUpdate(
+                    "UPDATE collabhbrs.application SET status = 'abgelehnt' WHERE id = " + applicationId
+            );
+            return result > 0;
+        } catch (SQLException | DatabaseLayerException ex) {
+            ex.printStackTrace();
+            return false;
+        } finally {
+            JDBCConnection.getInstance().closeConnection();
+        }
+    }
+
+    public List<ApplicationDTO> getMyApplications(int id) {
+        List<ApplicationDTO> applications = new ArrayList<>();
+        try {
+            Statement statement = JDBCConnection.getInstance().getStatement();
+            ResultSet set = statement.executeQuery("SELECT * "
+                    + "FROM collabhbrs.application "
+                    + "WHERE collabhbrs.application.student_id = \'" + id + "\'" );
+
+            while (set.next()) {
+                applications.add(mapResultSetToApplication(set));
+            }
+        } catch (SQLException | DatabaseLayerException ex) {
+            ex.printStackTrace();
+    }
+        return applications;
+    }
 }

@@ -9,8 +9,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.open.App;
-import org.atmosphere.interceptor.AtmosphereResourceStateRecovery;
+import org.hbrs.se2.project.hellocar.control.ApplicationControl;
 import org.hbrs.se2.project.hellocar.dao.ApplicationDAO;
 import org.hbrs.se2.project.hellocar.dao.UserDAO;
 import org.hbrs.se2.project.hellocar.dtos.ApplicationDTO;
@@ -19,74 +18,86 @@ import org.hbrs.se2.project.hellocar.dtos.UserDTO;
 import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerException;
 import org.hbrs.se2.project.hellocar.util.Globals;
 
-import java.awt.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
-@Route(value = "applicationdetailview", layout = AppView.class)
-@PageTitle(value = "Bewerbungsdetails")
+@Route(value = Globals.Pages.SHOW_APPLICATION_DETAILS, layout = AppView.class)
+@PageTitle("Bewerbungsdetails")
 @CssImport("./styles/views/applicationdetailview/application-detail-view.css")
 public class ApplicationDetailView extends VerticalLayout implements HasUrlParameter<Integer> {
     private ApplicationDTO applicationDTO;
-    private final ApplicationDAO applicationDAO;
+    private ApplicationControl applicationControl = new ApplicationControl();
     private final UserDAO userDAO;
-    private final TextField jobTitle;
-    private final TextField standort;
-    private final TextField firstName;
-    private final TextField lastName;
-    private final TextField email;
-    private final TextField fachsemester;
-    private final TextField beschaeftigung;
-    private final TextField wohnort;
-    private final TextField verfuegbar;
-    private final TextField motivationsschreiben;
-    private final TextField lebenslauf;
-    private final TextField verschicktAm;
+    private final TextField jobTitle = new TextField();
+    private final TextField standort = new TextField();
+    private final TextField firstName = new TextField();
+    private final TextField lastName = new TextField();
+    private final TextField email = new TextField();
+    private final TextField fachsemester = new TextField();
+    private final TextField beschaeftigung = new TextField();
+    private final TextField wohnort = new TextField();
+    private final TextField verfuegbar = new TextField();
+    private final TextField motivationsschreiben = new TextField();
+    private final TextField lebenslauf = new TextField();
+    private final TextField verschicktAm = new TextField();
+    private final Button acceptButton = new Button("Bewerbung annehmen");
+    private final Button refuseButton = new Button("Bewerbung ablehnen");
+    private final Button backButton = new Button("Zurück");
 
     public ApplicationDetailView() {
-        this.applicationDAO = new ApplicationDAO();
+        this.applicationControl = new ApplicationControl();
         this.userDAO = new UserDAO();
 
+        // Form-Layout erstellen und hinzufügen
+        add(createFormLayout());
+
+        // Button-Layout erstellen und hinzufügen
+        add(createButtonLayout());
+
+        // Aktionen für die Buttons
+        backButton.addClickListener(event -> {
+            UI.getCurrent().navigate(Globals.Pages.SHOW_APPLICATIONS);
+        });
+
+        acceptButton.addClickListener(event -> {
+            try {
+                UserDTO currentUser = (UserDTO) UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER);
+                applicationControl.acceptApplication(applicationDTO.getId());
+                Notification.show("Bewerbung erfolgreich angenommen", 3000, Notification.Position.MIDDLE);
+                UI.getCurrent().navigate(Globals.Pages.SHOW_APPLICATIONS);
+            } catch (DatabaseLayerException e) {
+                Notification.show("Fehler beim Annehmen der Bewerbung: " + e.getMessage(), 3000, Notification.Position.MIDDLE);
+            }
+        });
+
+        refuseButton.addClickListener(event -> {
+            try {
+                UserDTO currentUser = (UserDTO) UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER);
+                applicationControl.refuseApplication(applicationDTO.getId());
+                Notification.show("Bewerbung erfolgreich abgelehnt", 3000, Notification.Position.MIDDLE);
+                UI.getCurrent().navigate(Globals.Pages.SHOW_APPLICATIONS);
+            } catch (DatabaseLayerException e) {
+                Notification.show("Fehler beim Ablehnen der Bewerbung: " + e.getMessage(), 3000, Notification.Position.MIDDLE);
+            }
+        });
+    }
+
+    private FormLayout createFormLayout() {
         FormLayout formLayout = new FormLayout();
 
-        //Erstellen der Textfelder und Labels
-        jobTitle = new TextField();
         jobTitle.setLabel("Job Titel");
-
-        standort = new TextField();
         standort.setLabel("Standort");
-
-        firstName = new TextField();
         firstName.setLabel("Vorname");
-
-        lastName = new TextField();
         lastName.setLabel("Nachname");
-
-        email = new TextField();
         email.setLabel("E-Mail-Adresse");
-
-        fachsemester = new TextField();
         fachsemester.setLabel("Fachsemester");
-
-        beschaeftigung = new TextField();
         beschaeftigung.setLabel("Art der Beschäftigung");
-
-        wohnort = new TextField();
         wohnort.setLabel("Wohnort");
-
-        verfuegbar = new TextField();
         verfuegbar.setLabel("Verfügbar ab ...");
-
-        motivationsschreiben = new TextField();
         motivationsschreiben.setLabel("Motivationsschreiben");
-
-        lebenslauf = new TextField();
         lebenslauf.setLabel("Lebenslauf");
-
-        verschicktAm = new TextField();
         verschicktAm.setLabel("Bewerbung abgeschickt am ...");
 
-        // Fügen Sie die Textfelder zum Layout hinzu
         formLayout.addFormItem(jobTitle, "Job Titel");
         formLayout.addFormItem(standort, "Standort");
         formLayout.addFormItem(firstName, "Vorname");
@@ -95,37 +106,34 @@ public class ApplicationDetailView extends VerticalLayout implements HasUrlParam
         formLayout.addFormItem(fachsemester, "Fachsemester");
         formLayout.addFormItem(beschaeftigung, "Art der Beschäftigung");
         formLayout.addFormItem(wohnort, "Wohnort");
-        formLayout.addFormItem(verfuegbar, "Verfuegbar ab");
+        formLayout.addFormItem(verfuegbar, "Verfügbar ab");
         formLayout.addFormItem(motivationsschreiben, "Motivationsschreiben");
         formLayout.addFormItem(lebenslauf, "Lebenslauf");
         formLayout.addFormItem(verschicktAm, "Verschickt am");
 
-        //Buttons "annehmen", "ablehnen", "abbrechen"
-        Button backButton = new Button("Zurück", event -> UI.getCurrent().navigate(Globals.Pages.SHOW_APPLICATIONS));
-        Button acceptButton = new Button("Bewerbung annehmen", event -> this.applicationDTO.setStatus("angenommen"));
-        Button refuseButton = new Button("Bewerbung ablehnen", event -> this.applicationDTO.setStatus("abgelehnt"));
+        return formLayout;
+    }
 
+    private HorizontalLayout createButtonLayout() {
         backButton.addClassName("back-button");
         acceptButton.addClassName("accept-button");
         refuseButton.addClassName("refuse-button");
 
-        //Layout für die Buttons
-        HorizontalLayout buttonLayout = new HorizontalLayout(backButton, acceptButton, refuseButton);
-
-        //Formulare zum Hauptlayout hinzufügen
-        add(formLayout, buttonLayout);
+        return new HorizontalLayout(backButton, acceptButton, refuseButton);
     }
 
     @Override
     public void setParameter(BeforeEvent beforeEvent, @OptionalParameter Integer applicationId) {
-        if(applicationId == null) {
+        if (applicationId == null) {
             System.out.println("Null Value is not supported");
+            return;
         }
+
         try {
-            ApplicationDTO applicationDTO = applicationDAO.getApplicationById(applicationId);
+            applicationDTO = applicationControl.findApplicationById(applicationId);
             final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MMMM uuuu", Locale.ENGLISH);
 
-            if(applicationDTO.getStellenanzeige().getStandort() == null) {
+            if (applicationDTO.getStellenanzeige().getStandort() == null) {
                 standort.setValue("offen");
             } else {
                 standort.setValue(applicationDTO.getStellenanzeige().getStandort());
@@ -142,7 +150,7 @@ public class ApplicationDetailView extends VerticalLayout implements HasUrlParam
             motivationsschreiben.setValue(applicationDTO.getMotivationsschreiben());
             lebenslauf.setValue(applicationDTO.getLebenslauf());
             verschicktAm.setValue(dtf.format(applicationDTO.getAppliedAt()));
-            this.applicationDTO = applicationDTO;
+
         } catch (DatabaseLayerException e) {
             Notification.show("Fehler beim Abrufen der Application: " + e.getMessage(), 3000, Notification.Position.MIDDLE);
         } catch (NullPointerException e) {
@@ -150,6 +158,4 @@ public class ApplicationDetailView extends VerticalLayout implements HasUrlParam
             System.out.println(applicationId);
         }
     }
-
-
 }

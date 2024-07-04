@@ -171,6 +171,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
             System.out.println("User is Student!");
              tabs = Utils.append(tabs, createTab("Verfügbare Stellenanzeigen", ShowJobPostingsView.class));
              tabs = Utils.append(tabs, createTab("Unternehmen finden", ShowCompaniesView.class));
+             tabs = Utils.append(tabs, createTab("Meine Bewerbungen", ShowMyApplications.class));
              //tabs = Utils.append(tabs, createTab("Enter Application", EnterApplicationView.class)); //Bewerbung nicht als Menütab
         }
         return tabs;
@@ -198,7 +199,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
 
         // Setzen des Vornamens von dem aktuell eingeloggten Benutzer
         // Stringoperation: Nach @ String abschneiden, .,-_ ersetzen durch Leerzeichen
-        helloUser.setText("Hello my dear old friend!! Wie geht's dir, " + this.getCurrentEmailOfUser());
+        helloUser.setText("Hello my dear old friend!! Wie geht's dir, " + this.getCurrentEmailOfUser().substring(0, this.getCurrentEmailOfUser().indexOf('@')));
 
     }
 
