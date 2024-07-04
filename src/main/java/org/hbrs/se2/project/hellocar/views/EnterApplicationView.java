@@ -16,10 +16,7 @@ import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import org.hbrs.se2.project.hellocar.control.AnzeigeControl;
-import org.hbrs.se2.project.hellocar.control.ApplicationControl;
-import org.hbrs.se2.project.hellocar.control.StudentControl;
-import org.hbrs.se2.project.hellocar.control.UserControl;
+import org.hbrs.se2.project.hellocar.control.*;
 import org.hbrs.se2.project.hellocar.dao.AnzeigeDAO;
 import org.hbrs.se2.project.hellocar.dao.CompanyDAO;
 import org.hbrs.se2.project.hellocar.dao.StudentDAO;
@@ -48,7 +45,6 @@ public class EnterApplicationView extends VerticalLayout implements HasUrlParame
     private ApplicationDTO applicationDTO = new ApplicationDTOImpl();
     private Button cancelButton = new Button("Abbrechen");
     private Button applyButton = new Button("Bewerbung abschicken");
-
     private Integer jobId;
     private Integer companyId;
 
@@ -164,10 +160,20 @@ public class EnterApplicationView extends VerticalLayout implements HasUrlParame
             UserControl userControl = new UserControl();
             try {
                 AnzeigeDTO anzeigeDTO = anzeigeControl.findAnzeige(jobId);
-                applicationDTO.setCompany(anzeigeDTO.getCompany());
-                applicationDTO.setStellenanzeige(anzeigeDTO);
-                applicationDTO.setStudent(studentControl.findStudent(getCurrentUser().getId()));
-                applicationDTO.setUser(userControl.findUser(getCurrentUser().getId()));
+                //Check ob anzeigeDTO null ist, wenn ja dann handelt es sich um eine Initiative Bewerbung. In dem Fall
+                //wird der Parameter als companyId interpretiert
+                if (anzeigeDTO == null) {
+                    companyId = parameter;
+                    CompanyControl companyControl = new CompanyControl();
+                    applicationDTO.setCompany(companyControl.findCompany(companyId));
+                    applicationDTO.setStudent(studentControl.findStudent(getCurrentUser().getId()));
+                    applicationDTO.setUser(userControl.findUser(getCurrentUser().getId()));
+                } else {
+                    applicationDTO.setCompany(anzeigeDTO.getCompany());
+                    applicationDTO.setStellenanzeige(anzeigeDTO);
+                    applicationDTO.setStudent(studentControl.findStudent(getCurrentUser().getId()));
+                    applicationDTO.setUser(userControl.findUser(getCurrentUser().getId()));
+                }
             } catch (DatabaseLayerException e) {
                 e.printStackTrace();
                 Notification.show("Fehler beim Abrufen der Application");

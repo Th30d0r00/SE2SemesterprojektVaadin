@@ -1,16 +1,15 @@
 package org.hbrs.se2.project.hellocar.views;
 
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.router.*;
-import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.dependency.CssImport;
-import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.*;
 import org.hbrs.se2.project.hellocar.dao.CompanyDAO;
 import org.hbrs.se2.project.hellocar.dao.UserDAO;
 import org.hbrs.se2.project.hellocar.dtos.CompanyDTO;
@@ -20,9 +19,8 @@ import org.hbrs.se2.project.hellocar.util.Globals;
 
 import java.sql.SQLException;
 
-@Route(value = "companydetailview", layout = AppView.class)
-//@Route(value = Globals.Pages.COMPANY_DETAILS, layout = AppView.class)
-@PageTitle(value = "Anzeigendetails")
+@Route(value = Globals.Pages.COMPANY_DETAILS, layout = AppView.class)
+@PageTitle("Unternehmensdetails")
 public class CompanyDetailView extends VerticalLayout implements HasUrlParameter<Integer> {
     private final UserDAO userDAO;
     private final CompanyDAO companyDAO;
@@ -32,15 +30,25 @@ public class CompanyDetailView extends VerticalLayout implements HasUrlParameter
     private TextField foundingdateField;
     private TextField locationsField;
     private TextField descriptionField;
+    private Integer companyId;
+    private Button backButton;
+    private Button applyButton;
 
     public CompanyDetailView() {
         this.userDAO = new UserDAO();
         this.companyDAO = new CompanyDAO();
 
-        // FormLayout zur Anordnung der Textboxen und Labels
+        add(createFormLayout());
+        add(createButtonLayout());
+
+        //Aktionen für die Buttons
+        applyButton.addClickListener(event -> UI.getCurrent().navigate(Globals.Pages.JOB_APPLY + "/" + companyId));
+        backButton.addClickListener(event -> UI.getCurrent().navigate(Globals.Pages.SHOW_COMPANIES));
+    }
+
+    private Component createFormLayout() {
         FormLayout formLayout = new FormLayout();
 
-        // Erstellen der Textfelder und Labels
         nameField = new TextField();
         nameField.setLabel("Name");
 
@@ -51,7 +59,7 @@ public class CompanyDetailView extends VerticalLayout implements HasUrlParameter
         employeesField.setLabel("Anzahl der Mitarbeiter");
 
         foundingdateField = new TextField();
-        foundingdateField.setLabel("Gründungssatum");
+        foundingdateField.setLabel("Gründungsdatum");
 
         locationsField = new TextField();
         locationsField.setLabel("Standorte");
@@ -59,7 +67,6 @@ public class CompanyDetailView extends VerticalLayout implements HasUrlParameter
         descriptionField = new TextField();
         descriptionField.setLabel("Kurze Beschreibung des Unternehmens");
 
-        // Fügen Sie die Textfelder zum Layout hinzu
         formLayout.addFormItem(nameField, "Name");
         formLayout.addFormItem(emailField, "E-Mail");
         formLayout.addFormItem(employeesField, "Anzahl der Mitarbeiter");
@@ -67,35 +74,30 @@ public class CompanyDetailView extends VerticalLayout implements HasUrlParameter
         formLayout.addFormItem(locationsField, "Standorte");
         formLayout.addFormItem(descriptionField, "Kurze Beschreibung des Unternehmens");
 
-        // Buttons "Zurück" und "Bewerben"
-        Button backButton = new Button("Zurück", event -> {
-            // Logik für den Zurück-Button
-            //getUI().ifPresent(ui -> ui.navigate(""));
-            UI.getCurrent().navigate( Globals.Pages.SHOW_COMPANIES);
-        });
-
-        Button applyButton = new Button("Initiativbewerbung", event -> {
-            // Logik für den Bewerben-Button
-
-        });
-
-        // Layout für die Buttons
-        HorizontalLayout buttonLayout = new HorizontalLayout(backButton, applyButton);
-
-        // Fügen Sie das Formular und die Buttons zum Hauptlayout hinzu
-        add(formLayout, buttonLayout);
+        return formLayout;
     }
+
+    private Component createButtonLayout() {
+        backButton = new Button("Zurück");
+        applyButton = new Button("Initiativbewerbung");
+        backButton.addClassName("cancel-button");
+        applyButton.addClassName("apply-button");
+        HorizontalLayout buttonLayout = new HorizontalLayout(backButton, applyButton);
+        buttonLayout.setSpacing(true);
+
+        return buttonLayout;
+    }
+
     @Override
     public void setParameter(BeforeEvent beforeEvent, @OptionalParameter Integer companyId) {
-        if(companyId == null) {
+        this.companyId = companyId;
+        if (companyId == null) {
             System.out.println("Null Value is not supported");
+            return;
         }
-        CompanyDTO companyDTO;
-        UserDTO userDTO;
-
         try {
-            companyDTO = companyDAO.getCompanyById(companyId.intValue());
-            userDTO = userDAO.findUserById(companyId.intValue());
+            CompanyDTO companyDTO = companyDAO.getCompanyById(companyId);
+            UserDTO userDTO = userDAO.findUserById(companyId);
             if (userDTO != null && companyDTO != null) {
                 nameField.setValue(companyDTO.getCompanyName());
                 emailField.setValue(userDTO.getEmail());

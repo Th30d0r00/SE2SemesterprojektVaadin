@@ -48,24 +48,42 @@ public class ApplicationDAO {
         boolean successfullyAddesApplication = false;
         try {
             Statement statement = JDBCConnection.getInstance().getStatement();
+            String query = "";
 
-            String query = "INSERT INTO collabhbrs.application " +
-                    "(telefonnummer, beschaeftigung, verfuegbar, wohnort, motivationsschreiben, lebenslauf, applied, status, stellenanzeige_id, student_id, company_id, user_id) " +
-                    "VALUES ('" +
-                    applicationDTO.getTelefonnummer() + "', '" +
-                    applicationDTO.getBeschaeftigung() + "', '" +
-                    Date.valueOf(applicationDTO.getVerfuegbar()) + "', '" +
-                    applicationDTO.getWohnort() + "', '" +
-                    applicationDTO.getMotivationsschreiben() + "', '" +
-                    applicationDTO.getLebenslauf() + "', '" +
-                    applicationDTO.getAppliedAt() + "', '" +
-                    applicationDTO.getStatus() + "', " +
-                    applicationDTO.getStellenanzeige().getId() + ", " +
-                    applicationDTO.getStudent().getId() + "," +
-                    applicationDTO.getCompany().getId() + "," +
-                    applicationDTO.getUser().getId() +
-                    ")";
-
+            if(applicationDTO.getStellenanzeige() == null) {
+                query = "INSERT INTO collabhbrs.application " +
+                        "(telefonnummer, beschaeftigung, verfuegbar, wohnort, motivationsschreiben, lebenslauf, applied, status, student_id, company_id, user_id) " +
+                        "VALUES ('" +
+                        applicationDTO.getTelefonnummer() + "', '" +
+                        applicationDTO.getBeschaeftigung() + "', '" +
+                        Date.valueOf(applicationDTO.getVerfuegbar()) + "', '" +
+                        applicationDTO.getWohnort() + "', '" +
+                        applicationDTO.getMotivationsschreiben() + "', '" +
+                        applicationDTO.getLebenslauf() + "', '" +
+                        applicationDTO.getAppliedAt() + "', '" +
+                        applicationDTO.getStatus() + "', " +
+                        applicationDTO.getStudent().getId() + "," +
+                        applicationDTO.getCompany().getId() + "," +
+                        applicationDTO.getUser().getId() +
+                        ")";
+            } else {
+                query = "INSERT INTO collabhbrs.application " +
+                        "(telefonnummer, beschaeftigung, verfuegbar, wohnort, motivationsschreiben, lebenslauf, applied, status, stellenanzeige_id, student_id, company_id, user_id) " +
+                        "VALUES ('" +
+                        applicationDTO.getTelefonnummer() + "', '" +
+                        applicationDTO.getBeschaeftigung() + "', '" +
+                        Date.valueOf(applicationDTO.getVerfuegbar()) + "', '" +
+                        applicationDTO.getWohnort() + "', '" +
+                        applicationDTO.getMotivationsschreiben() + "', '" +
+                        applicationDTO.getLebenslauf() + "', '" +
+                        applicationDTO.getAppliedAt() + "', '" +
+                        applicationDTO.getStatus() + "', " +
+                        applicationDTO.getStellenanzeige().getId() + ", " +
+                        applicationDTO.getStudent().getId() + "," +
+                        applicationDTO.getCompany().getId() + "," +
+                        applicationDTO.getUser().getId() +
+                        ")";
+            }
 
             int result = statement.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
             if (result > 0) {
@@ -118,7 +136,7 @@ public class ApplicationDAO {
         Integer stellenanzeigeId = set.getInt("stellenanzeige_id");
 
         //Falls der Verweis auf eine Stellenanzeige null ist, handelt es sich um eine Initiativbewerbung
-        if(stellenanzeigeId == null) {
+        if(stellenanzeigeId == 0) {
             AnzeigeDTO anzeigeDTO = new AnzeigeDTOImpl();
             anzeigeDTO.setJobTitle("Initiativbewerbung");
             application.setStellenanzeige(anzeigeDTO);

@@ -30,7 +30,6 @@ public class ApplicationDetailView extends VerticalLayout implements HasUrlParam
     private ApplicationDTO applicationDTO;
     private final ApplicationDAO applicationDAO;
     private final UserDAO userDAO;
-
     private final TextField jobTitle;
     private final TextField standort;
     private final TextField firstName;
@@ -124,29 +123,31 @@ public class ApplicationDetailView extends VerticalLayout implements HasUrlParam
         }
         try {
             ApplicationDTO applicationDTO = applicationDAO.getApplicationById(applicationId);
-            if (applicationId != null) {
-                final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MMMM uuuu", Locale.ENGLISH);
+            final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MMMM uuuu", Locale.ENGLISH);
 
-                jobTitle.setValue(applicationDTO.getStellenanzeige().getJobTitle());
-                standort.setValue(applicationDTO.getStellenanzeige().getStandort());
-                firstName.setValue(applicationDTO.getStudent().getFirstname());
-                lastName.setValue(applicationDTO.getStudent().getLastname());
-                email.setValue(applicationDTO.getUser().getEmail());
-                fachsemester.setValue(String.valueOf(applicationDTO.getStudent().getFachsemester()));
-                beschaeftigung.setValue(applicationDTO.getBeschaeftigung());
-                wohnort.setValue(applicationDTO.getWohnort());
-                verfuegbar.setValue(dtf.format(applicationDTO.getVerfuegbar()));
-                motivationsschreiben.setValue(applicationDTO.getMotivationsschreiben());
-                lebenslauf.setValue(applicationDTO.getLebenslauf());
-                verschicktAm.setValue(dtf.format(applicationDTO.getAppliedAt()));
-                this.applicationDTO = applicationDTO;
+            if(applicationDTO.getStellenanzeige().getStandort() == null) {
+                standort.setValue("offen");
             } else {
-                Notification.show("ApplicationDTO ist null: ", 3000, Notification.Position.MIDDLE);
+                standort.setValue(applicationDTO.getStellenanzeige().getStandort());
             }
+
+            jobTitle.setValue(applicationDTO.getStellenanzeige().getJobTitle());
+            firstName.setValue(applicationDTO.getStudent().getFirstname());
+            lastName.setValue(applicationDTO.getStudent().getLastname());
+            email.setValue(applicationDTO.getUser().getEmail());
+            fachsemester.setValue(String.valueOf(applicationDTO.getStudent().getFachsemester()));
+            beschaeftigung.setValue(applicationDTO.getBeschaeftigung());
+            wohnort.setValue(applicationDTO.getWohnort());
+            verfuegbar.setValue(dtf.format(applicationDTO.getVerfuegbar()));
+            motivationsschreiben.setValue(applicationDTO.getMotivationsschreiben());
+            lebenslauf.setValue(applicationDTO.getLebenslauf());
+            verschicktAm.setValue(dtf.format(applicationDTO.getAppliedAt()));
+            this.applicationDTO = applicationDTO;
         } catch (DatabaseLayerException e) {
             Notification.show("Fehler beim Abrufen der Application: " + e.getMessage(), 3000, Notification.Position.MIDDLE);
         } catch (NullPointerException e) {
             Notification.show("applicationID ist null: " + e.getMessage(), 3000, Notification.Position.MIDDLE);
+            System.out.println(applicationId);
         }
     }
 
