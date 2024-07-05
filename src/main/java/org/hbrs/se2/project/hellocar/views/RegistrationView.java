@@ -32,7 +32,7 @@ import java.time.LocalDate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@Route(value = "registration" )
+@Route(value = Globals.Pages.USER_REGISTRATION, layout = AppView.class)
 @PageTitle("User Registration")
 @CssImport("./styles/views/entercar/enter-car-view.css")
 public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Vererbung)

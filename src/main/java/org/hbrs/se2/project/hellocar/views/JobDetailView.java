@@ -19,7 +19,7 @@ import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerExcepti
 import org.hbrs.se2.project.hellocar.util.Globals;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@Route(value = "job-detail", layout = AppView.class)
+@Route(value = Globals.Pages.JOB_DETAIL, layout = AppView.class)
 @PageTitle(value = "Job Details")
 @CssImport("./styles/views/jobdetail/show-job-detail-view.css")
 public class JobDetailView extends Div implements HasUrlParameter<Integer> {

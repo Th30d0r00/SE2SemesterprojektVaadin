@@ -53,7 +53,7 @@ public class ShowMyJobPostingsView extends Div{
         // Click listener for rows
         grid.addItemClickListener(event -> {
             AnzeigeDTO selectedJobPosting = event.getItem();
-            //UI.getCurrent().navigate(EditJobPostingView.class, selectedJobPosting);
+            UI.getCurrent().navigate(EditJobPostingView.class, selectedJobPosting.getId());
         });
 
         HeaderRow filterRow = grid.appendHeaderRow();

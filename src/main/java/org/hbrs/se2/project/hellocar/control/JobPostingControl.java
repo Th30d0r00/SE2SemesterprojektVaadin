@@ -30,7 +30,7 @@ public class JobPostingControl {
         return anzeigeDAO.getAllAnzeigen();
     }
 
-    public boolean updateJobPosting(int id, String jobTitle, String location, String jobType, String description) {
+    public boolean updateJobPosting(int id, String jobTitle, String location, String jobType, String description) throws DatabaseLayerException {
         return anzeigeDAO.updateJobPostingInDB(id, jobTitle, location, jobType, description);
     }
 

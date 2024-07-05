@@ -31,7 +31,7 @@ import java.util.Optional;
 @JsModule("./styles/shared-styles.js")
 @Uses(TextArea.class)
 @PageTitle("HelloCar")
-@Route("main")
+@Route(Globals.Pages.MAIN_VIEW)
 public class AppView extends AppLayout implements BeforeEnterObserver {
 
     private Tabs menu;

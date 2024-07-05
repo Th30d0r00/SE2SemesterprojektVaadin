@@ -62,10 +62,22 @@ public class AnzeigeDAO {
         return anzeige;
     }
 
-    public boolean updateJobPostingInDB(int id, String jobTitle, String location, String jobType, String description) {
+    public boolean updateJobPostingInDB(int id, String jobTitle, String location, String jobType, String description) throws DatabaseLayerException {
         boolean successResult = false;
-        // SQL Anweisung UPDATE TABLE Anzeige ....
-
+        String query = "UPDATE collabhbrs.anzeige SET titel = ?, standort = ?, jobart = ?, stellenbeschreibung = ? WHERE id = ?";
+        try (PreparedStatement statement = JDBCConnectionPrepared.getInstance().getPreparedStatement(query)) {
+            statement.setString(1, jobTitle);
+            statement.setString(2, location);
+            statement.setString(3, jobType);
+            statement.setString(4, description);
+            statement.setInt(5, id);
+            int result = statement.executeUpdate();
+            successResult = result > 0;
+        } catch (SQLException | DatabaseLayerException ex) {
+            throw new DatabaseLayerException("Fehler im SQL-Befehl!");
+        } finally {
+            JDBCConnectionPrepared.getInstance().closeConnection();
+        }
         return  successResult;
     }
 

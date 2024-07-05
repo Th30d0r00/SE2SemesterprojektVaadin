@@ -46,4 +46,8 @@ public class ApplicationControl {
     public List<ApplicationDTO> readApplications(int companyId) throws DatabaseLayerException {
         return applicationDAO.getReceivedApplications(companyId);
     }
+
+    public boolean deleteApplication(int applicationId) throws DatabaseLayerException {
+        return applicationDAO.deleteApplication(applicationId);
+    }
 }
