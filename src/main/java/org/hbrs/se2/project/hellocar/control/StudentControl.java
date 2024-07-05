@@ -5,6 +5,7 @@ import org.hbrs.se2.project.hellocar.dtos.StudentDTO;
 import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerException;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 
 /**
  * Implementierung der Control-Klasse StudentControl
@@ -21,5 +22,11 @@ public class StudentControl {
     public StudentDTO findStudent(int studentId) throws DatabaseLayerException, SQLException {
         // Anzeigen eines Studenten anhand der ID
         return studentDAO.getStudentById(studentId);
+    }
+
+    public boolean updateStudentProfile(int studentId, String newFirstName, String newLastname,
+                                        LocalDate newBirthday, int newFachsemester) throws DatabaseLayerException {
+        return studentDAO.updateStudentProfileInDB(studentId, newFirstName, newLastname,
+                newBirthday, newFachsemester);
     }
 }

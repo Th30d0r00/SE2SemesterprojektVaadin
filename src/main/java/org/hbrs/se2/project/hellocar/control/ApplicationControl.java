@@ -7,6 +7,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Implementierung der Control-Klasse ApplicationControl
+ * Hier sollen alle Methoden implementiert werden, die für die Steuerung der Bewerbungen zuständig sind
+ * Dazu gehören u.a. Methoden zum Anzeigen von Anzeigen, zum Erstellen von Anzeigen und zum Löschen von Anzeigen
+ */
+
 @Service
 public class ApplicationControl {
 
@@ -35,5 +41,9 @@ public class ApplicationControl {
 
     public List<ApplicationDTO> readMyApplications(int id) throws DatabaseLayerException {
         return applicationDAO.getMyApplications(id);
+    }
+
+    public List<ApplicationDTO> readApplications(int companyId) throws DatabaseLayerException {
+        return applicationDAO.getReceivedApplications(companyId);
     }
 }

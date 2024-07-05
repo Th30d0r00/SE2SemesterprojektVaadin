@@ -13,7 +13,7 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.apache.commons.lang3.StringUtils;
-import org.hbrs.se2.project.hellocar.control.ShowApplicationsControl;
+import org.hbrs.se2.project.hellocar.control.ApplicationControl;
 import org.hbrs.se2.project.hellocar.dtos.ApplicationDTO;
 import org.hbrs.se2.project.hellocar.dtos.UserDTO;
 import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerException;
@@ -26,11 +26,11 @@ import java.util.List;
 public class ShowApplicationsView extends Div {
     private List<ApplicationDTO> applicationsList;
 
-    public ShowApplicationsView(ShowApplicationsControl showApplicationsControl) {
+    public ShowApplicationsView(ApplicationControl applicationControl) {
         addClassName("receivedApplications");
         try {
             UserDTO currentUser = (UserDTO) UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER);
-            applicationsList = showApplicationsControl.readApplications(currentUser.getId());
+            applicationsList = applicationControl.readApplications(currentUser.getId());
         } catch (DatabaseLayerException e) {
             Notification.show("Fehler beim Abrufen der Unternehmen: " + e.getMessage(), 3000, Notification.Position.MIDDLE);
         }

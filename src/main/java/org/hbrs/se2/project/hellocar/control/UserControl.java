@@ -23,4 +23,8 @@ public class UserControl {
         // Anzeigen eines Users anhand der ID
         return userDAO.findUserById(userId);
     }
+
+    public boolean deleteUserProfile(int userId) {
+        return userDAO.deleteUserProfile(userId);
+    }
 }

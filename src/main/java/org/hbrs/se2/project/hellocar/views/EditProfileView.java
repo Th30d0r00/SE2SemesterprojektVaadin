@@ -12,17 +12,14 @@ import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import org.hbrs.se2.project.hellocar.control.EditProfileControl;
-import org.hbrs.se2.project.hellocar.dao.CompanyDAO;
-import org.hbrs.se2.project.hellocar.dao.StudentDAO;
-import org.hbrs.se2.project.hellocar.dao.UserDAO;
+import org.hbrs.se2.project.hellocar.control.CompanyControl;
+import org.hbrs.se2.project.hellocar.control.StudentControl;
+import org.hbrs.se2.project.hellocar.control.UserControl;
 import org.hbrs.se2.project.hellocar.dtos.CompanyDTO;
 import org.hbrs.se2.project.hellocar.dtos.StudentDTO;
 import org.hbrs.se2.project.hellocar.dtos.UserDTO;
-import org.hbrs.se2.project.hellocar.dtos.impl.UserDTOImpl;
 import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerException;
 import org.hbrs.se2.project.hellocar.util.AccountType;
 import org.hbrs.se2.project.hellocar.util.Globals;
@@ -34,7 +31,9 @@ import java.time.LocalDate;
 @PageTitle("Profil bearbeiten")
 @CssImport("./styles/views/editprofileview/edit-profile-view.css")
 public class EditProfileView extends Div {
-    EditProfileControl editProfileControl;
+    private StudentControl studentControl = new StudentControl();
+    private CompanyControl companyControl = new CompanyControl();
+    private UserControl userControl = new UserControl();
     private final UserDTO currentUser;
     private StudentDTO currentStudent;
     private CompanyDTO currentCompany;
@@ -60,9 +59,11 @@ public class EditProfileView extends Div {
 
     AccountType accountType;
 
-    public EditProfileView(EditProfileControl editProfileControl) {
+    public EditProfileView() {
         addClassName("editprofileview");
-        this.editProfileControl = editProfileControl;
+        this.studentControl = new StudentControl();
+        this.companyControl = new CompanyControl();
+        this.userControl = new UserControl();
 
         currentUser = (UserDTO) UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER);
         accountType = currentUser.getAccountType();
@@ -91,14 +92,14 @@ public class EditProfileView extends Div {
                 try{
                     // Die aktualisierten Eingaben werden an die Control übergeben, mit Verweis auf den betroffenen User
                     if(accountType == AccountType.STUDENT){
-                        this.currentStudent = editProfileControl.getCurrentStudent(currentUser.getId());
-                        successResult = editProfileControl.updateStudentProfile(currentUser.getId(), changeFirstname.getValue(),
+                        this.currentStudent = studentControl.findStudent(currentUser.getId());
+                        successResult = studentControl.updateStudentProfile(currentUser.getId(), changeFirstname.getValue(),
                                 changeLastname.getValue(),changeBirthday.getValue(),
                                 Integer.parseInt(changeFachsemester.getValue()));
                     }
                     if(accountType == AccountType.UNTERNEHMEN){
-                        this.currentCompany = editProfileControl.getCurrentCompany(currentUser.getId());
-                        successResult = editProfileControl.updateCompanyProfile(currentUser.getId(), changeCompanyName.getValue(),
+                        this.currentCompany = companyControl.findCompany(currentUser.getId());
+                        successResult = companyControl.updateCompanyProfile(currentUser.getId(), changeCompanyName.getValue(),
                                 changeFoundingDate.getValue(), Integer.parseInt(changeEmployees.getValue()),
                                 changeLocations.getValue(), changeDescription.getValue());
                     }
@@ -130,7 +131,7 @@ public class EditProfileView extends Div {
 
         //Wenn deleteButton gedrückt wird
         deleteButton.addClickListener(e -> {
-            editProfileControl.deleteUserProfile(currentUser.getId());
+            userControl.deleteUserProfile(currentUser.getId());
             logoutUser();
         });
 

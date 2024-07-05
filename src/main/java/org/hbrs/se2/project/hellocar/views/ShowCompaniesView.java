@@ -13,7 +13,7 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.apache.commons.lang3.StringUtils;
-import org.hbrs.se2.project.hellocar.control.ShowCompaniesControl;
+import org.hbrs.se2.project.hellocar.control.CompanyControl;
 import org.hbrs.se2.project.hellocar.dtos.CompanyDTO;
 import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerException;
 import org.hbrs.se2.project.hellocar.util.Globals;
@@ -25,13 +25,16 @@ import java.util.List;
 public class ShowCompaniesView extends Div {
 
     private List<CompanyDTO> companiesList;
+    private CompanyControl companyControl;
 
-    public ShowCompaniesView(ShowCompaniesControl companiesControl) {
+    public ShowCompaniesView() {
         try {
+            companyControl = new CompanyControl();
+
             addClassName("showCompanies");
 
             // Auslesen aller abgespeicherten Unternehmen aus der DB (über das Control)
-            companiesList = companiesControl.readAllCompanies();
+            companiesList = companyControl.readAllCompanies();
 
             // Titel über der Tabelle
             add(this.createTitle());

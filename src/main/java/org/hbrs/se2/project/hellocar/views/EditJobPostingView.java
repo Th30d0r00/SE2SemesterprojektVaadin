@@ -13,7 +13,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.*;
-import org.hbrs.se2.project.hellocar.control.EditJobPostingControl;
+import org.hbrs.se2.project.hellocar.control.JobPostingControl;
 import org.hbrs.se2.project.hellocar.dtos.AnzeigeDTO;
 import org.hbrs.se2.project.hellocar.dtos.impl.AnzeigeDTOImpl;
 import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerException;
@@ -22,7 +22,7 @@ import org.hbrs.se2.project.hellocar.util.Globals;
 @Route(value = Globals.Pages.EDIT_JOBPOSTING, layout = AppView.class)
 @PageTitle("Stellenanzeige bearbeiten")
 public class EditJobPostingView extends Div implements HasUrlParameter<AnzeigeDTOImpl> {
-    EditJobPostingControl editJobPostingControl;
+    JobPostingControl jobPostingControl;
     AnzeigeDTO currentJobPosting;
 
     TextField changeTitle;
@@ -35,9 +35,9 @@ public class EditJobPostingView extends Div implements HasUrlParameter<AnzeigeDT
     Button cancelButton = new Button("Abbrechen");
     Button deleteButton = new Button("Stellenanzeige löschen");
 
-    public EditJobPostingView(EditJobPostingControl editJobPostingControl) {
+    public EditJobPostingView(JobPostingControl jobPostingControl) {
         addClassName("editjobpostingview");
-        this.editJobPostingControl = editJobPostingControl;
+        this.jobPostingControl = jobPostingControl;
         // Erstelle die Textfelder
         changeTitle = new TextField("Titel der Anzeige");
         changeLocation = new TextField("Standort");
@@ -63,7 +63,7 @@ public class EditJobPostingView extends Div implements HasUrlParameter<AnzeigeDT
                 changeJobDescription.setValue(currentJobPosting.getJobDescription());
             }
 
-            boolean successResult = editJobPostingControl.updateJobPosting(currentJobPosting.getId(), changeTitle.getValue(),
+            boolean successResult = jobPostingControl.updateJobPosting(currentJobPosting.getId(), changeTitle.getValue(),
                     changeLocation.getValue(), changeEmploymentType.getValue(), changeJobDescription.getValue());
 
             if (successResult) {
@@ -78,7 +78,7 @@ public class EditJobPostingView extends Div implements HasUrlParameter<AnzeigeDT
         });
         deleteButton.addClickListener(event -> {
             try {
-                editJobPostingControl.deleteJobPosting(currentJobPosting.getId());
+                jobPostingControl.deleteJobPosting(currentJobPosting.getId());
             } catch (DatabaseLayerException e) {
                 Notification.show("Beim Löschen der Stellenanzeige ist ein Fehler aufgetreten", 3000, Notification.Position.MIDDLE);
             }

@@ -155,11 +155,11 @@ public class EnterApplicationView extends VerticalLayout implements HasUrlParame
     public void setParameter(BeforeEvent beforeEvent, @OptionalParameter Integer parameter) {
         if (parameter != null) {
             jobId = parameter;
-            AnzeigeControl anzeigeControl = new AnzeigeControl();
+            JobPostingControl JobPostingControl = new JobPostingControl();
             StudentControl studentControl= new StudentControl();
             UserControl userControl = new UserControl();
             try {
-                AnzeigeDTO anzeigeDTO = anzeigeControl.findAnzeige(jobId);
+                AnzeigeDTO anzeigeDTO = JobPostingControl.findJobPosting(jobId);
                 //Check ob anzeigeDTO null ist, wenn ja dann handelt es sich um eine Initiative Bewerbung. In dem Fall
                 //wird der Parameter als companyId interpretiert
                 if (anzeigeDTO == null) {
