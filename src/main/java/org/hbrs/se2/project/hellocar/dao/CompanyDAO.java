@@ -1,41 +1,64 @@
 package org.hbrs.se2.project.hellocar.dao;
 
-import org.hbrs.se2.project.hellocar.dtos.AnzeigeDTO;
 import org.hbrs.se2.project.hellocar.dtos.CompanyDTO;
 import org.hbrs.se2.project.hellocar.dtos.impl.CompanyDTOImpl;
-import org.hbrs.se2.project.hellocar.entities.Company;
-import org.hbrs.se2.project.hellocar.services.db.JDBCConnection;
+import org.hbrs.se2.project.hellocar.services.db.JDBCConnectionPrepared;
 import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerException;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Dient der Verwaltung von Unternehmen in der Datenbank.
+ */
+
 public class CompanyDAO {
-    public CompanyDTO getCompanyById(int companyId) throws SQLException {
+    public CompanyDTO getCompanyById(int companyId) throws SQLException, DatabaseLayerException {
         CompanyDTO company = null;
-        String sql = "SELECT * FROM collabhbrs.company WHERE id = " + companyId;
-        try (Statement statement = JDBCConnection.getInstance().getStatement();) {
-            ResultSet resultSet = statement.executeQuery(sql);
-            if (resultSet.next()) {
-                company = mapResultSetToCompany(resultSet);
+        String sql = "SELECT * FROM collabhbrs.company WHERE id = ?";
+        try (PreparedStatement statement = JDBCConnectionPrepared.getInstance().getPreparedStatement(sql)) {
+            statement.setInt(1, companyId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    company = mapResultSetToCompany(resultSet);
+                }
             }
         } catch (DatabaseLayerException e) {
             throw new RuntimeException(e);
+        } finally {
+            JDBCConnectionPrepared.getInstance().closeConnection();
         }
         return company;
     }
 
-    public boolean updateCompanyProfileInDB(int companyId, String newCompanyName, LocalDate newFoundingDate, int newEmployees,
-                                         String newLocations, String newDescription) {
-        boolean successfullyUpdatedCompany = false;
-        String sql = ""; //UPDATE TABLE collabhbrs.company WHERE id = companyId  ....
 
+    public boolean updateCompanyProfileInDB(int companyId, String newCompanyName, LocalDate newFoundingDate, int newEmployees,
+                                            String newLocations, String newDescription) throws DatabaseLayerException {
+        boolean successfullyUpdatedCompany = false;
+        String sql = "UPDATE collabhbrs.company SET name = ?, founding_date = ?, employees = ?, locations = ?, description = ? WHERE id = ?";
+
+        try (PreparedStatement statement = JDBCConnectionPrepared.getInstance().getPreparedStatement(sql)) {
+            statement.setString(1, newCompanyName);
+            statement.setDate(2, Date.valueOf(newFoundingDate));
+            statement.setInt(3, newEmployees);
+            statement.setString(4, newLocations);
+            statement.setString(5, newDescription);
+            statement.setInt(6, companyId);
+
+            int result = statement.executeUpdate();
+            if (result > 0) {
+                successfullyUpdatedCompany = true;
+            }
+        } catch (SQLException ex) {
+            throw new DatabaseLayerException("Fehler im SQL-Befehl!");
+        } finally {
+            JDBCConnectionPrepared.getInstance().closeConnection();
+        }
         return successfullyUpdatedCompany;
     }
+
 
     private CompanyDTO mapResultSetToCompany(ResultSet set) throws SQLException {
         CompanyDTO company = new CompanyDTOImpl();
@@ -50,9 +73,9 @@ public class CompanyDAO {
 
     public List<CompanyDTO> getAllCompanies() throws DatabaseLayerException {
         List<CompanyDTO> companies = new ArrayList<>();
-        try {
-            Statement statement = JDBCConnection.getInstance().getStatement();
-            ResultSet set = statement.executeQuery("SELECT * FROM collabhbrs.company");
+        String sql = "SELECT * FROM collabhbrs.company";
+        try (PreparedStatement statement = JDBCConnectionPrepared.getInstance().getPreparedStatement(sql);
+             ResultSet set = statement.executeQuery()) {
 
             while (set.next()) {
                 companies.add(mapResultSetToCompany(set));
@@ -62,8 +85,9 @@ public class CompanyDAO {
         } catch (NullPointerException ex) {
             throw new DatabaseLayerException("Fehler bei Datenbankverbindung!");
         } finally {
-            JDBCConnection.getInstance().closeConnection();
+            JDBCConnectionPrepared.getInstance().closeConnection();
         }
         return companies;
     }
+
 }

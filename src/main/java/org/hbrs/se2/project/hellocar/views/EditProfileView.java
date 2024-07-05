@@ -22,6 +22,7 @@ import org.hbrs.se2.project.hellocar.dtos.CompanyDTO;
 import org.hbrs.se2.project.hellocar.dtos.StudentDTO;
 import org.hbrs.se2.project.hellocar.dtos.UserDTO;
 import org.hbrs.se2.project.hellocar.dtos.impl.UserDTOImpl;
+import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerException;
 import org.hbrs.se2.project.hellocar.util.AccountType;
 import org.hbrs.se2.project.hellocar.util.Globals;
 
@@ -107,6 +108,8 @@ public class EditProfileView extends Div {
                     Notification.show("Fehlerhafte Eingabe bei der Übergabe vom Profilupdate an die Control");
                 } catch (SQLException ex) {
                     Notification.show("Fehler beim Abruf des aktuellen Student bzw. Company");
+                } catch (DatabaseLayerException ex) {
+                    throw new RuntimeException(ex);
                 }
 
                 /*

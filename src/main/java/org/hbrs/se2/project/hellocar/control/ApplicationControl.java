@@ -33,7 +33,7 @@ public class ApplicationControl {
         return applicationDAO.refuseApplication(applicationId);
     }
 
-    public List<ApplicationDTO> readMyApplications(int id) {
+    public List<ApplicationDTO> readMyApplications(int id) throws DatabaseLayerException {
         return applicationDAO.getMyApplications(id);
     }
 }

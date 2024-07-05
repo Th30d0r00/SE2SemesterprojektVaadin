@@ -43,14 +43,14 @@ public class UserDaoTest {
             LocalDate date = LocalDate.of(2020, 1, 8);
             studentToAdd.setBirthday(date);
             userToAdd.setStudent(studentToAdd);
-            dao.AddUser(userToAdd);
+            dao.addUser(userToAdd);
 
             /*
              * Der User wird mit der Methode findUSerByEmail ausgelesen und die Attribute mit dem ursprünglich
              * erstellten User verglichen
              * */
 
-            UserDTO readUser = dao.FindUserByEmail("mustermann@gmail.com");
+            UserDTO readUser = dao.findUserByEmail("mustermann@gmail.com");
             assertEquals(userToAdd.getEmail(), readUser.getEmail());
             assertEquals(userToAdd.getAccountType(), readUser.getAccountType());
 
@@ -88,14 +88,14 @@ public class UserDaoTest {
         LocalDate date = LocalDate.of(2020, 1, 8);
         companyToAdd.setFoundingDate(date);
         userToAdd.setCompany(companyToAdd);
-        dao.AddUser(userToAdd);
+        dao.addUser(userToAdd);
 
         /*
          * Der User wird mit der Methode findUSerByEmail ausgelesen und die Attribute mit dem ursprünglich
          * erstellten User verglichen
         * */
 
-        UserDTO readUser = dao.FindUserByEmail("mustermann@hotmail.com");
+        UserDTO readUser = dao.findUserByEmail("mustermann@hotmail.com");
         assertEquals(userToAdd.getEmail(), readUser.getEmail());
         assertEquals(userToAdd.getAccountType(), readUser.getAccountType());
 

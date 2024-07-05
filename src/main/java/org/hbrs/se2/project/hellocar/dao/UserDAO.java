@@ -4,276 +4,223 @@ import org.hbrs.se2.project.hellocar.dtos.*;
 import org.hbrs.se2.project.hellocar.dtos.impl.CompanyDTOImpl;
 import org.hbrs.se2.project.hellocar.dtos.impl.StudentDTOImpl;
 import org.hbrs.se2.project.hellocar.dtos.impl.UserDTOImpl;
-import org.hbrs.se2.project.hellocar.services.db.JDBCConnection;
+import org.hbrs.se2.project.hellocar.services.db.JDBCConnectionPrepared;
 import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerException;
 import org.hbrs.se2.project.hellocar.util.AccountType;
-import org.hbrs.se2.project.hellocar.util.Globals;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
-import java.util.Objects;
 
-import org.hbrs.se2.project.hellocar.dtos.UserDTO;
-import org.hbrs.se2.project.hellocar.dtos.impl.UserDTOImpl;
-import org.hbrs.se2.project.hellocar.services.db.JDBCConnection;
-import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerException;
-import org.postgresql.util.PGbytea;
+/**
+ * Dient der Verwaltung von Usern in der Datenbank.
+ */
 
 public class UserDAO {
 
     public UserDTO findUserByUseridAndPassword(String id, String password) throws DatabaseLayerException {
-        // Set ResultSet to null;
-        ResultSet set = null;
+        String sql = "SELECT * FROM carlook.user WHERE userid = ? AND password = ?";
+        try (PreparedStatement statement = JDBCConnectionPrepared.getInstance().getPreparedStatement(sql)) {
+            statement.setString(1, id);
+            statement.setString(2, password);
 
-        // Set try-clause
-        try {
-            Statement statement = null;
-            try {
-                statement = JDBCConnection.getInstance().getStatement();
-            } catch (DatabaseLayerException e) {
-                e.printStackTrace();
+            try (ResultSet set = statement.executeQuery()) {
+                if (set.next()) {
+                    UserDTOImpl user = new UserDTOImpl();
+                    user.setId(set.getInt(1));
+                    user.getStudent().setFirstname(set.getString(3));
+                    user.getStudent().setLastname(set.getString(4));
+
+                    // Beziehe die Rollen eines Users
+                    RolleDAO rolleDAO = new RolleDAO();
+                    List<RolleDTO> rollen = rolleDAO.getRolesOfUser(user);
+                    user.setRoles(rollen);
+
+                    return user;
+                } else {
+                    throw new DatabaseLayerException("No User Could be found");
+                }
             }
-
-            set = statement.executeQuery(
-                    "SELECT * "
-                       + "FROM carlook.user "
-                       + "WHERE carlook.user.userid = \'" + id + "\'"
-                         + " AND carlook.user.password = \'" + password + "\'");
-
-            // JDBCConnection.getInstance().closeConnection();
-
-        } catch (SQLException ex) {
-            DatabaseLayerException e = new DatabaseLayerException("Fehler im SQL-Befehl!");
-            e.setReason(Globals.Errors.SQLERROR);
-            throw e;
-        }
-        catch (NullPointerException ex) {
-            DatabaseLayerException e = new DatabaseLayerException("Fehler bei Datenbankverbindung!");
-            e.setReason(Globals.Errors.DATABASE);
-            throw e;
-        }
-
-        UserDTOImpl user = null;
-
-        try {
-            if (set.next()) {
-                // Durchführung des Object-Relational-Mapping (ORM)
-
-                user = new UserDTOImpl();
-                user.setId( set.getInt(1));
-                user.getStudent().setFirstname( set.getString(3) );
-                user.getStudent().setLastname(set.getString(4));
-
-                // Beziehe die Rollen eines Users:
-                RolleDAO rolleDAO = new RolleDAO();
-                List<RolleDTO> rollen = rolleDAO.getRolesOfUser(user);
-
-                // Einsetzen der Rollen in ein User-Object
-                user.setRoles(rollen);
-
-                return user;
-
-            } else {
-                // Error Handling
-                DatabaseLayerException e = new DatabaseLayerException("No User Could be found");
-                e.setReason(Globals.Errors.NOUSERFOUND);
-                throw e;
-            }
-        } catch (SQLException ex) {
-            DatabaseLayerException e = new DatabaseLayerException("Probleme mit der Datenbank");
-            e.setReason(Globals.Errors.DATABASE);
-            throw e;
-
+        } catch (SQLException e) {
+            throw new DatabaseLayerException("Fehler im SQL-Befehl!");
         } finally {
-            JDBCConnection.getInstance().closeConnection();
+            JDBCConnectionPrepared.getInstance().closeConnection();
         }
     }
 
-    public UserDTO FindUserByEmail(String email) throws DatabaseLayerException {
-        UserDTO user = null;
-        Statement statement = null;
-        ResultSet set = null;
-        ResultSet set2 = null;
+    public UserDTO findUserByEmail(String email) throws DatabaseLayerException {
+        String sqlUser = "SELECT * FROM collabhbrs.users WHERE email = ?";
+        try (PreparedStatement statement = JDBCConnectionPrepared.getInstance().getPreparedStatement(sqlUser)) {
+            statement.setString(1, email);
+            try (ResultSet set = statement.executeQuery()) {
+                if (set.next()) {
+                    UserDTOImpl user = new UserDTOImpl();
+                    user.setId(set.getInt("id"));
+                    user.setEmail(set.getString("email"));
+                    user.setSalt(set.getBytes("salt"));
+                    user.setHashValue(set.getBytes("hashvalue"));
+                    user.setAccountType(AccountType.valueOf(set.getString("accounttype")));
 
-        try {
-            statement = JDBCConnection.getInstance().getStatement();
+                    RolleDAO rolleDAO = new RolleDAO();
+                    List<RolleDTO> rollen = rolleDAO.getRolesOfUser(user);
+                    user.setRoles(rollen);
 
-            // Suche den User über seine Email
-            String userQuery = "SELECT * FROM collabhbrs.users WHERE email = '" + email + "'";
-            set = statement.executeQuery(userQuery);
-
-            if (set.next()) {
-                // Durchführung des Object-Relational-Mapping (ORM) für user
-                user = new UserDTOImpl();
-                user.setId(set.getInt("id"));
-                user.setEmail(set.getString("email"));
-                user.setSalt(set.getBytes("salt"));
-                user.setHashValue(set.getBytes("hashvalue"));
-                user.setAccountType(AccountType.valueOf(set.getString("accounttype")));
-
-                // Beziehe die Rollen eines Users
-                RolleDAO rolleDAO = new RolleDAO();
-                List<RolleDTO> rollen = rolleDAO.getRolesOfUser(user);
-                user.setRoles(rollen);
-
-                // Prüfen, ob der User ein Student oder eine Company ist und dementsprechend die Attribute einfügen
-                if (user.getAccountType() == AccountType.STUDENT) {
-                    String studentQuery = "SELECT * FROM collabhbrs.student WHERE id = " + user.getId();
-                    set2 = statement.executeQuery(studentQuery);
-
-                    if (set2.next()) {
-                        StudentDTO student = new StudentDTOImpl();
-                        student.setFirstname(set2.getString("firstname"));
-                        student.setLastname(set2.getString("lastname"));
-                        student.setBirthday(set2.getDate("birthday").toLocalDate());
-                        user.setStudent(student);
-                    }
-                } else {
-                    String companyQuery = "SELECT * FROM collabhbrs.company WHERE id = " + user.getId();
-                    set2 = statement.executeQuery(companyQuery);
-
-                    if (set2.next()) {
-                        CompanyDTO company = new CompanyDTOImpl();
-                        company.setCompanyName(set2.getString("company_name"));
-                        company.setEmployees(set2.getInt("employees"));
-                        company.setFoundingDate(set2.getDate("founding_date").toLocalDate());
-                        company.setLocations(set2.getString("locations"));
-                        company.setDescription(set2.getString("description"));
-                        user.setCompany(company);
+                    if (user.getAccountType() == AccountType.STUDENT) {
+                        return getStudentDetails(user);
+                    } else {
+                        return getCompanyDetails(user);
                     }
                 }
             }
-        } catch (SQLException ex) {
+        } catch (SQLException e) {
             throw new DatabaseLayerException("Fehler im SQL-Befehl!");
-        } catch (NullPointerException ex) {
+        } catch (NullPointerException e) {
             throw new DatabaseLayerException("Fehler bei Datenbankverbindung!");
         } finally {
-            // Stelle sicher, dass die ResultSet und Statement geschlossen werden
-            try {
-                if (set != null) {
-                    set.close();
-                }
-                if (set2 != null) {
-                    set2.close();
-                }
-                if (statement != null) {
-                    statement.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            JDBCConnection.getInstance().closeConnection();
+            JDBCConnectionPrepared.getInstance().closeConnection();
         }
+        return null;
+    }
 
+    private UserDTO getStudentDetails(UserDTO user) throws SQLException, DatabaseLayerException {
+        String sqlStudent = "SELECT * FROM collabhbrs.student WHERE id = ?";
+        try (PreparedStatement statement = JDBCConnectionPrepared.getInstance().getPreparedStatement(sqlStudent)) {
+            statement.setInt(1, user.getId());
+            try (ResultSet set = statement.executeQuery()) {
+                if (set.next()) {
+                    StudentDTO student = new StudentDTOImpl();
+                    student.setFirstname(set.getString("firstname"));
+                    student.setLastname(set.getString("lastname"));
+                    student.setBirthday(set.getDate("birthday").toLocalDate());
+                    user.setStudent(student);
+                }
+            }
+        }
         return user;
     }
 
-
-    public boolean AddUser(UserDTO userDTO) throws DatabaseLayerException {
-        boolean successfullyAddedUser = false;
-        Statement statement = null;
-
-        try {
-            statement = JDBCConnection.getInstance().getStatement();
-
-            // Konvertiere Byte-Array in PostgreSQL-Bytea-Format
-            String salt = PGbytea.toPGString(userDTO.getSalt());
-            String hashValue = PGbytea.toPGString(userDTO.getHashValue());
-
-            // Füge einen neuen User in die Datenbank ein und erhalte den generierten Key
-            String userQuery = "INSERT INTO collabhbrs.users (email, salt, hashvalue, accounttype) " +
-                    "VALUES ('" + userDTO.getEmail() + "', '" +
-                    salt + "', '" +
-                    hashValue + "', '" +
-                    userDTO.getAccountType().toString() + "')";
-
-            statement.executeUpdate(userQuery, Statement.RETURN_GENERATED_KEYS);
-
-            // Hole den automatisch generierten Primary Key des Users
-            ResultSet userKeys = statement.getGeneratedKeys();
-            userKeys.next();
-            int userId = userKeys.getInt(1);
-
-            // Füge einen neuen Studenten oder eine neue Company in die entsprechende Tabelle ein
-            if (userDTO.getStudent() != null) {
-                String studentQuery = "INSERT INTO collabhbrs.student (id, firstname, lastname, birthday, fachsemester) " +
-                        "VALUES (" + userId + ", '" +
-                        userDTO.getStudent().getFirstname() + "', '" +
-                        userDTO.getStudent().getLastname() + "', '" +
-                        userDTO.getStudent().getBirthday() + "', '" +
-                        userDTO.getStudent().getFachsemester() + "')";
-                statement.executeUpdate(studentQuery);
-            } else {
-                String companyQuery = "INSERT INTO collabhbrs.company (id, company_name, founding_date, employees, locations, description) " +
-                        "VALUES (" + userId + ", '" +
-                        userDTO.getCompany().getCompanyName() + "', '" +
-                        userDTO.getCompany().getFoundingDate() + "', " +
-                        userDTO.getCompany().getEmployees() + ", '" +
-                        userDTO.getCompany().getLocations() + "', '" +
-                        userDTO.getCompany().getDescription() + "')";
-                statement.executeUpdate(companyQuery);
-            }
-
-
-            successfullyAddedUser = true;
-
-        } catch (SQLException ex) {
-            DatabaseLayerException e = new DatabaseLayerException("Fehler im SQL-Befehl!");
-            e.setReason(Globals.Errors.SQLERROR);
-            throw e;
-        } catch (NullPointerException ex) {
-            DatabaseLayerException e = new DatabaseLayerException("Fehler bei Datenbankverbindung!");
-            e.setReason(Globals.Errors.DATABASE);
-            throw e;
-        } finally {
-            if (statement != null) {
-                try {
-                    statement.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
+    private UserDTO getCompanyDetails(UserDTO user) throws SQLException, DatabaseLayerException {
+        String sqlCompany = "SELECT * FROM collabhbrs.company WHERE id = ?";
+        try (PreparedStatement statement = JDBCConnectionPrepared.getInstance().getPreparedStatement(sqlCompany)) {
+            statement.setInt(1, user.getId());
+            try (ResultSet set = statement.executeQuery()) {
+                if (set.next()) {
+                    CompanyDTO company = new CompanyDTOImpl();
+                    company.setCompanyName(set.getString("company_name"));
+                    company.setEmployees(set.getInt("employees"));
+                    company.setFoundingDate(set.getDate("founding_date").toLocalDate());
+                    company.setLocations(set.getString("locations"));
+                    company.setDescription(set.getString("description"));
+                    user.setCompany(company);
                 }
             }
-            JDBCConnection.getInstance().closeConnection();
         }
+        return user;
+    }
 
+    public boolean addUser(UserDTO userDTO) throws DatabaseLayerException {
+        boolean successfullyAddedUser = false;
+        String sqlUser = "INSERT INTO collabhbrs.users (email, salt, hashvalue, accounttype) VALUES (?, ?, ?, ?)";
+        try (PreparedStatement statement = JDBCConnectionPrepared.getInstance().getPreparedStatement(sqlUser, Statement.RETURN_GENERATED_KEYS)) {
+            statement.setString(1, userDTO.getEmail());
+            statement.setBytes(2, userDTO.getSalt());
+            statement.setBytes(3, userDTO.getHashValue());
+            statement.setString(4, userDTO.getAccountType().toString());
+
+            int affectedRows = statement.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Creating user failed, no rows affected.");
+            }
+
+            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    int userId = generatedKeys.getInt(1);
+                    if (userDTO.getStudent() != null) {
+                        addStudent(userId, userDTO.getStudent());
+                    } else if (userDTO.getCompany() != null) {
+                        addCompany(userId, userDTO.getCompany());
+                    }
+                    successfullyAddedUser = true;
+                } else {
+                    throw new SQLException("Creating user failed, no ID obtained.");
+                }
+            }
+        } catch (SQLException e) {
+            throw new DatabaseLayerException("Fehler im SQL-Befehl!");
+        } finally {
+            JDBCConnectionPrepared.getInstance().closeConnection();
+        }
         return successfullyAddedUser;
     }
 
+
+    private void addStudent(int userId, StudentDTO student) throws SQLException, DatabaseLayerException {
+        String sqlStudent = "INSERT INTO collabhbrs.student (id, firstname, lastname, birthday, fachsemester) VALUES (?, ?, ?, ?, ?)";
+        try (PreparedStatement statement = JDBCConnectionPrepared.getInstance().getPreparedStatement(sqlStudent)) {
+            statement.setInt(1, userId);
+            statement.setString(2, student.getFirstname());
+            statement.setString(3, student.getLastname());
+            statement.setDate(4, java.sql.Date.valueOf(student.getBirthday()));
+            statement.setInt(5, student.getFachsemester());
+            statement.executeUpdate();
+        }
+    }
+
+    private void addCompany(int userId, CompanyDTO company) throws SQLException, DatabaseLayerException {
+        String sqlCompany = "INSERT INTO collabhbrs.company (id, company_name, founding_date, employees, locations, description) VALUES (?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement statement = JDBCConnectionPrepared.getInstance().getPreparedStatement(sqlCompany)) {
+            statement.setInt(1, userId);
+            statement.setString(2, company.getCompanyName());
+            statement.setDate(3, java.sql.Date.valueOf(company.getFoundingDate()));
+            statement.setInt(4, company.getEmployees());
+            statement.setString(5, company.getLocations());
+            statement.setString(6, company.getDescription());
+            statement.executeUpdate();
+        }
+    }
+
     public UserDTO findUserById(int id) throws DatabaseLayerException {
-        UserDTO user = null;
-        try {
-            Statement statement = JDBCConnection.getInstance().getStatement();
-            ResultSet set = statement.executeQuery(
-                    "SELECT * FROM collabhbrs.users WHERE id = " + id
-            );
+        String sql = "SELECT * FROM collabhbrs.users WHERE id = ?";
+        try (PreparedStatement statement = JDBCConnectionPrepared.getInstance().getPreparedStatement(sql)) {
+            statement.setInt(1, id);
+            try (ResultSet set = statement.executeQuery()) {
+                if (set.next()) {
+                    UserDTOImpl user = new UserDTOImpl();
+                    user.setId(set.getInt("id"));
+                    user.setEmail(set.getString("email"));
+                    user.setSalt(set.getBytes("salt"));
+                    user.setHashValue(set.getBytes("hashvalue"));
+                    user.setAccountType(AccountType.valueOf(set.getString("accounttype")));
 
-            if (set.next()) {
-                user = new UserDTOImpl();
-                user.setId(set.getInt("id"));
-                user.setEmail(set.getString("email"));
-                user.setSalt(set.getBytes("salt"));
-                user.setHashValue(set.getBytes("hashvalue"));
-                user.setAccountType(AccountType.valueOf(set.getString("accounttype")));
+                    RolleDAO rolleDAO = new RolleDAO();
+                    List<RolleDTO> rollen = rolleDAO.getRolesOfUser(user);
+                    user.setRoles(rollen);
 
-                // Beziehe die Rollen eines Users
-                RolleDAO rolleDAO = new RolleDAO();
-                List<RolleDTO> rollen = rolleDAO.getRolesOfUser(user);
-                user.setRoles(rollen);
+                    if (user.getAccountType() == AccountType.STUDENT) {
+                        return getStudentDetails(user);
+                    } else {
+                        return getCompanyDetails(user);
+                    }
+                }
             }
-        } catch (SQLException | DatabaseLayerException e) {
-            e.printStackTrace();
-    } finally {
-        JDBCConnection.getInstance().closeConnection();
-    } return user;
+        } catch (SQLException e) {
+            throw new DatabaseLayerException("Fehler im SQL-Befehl!");
+        } finally {
+            JDBCConnectionPrepared.getInstance().closeConnection();
+        }
+        return null;
     }
 
     public boolean deleteUserProfile(int id) {
-        boolean successfullyDeletedUser = false;
-
-
-        return successfullyDeletedUser;
+        String sql = "DELETE FROM collabhbrs.users WHERE id = ?";
+        try (PreparedStatement statement = JDBCConnectionPrepared.getInstance().getPreparedStatement(sql)) {
+            statement.setInt(1, id);
+            int result = statement.executeUpdate();
+            return result > 0;
+        } catch (SQLException | DatabaseLayerException e) {
+            return false;
+        }
     }
 }
