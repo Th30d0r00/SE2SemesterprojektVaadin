@@ -62,6 +62,12 @@ public class AnzeigeDAO {
         return anzeige;
     }
 
+    public boolean updateJobPostingInDB(int id, String jobTitle, String location, String jobType, String description) {
+        boolean successResult = false;
+        // SQL Anweisung UPDATE TABLE Anzeige ....
+
+        return  successResult;
+    }
 
     public List<AnzeigeDTO> getAllAnzeigen() throws DatabaseLayerException {
         String query = "SELECT * FROM collabhbrs.anzeige";

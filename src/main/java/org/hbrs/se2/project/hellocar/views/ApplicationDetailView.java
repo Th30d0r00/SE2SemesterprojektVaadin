@@ -27,7 +27,6 @@ import java.util.Locale;
 public class ApplicationDetailView extends VerticalLayout implements HasUrlParameter<Integer> {
     private ApplicationDTO applicationDTO;
     private ApplicationControl applicationControl = new ApplicationControl();
-    private final UserDAO userDAO;
     private final TextField jobTitle = new TextField();
     private final TextField standort = new TextField();
     private final TextField firstName = new TextField();
@@ -46,7 +45,6 @@ public class ApplicationDetailView extends VerticalLayout implements HasUrlParam
 
     public ApplicationDetailView() {
         this.applicationControl = new ApplicationControl();
-        this.userDAO = new UserDAO();
 
         // Form-Layout erstellen und hinzufügen
         add(createFormLayout());

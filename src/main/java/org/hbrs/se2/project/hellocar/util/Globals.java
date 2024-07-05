@@ -27,6 +27,7 @@ public class Globals {
         public static final String SHOW_APPLICATIONS = "showapplications";
         public static final String EDIT_PROFILE = "editprofileview";
         public static final String SHOW_MY_APPLICATIONS = "showmyapplications";
+        public static final String EDIT_JOBPOSTING = "editjobposting";
     }
 
     public static class Roles {

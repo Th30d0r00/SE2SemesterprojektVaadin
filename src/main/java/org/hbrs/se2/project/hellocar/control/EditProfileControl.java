@@ -3,9 +3,12 @@ package org.hbrs.se2.project.hellocar.control;
 import org.hbrs.se2.project.hellocar.dao.CompanyDAO;
 import org.hbrs.se2.project.hellocar.dao.StudentDAO;
 import org.hbrs.se2.project.hellocar.dao.UserDAO;
+import org.hbrs.se2.project.hellocar.dtos.CompanyDTO;
+import org.hbrs.se2.project.hellocar.dtos.StudentDTO;
 import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerException;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 
 @Service
@@ -34,5 +37,13 @@ public class EditProfileControl {
 
     public boolean deleteUserProfile(int userId) {
         return userDAO.deleteUserProfile(userId);
+    }
+
+    public StudentDTO getCurrentStudent(int id) throws SQLException, DatabaseLayerException {
+        return studentDAO.getStudentById(id);
+    }
+
+    public CompanyDTO getCurrentCompany(int id) throws SQLException, DatabaseLayerException {
+        return companyDAO.getCompanyById(id);
     }
 }

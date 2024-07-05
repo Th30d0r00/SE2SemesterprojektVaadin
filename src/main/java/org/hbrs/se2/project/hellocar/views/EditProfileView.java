@@ -5,6 +5,7 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.datepicker.DatePicker;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H3;
@@ -29,14 +30,12 @@ import org.hbrs.se2.project.hellocar.util.Globals;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
-//CSS Klasse schreiben für Buttonfarbe
 @Route(value = Globals.Pages.EDIT_PROFILE, layout = AppView.class)
 @PageTitle("Profil bearbeiten")
+@CssImport("./styles/views/editprofileview/edit-profile-view.css")
 public class EditProfileView extends Div {
     EditProfileControl editProfileControl;
-    private final StudentDAO studentDAO;
-    private final CompanyDAO companyDAO;
-    private UserDTO currentUser;
+    private final UserDTO currentUser;
     private StudentDTO currentStudent;
     private CompanyDTO currentCompany;
 
@@ -64,8 +63,6 @@ public class EditProfileView extends Div {
     public EditProfileView(EditProfileControl editProfileControl) {
         addClassName("editprofileview");
         this.editProfileControl = editProfileControl;
-        studentDAO = new StudentDAO();
-        companyDAO = new CompanyDAO();
 
         currentUser = (UserDTO) UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER);
         accountType = currentUser.getAccountType();
@@ -87,20 +84,21 @@ public class EditProfileView extends Div {
         //Wenn changeButton gedrückt wird
         changeButton.addClickListener(e -> {
 
-            boolean formComplete = CheckIfFormComplete();
+            boolean formComplete = checkIfFormComplete();
+            boolean successResult = false;
 
             if(formComplete){
                 try{
                     // Die aktualisierten Eingaben werden an die Control übergeben, mit Verweis auf den betroffenen User
                     if(accountType == AccountType.STUDENT){
-                        this.currentStudent = studentDAO.getStudentById(currentUser.getId());
-                        editProfileControl.updateStudentProfile(currentUser.getId(), changeFirstname.getValue(),
+                        this.currentStudent = editProfileControl.getCurrentStudent(currentUser.getId());
+                        successResult = editProfileControl.updateStudentProfile(currentUser.getId(), changeFirstname.getValue(),
                                 changeLastname.getValue(),changeBirthday.getValue(),
                                 Integer.parseInt(changeFachsemester.getValue()));
                     }
                     if(accountType == AccountType.UNTERNEHMEN){
-                        this.currentCompany = companyDAO.getCompanyById(currentUser.getId());
-                        editProfileControl.updateCompanyProfile(currentUser.getId(), changeCompanyName.getValue(),
+                        this.currentCompany = editProfileControl.getCurrentCompany(currentUser.getId());
+                        successResult = editProfileControl.updateCompanyProfile(currentUser.getId(), changeCompanyName.getValue(),
                                 changeFoundingDate.getValue(), Integer.parseInt(changeEmployees.getValue()),
                                 changeLocations.getValue(), changeDescription.getValue());
                     }
@@ -112,21 +110,22 @@ public class EditProfileView extends Div {
                     throw new RuntimeException(ex);
                 }
 
-                /*
-                if (!result.getSuccess()) {
-                    Notification.show(result.getMessage());
+                if (successResult) {
+                    Notification.show("Profil erfolgreich aktualisiert", 3000, Notification.Position.MIDDLE);
+                    UI.getCurrent().navigate(Globals.Pages.SHOW_JOBPOSTINGS);
                 } else {
-                    Notification.show(result.getMessage());
-                    clearForm();
-                    UI.getCurrent().navigate( Globals.Pages.LOGIN_VIEW );
+                    Notification.show("Bei der Aktualisierung des Profils ist ein Fehler aufgetreten", 3000, Notification.Position.MIDDLE);
                 }
-                */
             }
         });
 
         //Wenn backButton gedrückt wird
         backButton.addClickListener(e -> {
-            UI.getCurrent().navigate(Globals.Pages.SHOW_APPLICATIONS);
+            if (currentUser.getAccountType() == AccountType.STUDENT) {
+                UI.getCurrent().navigate(Globals.Pages.SHOW_JOBPOSTINGS);
+            } else {
+                UI.getCurrent().navigate(Globals.Pages.SHOW_APPLICATIONS);
+            }
         });
 
         //Wenn deleteButton gedrückt wird
@@ -151,6 +150,9 @@ public class EditProfileView extends Div {
         buttonLayout.add(backButton);
         deleteButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         buttonLayout.add(deleteButton);
+        changeButton.addClassName("change-button");
+        backButton.addClassName("back-button");
+        deleteButton.addClassName("delete-button");
         return buttonLayout;
     }
 
@@ -196,7 +198,7 @@ public class EditProfileView extends Div {
     }
     */
 
-    boolean CheckIfFormComplete(){
+    boolean checkIfFormComplete(){
         boolean formComplete = true;
         if (accountType == AccountType.STUDENT) {
             String form_firstname = changeFirstname.getValue();

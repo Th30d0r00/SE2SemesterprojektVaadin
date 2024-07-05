@@ -52,12 +52,8 @@ public class ShowMyJobPostingsView extends Div{
 
         // Click listener for rows
         grid.addItemClickListener(event -> {
-            AnzeigeDTO selectedAnzeige = event.getItem();
-            System.out.println(selectedAnzeige.getId());
-            // Redirect to company detail view
-            //UI.getCurrent().navigate(CompanyDetailView.class,selectedAnzeige.getId()); //Stellenanzeige bearbeiten -> in Maske auch Button zum Löschen
-            //UI.getCurrent().navigate(CompanyDetailView.class, 2);
-            //getUI().ifPresent(ui -> ui.navigate(CompanyDetailView.class, selectedcompany.getId()));
+            AnzeigeDTO selectedJobPosting = event.getItem();
+            //UI.getCurrent().navigate(EditJobPostingView.class, selectedJobPosting);
         });
 
         HeaderRow filterRow = grid.appendHeaderRow();

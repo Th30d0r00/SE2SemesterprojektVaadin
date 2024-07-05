@@ -3,8 +3,8 @@ package org.hbrs.se2.project.hellocar.views;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.formlayout.FormLayout;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -21,6 +21,7 @@ import java.sql.SQLException;
 
 @Route(value = Globals.Pages.COMPANY_DETAILS, layout = AppView.class)
 @PageTitle("Unternehmensdetails")
+@CssImport("./styles/views/companydetailview/company-detail-view.css")
 public class CompanyDetailView extends VerticalLayout implements HasUrlParameter<Integer> {
     private final UserDAO userDAO;
     private final CompanyDAO companyDAO;
@@ -80,7 +81,7 @@ public class CompanyDetailView extends VerticalLayout implements HasUrlParameter
     private Component createButtonLayout() {
         backButton = new Button("Zurück");
         applyButton = new Button("Initiativbewerbung");
-        backButton.addClassName("cancel-button");
+        backButton.addClassName("back-button");
         applyButton.addClassName("apply-button");
         HorizontalLayout buttonLayout = new HorizontalLayout(backButton, applyButton);
         buttonLayout.setSpacing(true);
