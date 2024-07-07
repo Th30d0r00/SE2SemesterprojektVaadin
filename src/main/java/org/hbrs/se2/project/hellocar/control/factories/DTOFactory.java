@@ -58,9 +58,8 @@ public class DTOFactory {
         return companyDTO;
     }
 
-    public static ApplicationDTO createApplicationDTO(int id, String telefonnummer, String beschaeftigung, LocalDate verfuegbar, String wohnort, String motivationsschreiben, String lebenslauf, LocalDateTime appliedAt, String status, AnzeigeDTO stellenanzeige, StudentDTO student, CompanyDTO company, UserDTO user) {
+    public static ApplicationDTO createApplicationDTO(String telefonnummer, String beschaeftigung, LocalDate verfuegbar, String wohnort, String motivationsschreiben, String lebenslauf, LocalDateTime appliedAt, String status, AnzeigeDTO stellenanzeige, StudentDTO student, CompanyDTO company, UserDTO user) {
         ApplicationDTO applicationDTO = new ApplicationDTOImpl();
-        applicationDTO.setId(id);
         applicationDTO.setTelefonnummer(telefonnummer);
         applicationDTO.setBeschaeftigung(beschaeftigung);
         applicationDTO.setVerfuegbar(verfuegbar);
@@ -76,9 +75,8 @@ public class DTOFactory {
         return applicationDTO;
     }
 
-    public static AnzeigeDTO createAnzeigeDTO(int id, String jobTitle, String standort, String jobType, CompanyDTO company, String jobDescription, LocalDateTime publicationDate) {
+    public static AnzeigeDTO createAnzeigeDTO(String jobTitle, String standort, String jobType, CompanyDTO company, String jobDescription, LocalDateTime publicationDate) {
         AnzeigeDTO anzeigeDTO = new AnzeigeDTOImpl();
-        anzeigeDTO.setId(id);
         anzeigeDTO.setJobTitle(jobTitle);
         anzeigeDTO.setStandort(standort);
         anzeigeDTO.setJobType(jobType);
