@@ -2,7 +2,7 @@ package org.hbrs.se2.project.hellocar.views;
 
 import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.textfield.PasswordField;
-import org.hbrs.se2.demo.registration.RegistrationResult;
+import org.hbrs.se2.project.hellocar.util.RegistrationResult;
 import org.hbrs.se2.project.hellocar.control.RegistrationControl;
 import org.hbrs.se2.project.hellocar.dtos.CompanyDTO;
 import org.hbrs.se2.project.hellocar.dtos.StudentDTO;
@@ -32,7 +32,7 @@ import java.time.LocalDate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@Route(value = Globals.Pages.USER_REGISTRATION, layout = AppView.class)
+@Route(value = Globals.Pages.USER_REGISTRATION)
 @PageTitle("User Registration")
 @CssImport("./styles/views/entercar/enter-car-view.css")
 public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Vererbung)

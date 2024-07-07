@@ -1,4 +1,4 @@
-package org.hbrs.se2.demo.registration;
+package org.hbrs.se2.project.hellocar.util;
 
 public class RegistrationResult {
 

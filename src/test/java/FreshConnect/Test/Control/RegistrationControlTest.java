@@ -1,15 +1,12 @@
 package FreshConnect.Test.Control;
 
-import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
 import org.hbrs.se2.project.hellocar.control.RegistrationControl;
 import org.hbrs.se2.project.hellocar.dtos.StudentDTO; //
 import org.hbrs.se2.project.hellocar.dtos.impl.StudentDTOImpl;
 import org.hbrs.se2.project.hellocar.dtos.impl.UserDTOImpl;
-import org.junit.Before;
 import org.junit.Test;
-import org.hbrs.se2.demo.registration.RegistrationResult;
-import org.hbrs.se2.project.hellocar.dao.UserDAO;
+import org.hbrs.se2.project.hellocar.util.RegistrationResult;
 import org.hbrs.se2.project.hellocar.dtos.UserDTO;
 import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerException;
 import org.junit.jupiter.api.BeforeAll;

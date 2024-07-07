@@ -25,9 +25,6 @@ injectGlobalCss($cssFromFile_6.toString(), 'CSSImport end', document);
 import $cssFromFile_7 from 'Frontend/styles/views/entercar/enter-car-view.css?inline';
 
 injectGlobalCss($cssFromFile_7.toString(), 'CSSImport end', document);
-import $cssFromFile_8 from 'Frontend/styles/views/showcars/show-cars-view.css?inline';
-
-injectGlobalCss($cssFromFile_8.toString(), 'CSSImport end', document);
 import '@vaadin/polymer-legacy-adapter/style-modules.js';
 import '@vaadin/vaadin-lumo-styles/color-global.js';
 import '@vaadin/vaadin-lumo-styles/typography-global.js';

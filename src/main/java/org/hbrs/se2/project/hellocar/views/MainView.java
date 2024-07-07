@@ -37,7 +37,7 @@ public class MainView extends VerticalLayout {
 
         // Hinzufügen des Logos
         Image logo = new Image("images/freshconnect.png", "freshconnect logo");
-        logo.setWidth("200px"); // Passen Sie die Breite des Logos nach Bedarf an
+        logo.setWidth("200px");
         add(logo);
 
         LoginForm component = new LoginForm();

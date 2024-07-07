@@ -20,36 +20,6 @@ import java.util.List;
 
 public class UserDAO {
 
-    public UserDTO findUserByUseridAndPassword(String id, String password) throws DatabaseLayerException {
-        String sql = "SELECT * FROM carlook.user WHERE userid = ? AND password = ?";
-        try (PreparedStatement statement = JDBCConnectionPrepared.getInstance().getPreparedStatement(sql)) {
-            statement.setString(1, id);
-            statement.setString(2, password);
-
-            try (ResultSet set = statement.executeQuery()) {
-                if (set.next()) {
-                    UserDTOImpl user = new UserDTOImpl();
-                    user.setId(set.getInt(1));
-                    user.getStudent().setFirstname(set.getString(3));
-                    user.getStudent().setLastname(set.getString(4));
-
-                    // Beziehe die Rollen eines Users
-                    RolleDAO rolleDAO = new RolleDAO();
-                    List<RolleDTO> rollen = rolleDAO.getRolesOfUser(user);
-                    user.setRoles(rollen);
-
-                    return user;
-                } else {
-                    throw new DatabaseLayerException("No User Could be found");
-                }
-            }
-        } catch (SQLException e) {
-            throw new DatabaseLayerException("Fehler im SQL-Befehl!");
-        } finally {
-            JDBCConnectionPrepared.getInstance().closeConnection();
-        }
-    }
-
     public UserDTO findUserByEmail(String email) throws DatabaseLayerException {
         String sqlUser = "SELECT * FROM collabhbrs.users WHERE email = ?";
         try (PreparedStatement statement = JDBCConnectionPrepared.getInstance().getPreparedStatement(sqlUser)) {
@@ -62,10 +32,7 @@ public class UserDAO {
                     user.setSalt(set.getBytes("salt"));
                     user.setHashValue(set.getBytes("hashvalue"));
                     user.setAccountType(AccountType.valueOf(set.getString("accounttype")));
-
-                    RolleDAO rolleDAO = new RolleDAO();
-                    List<RolleDTO> rollen = rolleDAO.getRolesOfUser(user);
-                    user.setRoles(rollen);
+                    user.setRole(set.getString("roles"));
 
                     if (user.getAccountType() == AccountType.STUDENT) {
                         return getStudentDetails(user);
@@ -193,10 +160,7 @@ public class UserDAO {
                     user.setSalt(set.getBytes("salt"));
                     user.setHashValue(set.getBytes("hashvalue"));
                     user.setAccountType(AccountType.valueOf(set.getString("accounttype")));
-
-                    RolleDAO rolleDAO = new RolleDAO();
-                    List<RolleDTO> rollen = rolleDAO.getRolesOfUser(user);
-                    user.setRoles(rollen);
+                    user.setRole(set.getString("roles"));
 
                     if (user.getAccountType() == AccountType.STUDENT) {
                         return getStudentDetails(user);

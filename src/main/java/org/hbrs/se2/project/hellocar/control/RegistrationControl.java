@@ -1,6 +1,6 @@
 package org.hbrs.se2.project.hellocar.control;
 
-import org.hbrs.se2.demo.registration.RegistrationResult;
+import org.hbrs.se2.project.hellocar.util.RegistrationResult;
 import org.hbrs.se2.project.hellocar.dao.UserDAO;
 import org.hbrs.se2.project.hellocar.dtos.UserDTO;
 import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerException;

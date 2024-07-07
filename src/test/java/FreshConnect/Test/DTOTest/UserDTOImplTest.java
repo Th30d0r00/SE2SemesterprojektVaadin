@@ -1,11 +1,8 @@
 package FreshConnect.Test.DTOTest;
 
 import org.hbrs.se2.project.hellocar.dtos.CompanyDTO;
-import org.hbrs.se2.project.hellocar.dtos.RolleDTO;
 import org.hbrs.se2.project.hellocar.dtos.StudentDTO;
-import org.hbrs.se2.project.hellocar.dtos.UserDTO;
 import org.hbrs.se2.project.hellocar.dtos.impl.CompanyDTOImpl;
-import org.hbrs.se2.project.hellocar.dtos.impl.RolleDTOImpl;
 import org.hbrs.se2.project.hellocar.dtos.impl.StudentDTOImpl;
 import org.hbrs.se2.project.hellocar.dtos.impl.UserDTOImpl;
 import org.hbrs.se2.project.hellocar.util.AccountType;
@@ -13,10 +10,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -27,7 +20,6 @@ public class UserDTOImplTest {
     private static UserDTOImpl userDTO;
     private static StudentDTOImpl student;
     private static CompanyDTOImpl company;
-    private static List<RolleDTO> roles;
 
     @BeforeAll
     public static void setUp() {
@@ -48,7 +40,7 @@ public class UserDTOImplTest {
 
         userDTO.setStudent(student);
         userDTO.setCompany(company);
-        userDTO.setRoles(roles);
+        userDTO.setRole("USER");
     }
 
     @Test

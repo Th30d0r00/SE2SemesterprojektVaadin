@@ -1,16 +1,11 @@
 package FreshConnect.Test.Entities;
 
 import org.hbrs.se2.project.hellocar.entities.Company;
-import org.hbrs.se2.project.hellocar.entities.Rolle;
 import org.hbrs.se2.project.hellocar.entities.Student;
 import org.hbrs.se2.project.hellocar.entities.User;
 import org.hbrs.se2.project.hellocar.util.AccountType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -20,7 +15,6 @@ public class UserTest {
     private User user;
     private Student student;
     private Company company;
-    private List<Rolle> roles;
 
     @BeforeEach
     public void setUp() {
@@ -41,7 +35,7 @@ public class UserTest {
 
         user.setStudentenInfos(student);
         user.setFirmenInfos(company);
-        user.setRoles(roles);
+        user.setRole("USER");
     }
 
     @Test
