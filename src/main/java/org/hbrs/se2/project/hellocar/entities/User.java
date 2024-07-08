@@ -20,7 +20,7 @@ public class User {
     private int id;
     private String email;
     private String password;
-    private List<Rolle> roles;
+    private String role;
     private AccountType accountType;
     private Student studentenInfos;
     private Company firmenInfos;
@@ -49,12 +49,12 @@ public class User {
         this.password = password;
     }
 
-    public List<Rolle> getRoles() {
-        return roles;
+    public String getRole() {
+        return role;
     }
 
-    public void setRoles(List<Rolle> roles) {
-        this.roles = roles;
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public AccountType getAccountType() {

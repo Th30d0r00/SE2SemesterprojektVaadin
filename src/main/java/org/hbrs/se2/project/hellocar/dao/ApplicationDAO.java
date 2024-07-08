@@ -1,51 +1,75 @@
 package org.hbrs.se2.project.hellocar.dao;
 
-import org.hbrs.se2.project.hellocar.dtos.AnzeigeDTO;
-import org.hbrs.se2.project.hellocar.dtos.ApplicationDTO;
-import org.hbrs.se2.project.hellocar.dtos.StudentDTO;
-import org.hbrs.se2.project.hellocar.dtos.UserDTO;
+import org.hbrs.se2.project.hellocar.dtos.*;
+import org.hbrs.se2.project.hellocar.dtos.impl.AnzeigeDTOImpl;
 import org.hbrs.se2.project.hellocar.dtos.impl.ApplicationDTOImpl;
-import org.hbrs.se2.project.hellocar.entities.Anzeige;
-import org.hbrs.se2.project.hellocar.entities.Company;
-import org.hbrs.se2.project.hellocar.entities.Student;
-import org.hbrs.se2.project.hellocar.services.db.JDBCConnection;
+import org.hbrs.se2.project.hellocar.services.db.JDBCConnectionPrepared;
 import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerException;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Dient der Verwaltung von Bewerbungen in der Datenbank.
+ */
+
 public class ApplicationDAO {
 
-    /**
-     * Fügt eine neue Application in die Datenbank ein.
-     * Die Verlinkung zu Student (eindeutig) und zu einer Stellenanzeige (darf null sein bei Initiativb.)
-     * müsste noch richtig implementiert werden.
-     * @param applicationDTO
-     * @return
-     * @throws DatabaseLayerException
-     */
-    public Boolean addApplication(ApplicationDTO applicationDTO) throws DatabaseLayerException{
-        boolean successfullyAddesApplication = false;
-        try {
-            Statement statement = JDBCConnection.getInstance().getStatement();
+    public ApplicationDTO getApplicationById(int applicationId) throws DatabaseLayerException {
+        String query = "SELECT * FROM collabhbrs.application WHERE id = ?";
+        ApplicationDTO applicationDTO = null;
+        try (PreparedStatement statement = JDBCConnectionPrepared.getInstance().getPreparedStatement(query)) {
+            statement.setInt(1, applicationId);
+            try (ResultSet set = statement.executeQuery()) {
+                if (set.next()) {
+                    applicationDTO = mapResultSetToApplication(set);
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DatabaseLayerException("Fehler im SQL-Befehl!");
+        } catch (NullPointerException ex) {
+            throw new DatabaseLayerException("Fehler bei Datenbankverbindung!");
+        } finally {
+            JDBCConnectionPrepared.getInstance().closeConnection();
+        }
+        return applicationDTO;
+    }
 
-            String query = "INSERT INTO collabhbrs.application (motivationsschreiben, status, stellenanzeige, student, veröffentlichung) " +
-                    "VALUES ('" + applicationDTO.getMotivationsschreiben() + "', '" +
-                    applicationDTO.getStatus() + "', '" +
-                    applicationDTO.getStellenanzeige().getId() + "', '" +
-                    applicationDTO.getStudent().getId() + "', '" +
-                    Timestamp.valueOf(applicationDTO.getAppliedAt()) + "')";
+    public Boolean addApplication(ApplicationDTO applicationDTO) throws DatabaseLayerException {
+        boolean successfullyAddedApplication = false;
+        String query = applicationDTO.getStellenanzeige() == null
+                ? "INSERT INTO collabhbrs.application " +
+                "(telefonnummer, beschaeftigung, verfuegbar, wohnort, motivationsschreiben, lebenslauf, applied, status, student_id, company_id, user_id) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+                : "INSERT INTO collabhbrs.application " +
+                "(telefonnummer, beschaeftigung, verfuegbar, wohnort, motivationsschreiben, lebenslauf, applied, status, stellenanzeige_id, student_id, company_id, user_id) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-            int result = statement.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
+        try (PreparedStatement statement = JDBCConnectionPrepared.getInstance().getPreparedStatement(query)) {
+            statement.setString(1, applicationDTO.getTelefonnummer());
+            statement.setString(2, applicationDTO.getBeschaeftigung());
+            statement.setDate(3, Date.valueOf(applicationDTO.getVerfuegbar()));
+            statement.setString(4, applicationDTO.getWohnort());
+            statement.setString(5, applicationDTO.getMotivationsschreiben());
+            statement.setString(6, applicationDTO.getLebenslauf());
+            statement.setTimestamp(7, Timestamp.valueOf(applicationDTO.getAppliedAt()));
+            statement.setString(8, applicationDTO.getStatus());
+            int index = 9;
+            if (applicationDTO.getStellenanzeige() != null) {
+                statement.setInt(index++, applicationDTO.getStellenanzeige().getId());
+            }
+            statement.setInt(index++, applicationDTO.getStudent().getId());
+            statement.setInt(index++, applicationDTO.getCompany().getId());
+            statement.setInt(index, applicationDTO.getUser().getId());
+
+            int result = statement.executeUpdate();
             if (result > 0) {
-                ResultSet keys = statement.getGeneratedKeys();
-                if (keys.next()) {
-                    applicationDTO.setId(keys.getInt(1));
-                    successfullyAddesApplication = true;
+                try (ResultSet keys = statement.getGeneratedKeys()) {
+                    if (keys.next()) {
+                        applicationDTO.setId(keys.getInt(1));
+                        successfullyAddedApplication = true;
+                    }
                 }
             }
         } catch (SQLException ex) {
@@ -53,13 +77,17 @@ public class ApplicationDAO {
         } catch (NullPointerException ex) {
             throw new DatabaseLayerException("Fehler in der Datenbankverbindung!");
         } finally {
-            JDBCConnection.getInstance().closeConnection();
+            JDBCConnectionPrepared.getInstance().closeConnection();
         }
-        return successfullyAddesApplication;
+        return successfullyAddedApplication;
     }
+
+
     private ApplicationDTO mapResultSetToApplication(ResultSet set) throws SQLException, DatabaseLayerException {
         UserDAO userDAO = new UserDAO();
         AnzeigeDAO anzeigeDAO = new AnzeigeDAO();
+        CompanyDAO companyDAO = new CompanyDAO();
+        StudentDAO studentDAO = new StudentDAO();
         ApplicationDTO application = new ApplicationDTOImpl();
 
         application.setId(set.getInt("id"));
@@ -74,58 +102,108 @@ public class ApplicationDAO {
 
         //Verweise im DTO auf Company, Student und Anzeige setzen:
         int companyId = set.getInt("company_id");
-        UserDTO company = userDAO.findUserById(companyId);
-        application.setCompany((Company) company);
+        CompanyDTO company = companyDAO.getCompanyById(companyId);
+        application.setCompany(company);
 
         int studentId = set.getInt("student_id");
-        UserDTO student = userDAO.findUserById(studentId);
-        application.setStudent((Student) student);
+        StudentDTO student = studentDAO.getStudentById(studentId);
+        application.setStudent(student);
 
-        //Fremde Attribute aus User, Student und Stellenanzeige hinzufügen:
-        UserDTO userDTO = userDAO.findUserById(studentId);
-        StudentDTO studentDTO = (StudentDTO) userDAO.findUserById(studentId);
+        int userId = set.getInt("user_id");
+        UserDTO user = userDAO.findUserById(userId);
+        application.setUser(user);
 
-        application.setEmail(userDTO.getEmail());
-        application.setFirstname(studentDTO.getFirstname());
-        application.setLastname(studentDTO.getLastname());
-        application.setFachsemester(studentDTO.getFachsemester());
-        application.setBirthday(studentDTO.getBirthday());
+        Integer stellenanzeigeId = set.getInt("stellenanzeige_id");
 
-        if(application.getStellenanzeige() == null) {
-            application.setJobTitel("Initiativbewerbung");
-            application.setStandort("-");
-        } else {
-            int stellenanzeigeId = set.getInt("stellenanzeige_id");
+        //Falls der Verweis auf eine Stellenanzeige null ist, handelt es sich um eine Initiativbewerbung
+        if(stellenanzeigeId == 0) {
+            AnzeigeDTO anzeigeDTO = new AnzeigeDTOImpl();
+            anzeigeDTO.setJobTitle("Initiativbewerbung");
+            application.setStellenanzeige(anzeigeDTO);
+        } else { //In diesem Fall ist der Verweis nicht null (Bewerbung auf Stellenanzeige)
             AnzeigeDTO anzeige = anzeigeDAO.findAnzeigeById(stellenanzeigeId);
-            application.setStellenanzeige((Anzeige) anzeige);
-            AnzeigeDTO anzeigeDTO = anzeigeDAO.findAnzeigeById(stellenanzeigeId);
-            application.setJobTitel(anzeigeDTO.getJobTitle());
-            application.setStandort(anzeigeDTO.getStandort());
+            application.setStellenanzeige(anzeige);
         }
-
-
         // Prüfen auf Null-Werte?
-
         return application;
     }
     public List<ApplicationDTO> getReceivedApplications(int companyId) throws DatabaseLayerException {
+        String query = "SELECT * FROM collabhbrs.application WHERE company_id = ?";
         List<ApplicationDTO> applications = new ArrayList<>();
-        try {
-            Statement statement = JDBCConnection.getInstance().getStatement();
-            ResultSet set = statement.executeQuery("SELECT * "
-                    + "FROM collabhbrs.application "
-                    + "WHERE collabhbrs.application.company_id = \'" + companyId + "\'" ); //CompanyID gibts nicht in der DB -> brauchen Verlinkung
-
-            while (set.next()) {
-                applications.add(mapResultSetToApplication(set));
+        try (PreparedStatement statement = JDBCConnectionPrepared.getInstance().getPreparedStatement(query)) {
+            statement.setInt(1, companyId);
+            try (ResultSet set = statement.executeQuery()) {
+                while (set.next()) {
+                    applications.add(mapResultSetToApplication(set));
+                }
             }
         } catch (SQLException ex) {
             throw new DatabaseLayerException("Fehler im SQL-Befehl!");
         } catch (NullPointerException ex) {
             throw new DatabaseLayerException("Fehler bei Datenbankverbindung!");
         } finally {
-            JDBCConnection.getInstance().closeConnection();
+            JDBCConnectionPrepared.getInstance().closeConnection();
         }
         return applications;
+    }
+
+
+    public boolean acceptApplication(int applicationId) throws DatabaseLayerException {
+        String query = "UPDATE collabhbrs.application SET status = 'angenommen' WHERE id = ?";
+        try (PreparedStatement statement = JDBCConnectionPrepared.getInstance().getPreparedStatement(query)) {
+            statement.setInt(1, applicationId);
+            int result = statement.executeUpdate();
+            return result > 0;
+        } catch (SQLException ex) {
+            throw new DatabaseLayerException("Fehler im SQL-Befehl!");
+        } finally {
+            JDBCConnectionPrepared.getInstance().closeConnection();
+        }
+    }
+
+
+    public boolean refuseApplication(int applicationId) throws DatabaseLayerException {
+        String query = "UPDATE collabhbrs.application SET status = 'abgelehnt' WHERE id = ?";
+        try (PreparedStatement statement = JDBCConnectionPrepared.getInstance().getPreparedStatement(query)) {
+            statement.setInt(1, applicationId);
+            int result = statement.executeUpdate();
+            return result > 0;
+        } catch (SQLException ex) {
+            throw new DatabaseLayerException("Fehler im SQL-Befehl!");
+        } finally {
+            JDBCConnectionPrepared.getInstance().closeConnection();
+        }
+    }
+
+
+    public List<ApplicationDTO> getMyApplications(int id) throws DatabaseLayerException {
+        String query = "SELECT * FROM collabhbrs.application WHERE student_id = ?";
+        List<ApplicationDTO> applications = new ArrayList<>();
+        try (PreparedStatement statement = JDBCConnectionPrepared.getInstance().getPreparedStatement(query)) {
+            statement.setInt(1, id);
+            try (ResultSet set = statement.executeQuery()) {
+                while (set.next()) {
+                    applications.add(mapResultSetToApplication(set));
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DatabaseLayerException("Fehler im SQL-Befehl!");
+        } finally {
+            JDBCConnectionPrepared.getInstance().closeConnection();
+        }
+        return applications;
+    }
+
+    public boolean deleteApplication(int applicationId) throws DatabaseLayerException {
+        String query = "DELETE FROM collabhbrs.application WHERE id = ?";
+        try (PreparedStatement statement = JDBCConnectionPrepared.getInstance().getPreparedStatement(query)) {
+            statement.setInt(1, applicationId);
+            int result = statement.executeUpdate();
+            return result > 0;
+        } catch (SQLException ex) {
+            throw new DatabaseLayerException("Fehler im SQL-Befehl!");
+        } finally {
+            JDBCConnectionPrepared.getInstance().closeConnection();
+        }
     }
 }

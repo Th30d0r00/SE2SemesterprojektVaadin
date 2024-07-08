@@ -1,6 +1,6 @@
 package org.hbrs.se2.project.hellocar.views;
 
-import org.hbrs.se2.project.hellocar.control.ShowMyJobPostingsControl;
+import org.hbrs.se2.project.hellocar.control.JobPostingControl;
 import org.hbrs.se2.project.hellocar.dtos.AnzeigeDTO;
 import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerException;
 import java.util.List;
@@ -26,11 +26,11 @@ public class ShowMyJobPostingsView extends Div{
     private final List<AnzeigeDTO> anzeigenListe;
 
 
-    public ShowMyJobPostingsView(ShowMyJobPostingsControl showMyJobPostingsControl) throws DatabaseLayerException {
+    public ShowMyJobPostingsView(JobPostingControl jobPostingControl) throws DatabaseLayerException {
         addClassName("show-my-jobpostings");
         UserDTO currentUser = (UserDTO) UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER);
         System.out.print(currentUser.getId());
-        anzeigenListe = showMyJobPostingsControl.readAllMyJobPostings(currentUser.getId());
+        anzeigenListe = jobPostingControl.readAllMyJobPostings(currentUser.getId());
         add(this.createTitle());
         add(this.createGridTable());
     }
@@ -52,12 +52,8 @@ public class ShowMyJobPostingsView extends Div{
 
         // Click listener for rows
         grid.addItemClickListener(event -> {
-            AnzeigeDTO selectedAnzeige = event.getItem();
-            System.out.println(selectedAnzeige.getId());
-            // Redirect to company detail view
-            //UI.getCurrent().navigate(CompanyDetailView.class,selectedAnzeige.getId()); //Stellenanzeige bearbeiten -> in Maske auch Button zum Löschen
-            //UI.getCurrent().navigate(CompanyDetailView.class, 2);
-            //getUI().ifPresent(ui -> ui.navigate(CompanyDetailView.class, selectedcompany.getId()));
+            AnzeigeDTO selectedJobPosting = event.getItem();
+            UI.getCurrent().navigate(EditJobPostingView.class, selectedJobPosting.getId());
         });
 
         HeaderRow filterRow = grid.appendHeaderRow();

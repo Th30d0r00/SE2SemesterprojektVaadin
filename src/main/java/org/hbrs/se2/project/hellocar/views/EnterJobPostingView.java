@@ -4,9 +4,7 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dependency.CssImport;
-import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.dependency.Uses;
-import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -14,6 +12,7 @@ import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import org.hbrs.se2.project.hellocar.control.CompanyControl;
 import org.hbrs.se2.project.hellocar.control.JobPostingControl;
 import org.hbrs.se2.project.hellocar.dtos.AnzeigeDTO;
 import org.hbrs.se2.project.hellocar.dtos.UserDTO;
@@ -21,16 +20,15 @@ import org.hbrs.se2.project.hellocar.dtos.impl.AnzeigeDTOImpl;
 import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerException;
 import org.hbrs.se2.project.hellocar.util.Globals;
 
-@Route(value = "enter-job-posting", layout = AppView.class)
+import java.sql.SQLException;
+
+@Route(value = Globals.Pages.ENTER_JOBPOSTING, layout = AppView.class)
 @PageTitle("Stellenanzeige erstellen")
 @CssImport("./styles/views/enterjobposting/enter-job-posting-view.css")
 @Uses(TextArea.class)
 public class EnterJobPostingView extends VerticalLayout {
 
-    public EnterJobPostingView() {
-
-        // Erstelle die Überschrift
-        H1 header = new H1("Neue Stellenanzeige erstellen");
+    public EnterJobPostingView() { //Control übergeben?
 
         // Erstelle die Textfelder
         TextField titleField = new TextField("Titel der Anzeige");
@@ -81,13 +79,20 @@ public class EnterJobPostingView extends VerticalLayout {
                 anzeigeDTO.setStandort(locationField.getValue());
                 anzeigeDTO.setJobType(employmentTypeField.getValue());
                 anzeigeDTO.setJobDescription(jobDescriptionField.getValue());
-                anzeigeDTO.setCompany(getCurrentUser()); //UserDTO übergeben
                 anzeigeDTO.setPublicationDate(java.time.LocalDateTime.now());
                 System.out.println(getCurrentUser().getId());
 
                 JobPostingControl jobPostingControl = new JobPostingControl();
+                CompanyControl companyControl = new CompanyControl();
+                try {
+                    anzeigeDTO.setCompany(companyControl.findCompany(getCurrentUser().getId()));
+                } catch (DatabaseLayerException | SQLException e) {
+                    throw new RuntimeException(e);
+                }
+
                 try {
                     jobPostingControl.saveJobPosting(anzeigeDTO);
+                    Notification.show("Stellenanzeige erfolgreich veröffentlicht", 3000, Notification.Position.MIDDLE);
 
                     // Leere die Felder nach erfolgreicher Eingabe
                     titleField.clear();
@@ -119,11 +124,7 @@ public class EnterJobPostingView extends VerticalLayout {
         titleLocationLayout.setSpacing(true);
 
         // Füge die Komponenten zum Layout hinzu
-        add(header, titleLocationLayout, employmentTypeField, jobDescriptionField, buttonLayout);
-
-        // Zentriere das Layout
-        setAlignItems(Alignment.CENTER);
-        setJustifyContentMode(JustifyContentMode.CENTER);
+        add(titleLocationLayout, employmentTypeField, jobDescriptionField, buttonLayout);
     }
 
     public UserDTO getCurrentUser() {

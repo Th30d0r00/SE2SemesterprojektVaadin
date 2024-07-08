@@ -31,7 +31,7 @@ import java.util.Optional;
 @JsModule("./styles/shared-styles.js")
 @Uses(TextArea.class)
 @PageTitle("HelloCar")
-@Route("main")
+@Route(Globals.Pages.MAIN_VIEW)
 public class AppView extends AppLayout implements BeforeEnterObserver {
 
     private Tabs menu;
@@ -98,12 +98,17 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
         // Logout-Button am rechts-oberen Rand.
         MenuBar bar = new MenuBar();
         MenuItem item = bar.addItem("Logout", e -> logoutUser());
+
         //Button: Profil bearbeiten
-        //MenuItem item_editProfil = bar.addItem("Profil bearbeiten", e -> editProfil());
+        MenuItem item_editProfil = bar.addItem("Profil bearbeiten", e -> editProfile());
         topRightPanel.add(bar);
 
         layout.add(topRightPanel);
         return layout;
+    }
+
+    private void editProfile() {
+        UI.getCurrent().navigate(EditProfileView.class);
     }
 
     private void logoutUser() {
@@ -167,6 +172,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
             System.out.println("User is Student!");
              tabs = Utils.append(tabs, createTab("Verfügbare Stellenanzeigen", ShowJobPostingsView.class));
              tabs = Utils.append(tabs, createTab("Unternehmen finden", ShowCompaniesView.class));
+             tabs = Utils.append(tabs, createTab("Meine Bewerbungen", ShowMyApplications.class));
              //tabs = Utils.append(tabs, createTab("Enter Application", EnterApplicationView.class)); //Bewerbung nicht als Menütab
         }
         return tabs;
@@ -194,7 +200,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
 
         // Setzen des Vornamens von dem aktuell eingeloggten Benutzer
         // Stringoperation: Nach @ String abschneiden, .,-_ ersetzen durch Leerzeichen
-        helloUser.setText("Hello my dear old friend!! Wie geht's dir, " + this.getCurrentEmailOfUser());
+        helloUser.setText("Hello my dear old friend!! Wie geht's dir, " + this.getCurrentEmailOfUser().substring(0, this.getCurrentEmailOfUser().indexOf('@')));
 
     }
 

@@ -1,6 +1,6 @@
 package org.hbrs.se2.project.hellocar.control;
 
-import org.hbrs.se2.demo.registration.RegistrationResult;
+import org.hbrs.se2.project.hellocar.util.RegistrationResult;
 import org.hbrs.se2.project.hellocar.dao.UserDAO;
 import org.hbrs.se2.project.hellocar.dtos.UserDTO;
 import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerException;
@@ -14,10 +14,10 @@ public class RegistrationControl
 
         //check if User with this Email already exists
         try{
-            UserDTO existingUser = userDAO.FindUserByEmail(userDTO.getEmail()); //handle DatabaseLayerException
+            UserDTO existingUser = userDAO.findUserByEmail(userDTO.getEmail()); //handle DatabaseLayerException
             if(existingUser == null)
             {
-                if(userDAO.AddUser(userDTO)){
+                if(userDAO.addUser(userDTO)){
                     result.setSuccess(true);
                     result.setMessage("User successfully registered.");
                 }

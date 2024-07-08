@@ -1,8 +1,11 @@
 package org.hbrs.se2.project.hellocar.views;
 
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -31,15 +34,20 @@ public class MainView extends VerticalLayout {
 
     public MainView() {
         setSizeFull();
+
+        // Hinzufügen des Logos
+        Image logo = new Image("images/freshconnect.png", "freshconnect logo");
+        logo.setWidth("200px");
+        add(logo);
+
         LoginForm component = new LoginForm();
 
+        add(createTitle());
 
         component.addLoginListener(e -> {
-
             boolean isAuthenticated = false;
             try {
                 isAuthenticated = loginControl.authenticateWithHash( e.getUsername(), e.getPassword());
-
             } catch (DatabaseLayerException databaseException) {
                 Dialog dialog = new Dialog();
                 dialog.add( new Text( databaseException.getMessage()) );
@@ -50,7 +58,6 @@ public class MainView extends VerticalLayout {
             if (isAuthenticated) {
                 grabAndSetUserIntoSession();
                 navigateToMainPage();
-
             } else {
                 component.setError(true);
             }
@@ -66,19 +73,18 @@ public class MainView extends VerticalLayout {
         UI.getCurrent().getSession().setAttribute( Globals.CURRENT_USER, userDTO );
     }
 
-
     private void navigateToMainPage() {
-        // Navigation zur Startseite, hier auf die Teil-Komponente Show-Cars.
-        // Die anzuzeigende Teil-Komponente kann man noch individualisieren, je nach Rolle,
-        // die ein Benutzer besitzt
-        // Hier landing Page einfügen
         AuthorizationControl authorizationControl = new AuthorizationControl();
         UserDTO userDTO = loginControl.getCurrentUser();
+
         if (authorizationControl.isUserInAccountType(userDTO, AccountType.UNTERNEHMEN)) {
             UI.getCurrent().navigate(ShowApplicationsView.class);
         } else {
             UI.getCurrent().navigate(ShowJobPostingsView.class);
         }
-        //
+    }
+
+    private Component createTitle() {
+        return new H3("Willkommen bei Coll@hbrs by FreshConnect! Bitte loggen Sie sich ein.");
     }
 }

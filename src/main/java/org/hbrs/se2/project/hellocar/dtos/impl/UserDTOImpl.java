@@ -1,12 +1,9 @@
 package org.hbrs.se2.project.hellocar.dtos.impl;
 
 import org.hbrs.se2.project.hellocar.dtos.CompanyDTO;
-import org.hbrs.se2.project.hellocar.dtos.RolleDTO;
 import org.hbrs.se2.project.hellocar.dtos.StudentDTO;
 import org.hbrs.se2.project.hellocar.dtos.UserDTO;
 import org.hbrs.se2.project.hellocar.util.AccountType;
-
-import java.util.List;
 
 public class UserDTOImpl implements UserDTO {
 
@@ -16,7 +13,7 @@ public class UserDTOImpl implements UserDTO {
     private byte[] hashValue;
     private String email;
     private String password;
-    private List<RolleDTO> roles;
+    private String role;
     private AccountType accountType;
     private StudentDTO student;
     private CompanyDTO company;
@@ -26,7 +23,7 @@ public class UserDTOImpl implements UserDTO {
         return "UserDTOImpl{" +
                 "id=" + id +
                 "email: " + email +
-                ", roles=" + roles +
+                ", role=" + role +
                 '}';
     }
 
@@ -66,8 +63,8 @@ public class UserDTOImpl implements UserDTO {
     }
 
     @Override
-    public List<RolleDTO> getRoles() {
-        return roles;
+    public String getRole() {
+        return role;
     }
 
     @Override
@@ -116,8 +113,8 @@ public class UserDTOImpl implements UserDTO {
     }
 
     @Override
-    public void setRoles(List<RolleDTO> roles) {
-        this.roles = roles;
+    public void setRole(String role) {
+        this.role = role;
     }
 }
 

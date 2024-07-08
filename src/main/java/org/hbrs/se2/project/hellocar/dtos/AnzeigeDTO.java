@@ -11,7 +11,7 @@ public interface AnzeigeDTO {
     String getStandort();
     String getJobType();
     String getJobDescription();
-    UserDTO getCompany();
+    CompanyDTO getCompany();
     LocalDateTime getPublicationDate();
 
     void setId(int id);
@@ -19,6 +19,6 @@ public interface AnzeigeDTO {
     void setStandort(String standort);
     void setJobType(String jobType);
     void setJobDescription(String JobDescription);
-    void setCompany(UserDTO company);
+    void setCompany(CompanyDTO company);
     void setPublicationDate(LocalDateTime publicationDate);
 }
