@@ -19,7 +19,7 @@ public class AnzeigeDAO {
     public boolean addAnzeige(AnzeigeDTO anzeigeDTO) throws DatabaseLayerException {
         String query = "INSERT INTO collabhbrs.anzeige (titel, company_id, jobart, standort, veroeffentlichung, stellenbeschreibung) " +
                 "VALUES (?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement statement = JDBCConnectionPrepared.getInstance().getPreparedStatement(query)) {
+        try (PreparedStatement statement = JDBCConnectionPrepared.getInstance().getPreparedStatement(query,Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, anzeigeDTO.getJobTitle());
             statement.setInt(2, anzeigeDTO.getCompany().getId());
             statement.setString(3, anzeigeDTO.getJobType());
