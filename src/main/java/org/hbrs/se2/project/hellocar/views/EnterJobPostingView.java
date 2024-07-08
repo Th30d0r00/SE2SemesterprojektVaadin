@@ -4,9 +4,7 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dependency.CssImport;
-import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.dependency.Uses;
-import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -94,7 +92,7 @@ public class EnterJobPostingView extends VerticalLayout {
 
                 try {
                     jobPostingControl.saveJobPosting(anzeigeDTO);
-                    Notification.show("Anzeige erstellt");
+                    Notification.show("Stellenanzeige erfolgreich veröffentlicht", 3000, Notification.Position.MIDDLE);
 
                     // Leere die Felder nach erfolgreicher Eingabe
                     titleField.clear();

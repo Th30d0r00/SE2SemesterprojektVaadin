@@ -54,23 +54,23 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
 
     Button register = new Button("Register");
 
-    private Binder<UserDTOImpl> binder = new Binder(UserDTOImpl.class);
+    private final Binder<UserDTOImpl> binder = new Binder(UserDTOImpl.class);
 
     //RegistrationView
     public RegistrationView() {
         addClassName("enter-car-view");
         accountType.setItems(AccountType.values());
 
-        DefaultVisibility();
+        defaultVisibility();
 
         accountType.addValueChangeListener(e -> {
             if(e.getValue() == AccountType.STUDENT){
                 accountType.setVisible(true);
-                StudentVisibility();
+                studentVisibility();
             }
             if(e.getValue() == AccountType.UNTERNEHMEN){
                 accountType.setVisible(true);
-                CompanyVisibility();
+                companyVisibility();
             }
         });
 
@@ -86,7 +86,7 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
         //Wenn RegisterButton gedrückt wird
         register.addClickListener(e -> {
 
-            boolean formComplete = CheckIfFormComplete();
+            boolean formComplete = checkIfFormComplete();
 
             if(formComplete){
                 RegistrationControl regControl = new RegistrationControl();
@@ -94,10 +94,10 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
 
                 try{
                     if(accountType.getValue() == AccountType.STUDENT){
-                        FillUserDtoAsStudent(userDTO);
+                        fillUserDtoAsStudent(userDTO);
                     }
                     if(accountType.getValue() == AccountType.UNTERNEHMEN){
-                        FillUserDtoAsCompany(userDTO);
+                        fillUserDtoAsCompany(userDTO);
                     }
                 } catch (NumberFormatException nfe){
                     Notification.show("Fehlerhafte Eingabe beim Aufruf von FillUserDTOAsCompany / AsStudent");
@@ -110,6 +110,7 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
                 } else {
                     Notification.show(result.getMessage());
                     clearForm();
+                    Notification.show("Danke, dass Sie Fresh_Connect nutzen!", 3000, Notification.Position.MIDDLE);
                     UI.getCurrent().navigate( Globals.Pages.LOGIN_VIEW );
                 }
             }
@@ -139,7 +140,7 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
         return buttonLayout;
     }
 
-    private void DefaultVisibility(){
+    private void defaultVisibility(){
         accountType.setVisible(true);
         password.setVisible(true);
         email.setVisible(true);
@@ -155,7 +156,7 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
         fachsemester.setVisible(false);
     }
 
-    private void StudentVisibility(){
+    private void studentVisibility(){
         companyName.setVisible(false);
         foundingDate.setVisible(false);
         employees.setVisible(false);
@@ -167,7 +168,7 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
         fachsemester.setVisible(true);
     }
 
-    private void CompanyVisibility(){
+    private void companyVisibility(){
         companyName.setVisible(true);
         foundingDate.setVisible(true);
         employees.setVisible(true);
@@ -178,7 +179,7 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
         birthday.setVisible(false);
     }
 
-    private void FillUserDtoAsStudent(UserDTO userDTO){
+    private void fillUserDtoAsStudent(UserDTO userDTO){
         userDTO.setSalt(Security.getSalt());
         userDTO.setHashValue(Security.getHash(password.getValue(), userDTO.getSalt()));
         userDTO.setEmail(email.getValue());
@@ -194,7 +195,7 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
         userDTO.setStudent(studentDTO);
     }
 
-    private void FillUserDtoAsCompany(UserDTO userDTO){
+    private void fillUserDtoAsCompany(UserDTO userDTO){
         userDTO.setSalt(Security.getSalt());
         userDTO.setHashValue(Security.getHash(password.getValue(), userDTO.getSalt()));
         userDTO.setEmail(email.getValue());
@@ -210,7 +211,7 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
         userDTO.setCompany(companyDTO);
     }
 
-    boolean CheckIfFormComplete(){
+    boolean checkIfFormComplete(){
         boolean formComplete = true;
 
         AccountType form_type = accountType.getValue();
@@ -225,7 +226,7 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
             formComplete = false;
             Notification.show("Bitte geben Sie eine E-Mail Adresse an.");
         }
-        if(!ValidEmail(form_mail)){
+        if(!validEmail(form_mail)){
             formComplete = false;
             Notification.show("Bitte geben Sie eine gültige E-Mail Adresse an.");
         }
@@ -329,7 +330,7 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
     }
 
     //100% not stolen from Stackoverflow
-    public boolean ValidEmail(String emailStr) {
+    public boolean validEmail(String emailStr) {
         Pattern VALID_EMAIL_ADDRESS_REGEX =
                 Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 

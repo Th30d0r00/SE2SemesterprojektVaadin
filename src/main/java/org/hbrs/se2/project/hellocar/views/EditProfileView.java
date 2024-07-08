@@ -31,9 +31,9 @@ import java.time.LocalDate;
 @PageTitle("Profil bearbeiten")
 @CssImport("./styles/views/editprofileview/edit-profile-view.css")
 public class EditProfileView extends Div {
-    private StudentControl studentControl = new StudentControl();
-    private CompanyControl companyControl = new CompanyControl();
-    private UserControl userControl = new UserControl();
+    private final StudentControl studentControl;
+    private final CompanyControl companyControl;
+    private final UserControl userControl;
     private final UserDTO currentUser;
     private StudentDTO currentStudent;
     private CompanyDTO currentCompany;
@@ -55,8 +55,6 @@ public class EditProfileView extends Div {
     Button backButton = new Button("Abbrechen");
     Button deleteButton = new Button("Mein Profil löschen");
 
-    //private final Binder<UserDTOImpl> binder = new Binder(UserDTOImpl.class);
-
     AccountType accountType;
 
     public EditProfileView() {
@@ -69,18 +67,14 @@ public class EditProfileView extends Div {
         accountType = currentUser.getAccountType();
 
         if (accountType == AccountType.STUDENT) {
-            StudentVisibility();
+            studentVisibility();
         } else if (accountType == AccountType.UNTERNEHMEN) {
-            CompanyVisibility();
+            companyVisibility();
         }
 
         add(createTitle());
         add(createFormLayout());
         add(createButtonLayout());
-
-        //Was macht der Binder?
-        //binder.bindInstanceFields(this); // Nr. 1 API-Methode
-        //clearForm();
 
         //Wenn changeButton gedrückt wird
         changeButton.addClickListener(e -> {
@@ -131,7 +125,12 @@ public class EditProfileView extends Div {
 
         //Wenn deleteButton gedrückt wird
         deleteButton.addClickListener(e -> {
-            userControl.deleteUserProfile(currentUser.getId());
+            boolean successresult = userControl.deleteUserProfile(currentUser.getId());
+            if (successresult) {
+                Notification.show("Ihr Profil wurde erfolgreich gelöscht", 3000, Notification.Position.MIDDLE);
+            } else {
+                Notification.show("Bei der Löschung Ihres Profils ist ein Fehler aufgetreten", 3000, Notification.Position.MIDDLE);
+            }
             logoutUser();
         });
 
@@ -169,7 +168,7 @@ public class EditProfileView extends Div {
         return new H3("Profil bearbeiten");
     }
 
-    private void CompanyVisibility() {
+    private void companyVisibility() {
         changeCompanyName.setVisible(true);
         changeFoundingDate.setVisible(true);
         changeEmployees.setVisible(true);
@@ -181,7 +180,7 @@ public class EditProfileView extends Div {
         changeFachsemester.setVisible(false);
     }
 
-    private void StudentVisibility() {
+    private void studentVisibility() {
         changeCompanyName.setVisible(false);
         changeFoundingDate.setVisible(false);
         changeEmployees.setVisible(false);
@@ -226,12 +225,10 @@ public class EditProfileView extends Div {
                 changeFirstname.setValue(currentStudent.getFirstname());
             }
 
-            if (form_lastname != null) {
-                if (form_firstname.length() > 64) {
+                if (form_firstname != null && form_firstname.length() > 64) {
                     formComplete = false;
                     Notification.show("Ihr Nachname darf nicht länger als 64 Zeichen sein.");
-                }
-            } else { //Fall, dass Lastname null ist
+                } else { //Fall, dass Lastname null ist
                 changeLastname.setValue(currentStudent.getLastname());
             }
 

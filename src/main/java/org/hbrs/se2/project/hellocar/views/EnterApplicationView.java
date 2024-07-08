@@ -5,7 +5,6 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
-import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -17,19 +16,13 @@ import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.hbrs.se2.project.hellocar.control.*;
-import org.hbrs.se2.project.hellocar.dao.AnzeigeDAO;
-import org.hbrs.se2.project.hellocar.dao.CompanyDAO;
-import org.hbrs.se2.project.hellocar.dao.StudentDAO;
 import org.hbrs.se2.project.hellocar.dtos.AnzeigeDTO;
 import org.hbrs.se2.project.hellocar.dtos.ApplicationDTO;
 import org.hbrs.se2.project.hellocar.dtos.UserDTO;
 import org.hbrs.se2.project.hellocar.dtos.impl.ApplicationDTOImpl;
 import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerException;
 import org.hbrs.se2.project.hellocar.util.Globals;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import java.sql.SQLException;
-import java.util.Arrays;
 
 @Route(value = Globals.Pages.JOB_APPLY, layout = AppView.class)
 @PageTitle("Neue Bewerbung erstellen")
@@ -41,10 +34,10 @@ public class EnterApplicationView extends VerticalLayout implements HasUrlParame
     private TextField locationField;
     private TextArea motivationField;
     private TextArea resumeField;
-    private ApplicationControl applicationControl;
-    private ApplicationDTO applicationDTO = new ApplicationDTOImpl();
-    private Button cancelButton = new Button("Abbrechen");
-    private Button applyButton = new Button("Bewerbung abschicken");
+    private final ApplicationControl applicationControl;
+    private final ApplicationDTO applicationDTO = new ApplicationDTOImpl();
+    private final Button cancelButton = new Button("Abbrechen");
+    private final Button applyButton = new Button("Bewerbung abschicken");
     private Integer jobId;
     private Integer companyId;
 
@@ -102,6 +95,7 @@ public class EnterApplicationView extends VerticalLayout implements HasUrlParame
 
                 try {
                     applicationControl.saveApplication(applicationDTO);
+                    Notification.show("Bewerbung versendet", 3000, Notification.Position.MIDDLE);
                 } catch (DatabaseLayerException e) {
                     throw new RuntimeException(e);
                 }
@@ -175,7 +169,6 @@ public class EnterApplicationView extends VerticalLayout implements HasUrlParame
                     applicationDTO.setUser(userControl.findUser(getCurrentUser().getId()));
                 }
             } catch (DatabaseLayerException e) {
-                e.printStackTrace();
                 Notification.show("Fehler beim Abrufen der Application");
             } catch (SQLException e) {
                 throw new RuntimeException(e);
