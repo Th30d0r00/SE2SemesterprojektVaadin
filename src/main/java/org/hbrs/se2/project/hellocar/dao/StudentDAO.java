@@ -13,6 +13,8 @@ import java.time.LocalDate;
  */
 
 public class StudentDAO {
+
+    // Methode zur Abfrage eines Studenten anhand der ID
     public StudentDTO getStudentById(int studentId) throws SQLException, DatabaseLayerException {
         StudentDTO student = null;
         String sql = "SELECT * FROM collabhbrs.student WHERE id = ?";
@@ -31,6 +33,7 @@ public class StudentDAO {
         return student;
     }
 
+    // Methode zur Aktualisierung eines Studentenprofils in der Datenbank
     public boolean updateStudentProfileInDB(int studentId, String newFirstName, String newLastname,
                                             LocalDate newBirthday, int newFachsemester) throws DatabaseLayerException {
         boolean successfullyUpdatedStudent = false;
@@ -55,6 +58,7 @@ public class StudentDAO {
         return successfullyUpdatedStudent;
     }
 
+    // Methode zur Abbildung eines ResultSets auf ein StudentDTO-Objekt
     private StudentDTO mapResultSetToStudent(ResultSet set) throws SQLException {
         StudentDTO student = new StudentDTOImpl();
         student.setId(set.getInt("id"));
@@ -65,4 +69,3 @@ public class StudentDAO {
         return student;
     }
 }
-
