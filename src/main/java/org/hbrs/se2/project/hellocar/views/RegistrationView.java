@@ -199,7 +199,6 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
         userDTO.setSalt(Security.getSalt());
         userDTO.setHashValue(Security.getHash(password.getValue(), userDTO.getSalt()));
         userDTO.setEmail(email.getValue());
-        //userDTO.setPassword(password.getValue());
         userDTO.setAccountType(accountType.getValue());
 
         CompanyDTO companyDTO = new CompanyDTOImpl();
@@ -222,19 +221,17 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
             formComplete = false;
             Notification.show("Bitte wählen Sie ein Kundenkonto aus (Student/Unternehmen).");
         }
-        if(form_mail == null){
+        if(form_mail == null || form_mail.isEmpty()){
             formComplete = false;
             Notification.show("Bitte geben Sie eine E-Mail Adresse an.");
-        }
-        if(!validEmail(form_mail)){
+        } else if(!validEmail(form_mail)){
             formComplete = false;
             Notification.show("Bitte geben Sie eine gültige E-Mail Adresse an.");
         }
-        if (form_pw == null) {
+        if (form_pw == null || form_pw.isEmpty()) {
             formComplete = false;
             Notification.show("Bitte geben Sie ein Passwort ein.");
-        }
-        if(form_pw != null && form_pw.length() < 8){
+        } else if(form_pw.length() < 8){
             formComplete = false;
             Notification.show("Ihr Passwort muss mindestens 8 Zeichen lang sein.");
         }
@@ -329,7 +326,6 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
         return formComplete;
     }
 
-    //100% not stolen from Stackoverflow
     public boolean validEmail(String emailStr) {
         Pattern VALID_EMAIL_ADDRESS_REGEX =
                 Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
