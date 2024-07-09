@@ -7,6 +7,8 @@ import org.hbrs.se2.project.hellocar.dtos.AnzeigeDTO;
 import org.hbrs.se2.project.hellocar.dtos.CompanyDTO;
 import org.hbrs.se2.project.hellocar.dtos.UserDTO;
 import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerException;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -14,6 +16,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 public class JopPostingControlTest {
@@ -22,8 +25,6 @@ public class JopPostingControlTest {
     private static UserDTO userDTO;
     private static CompanyDTO companyDTO;
     private static UserDAO userDAO = new UserDAO();
-    private static int companyId;
-    private int testJobPostingId;
     private static JobPostingControl jobPostingControl = new JobPostingControl();
 
     @BeforeAll
@@ -52,22 +53,35 @@ public class JopPostingControlTest {
     @AfterAll
     public static void tearDown() throws DatabaseLayerException {
         //Delete the user from the database, AnzeigeDTO is also deleted because of the foreign key constraint
-        userDAO.deleteUserProfile(companyDTO.getId());
+        assertTrue(userDAO.deleteUserProfile(companyDTO.getId()));
     }
 
     @Test
     // Test if the saveJobPosting method works correctly
-    void saveJobPosting() throws DatabaseLayerException {
+    void saveJobPostingTest() throws DatabaseLayerException {
         boolean saveResult = jobPostingControl.saveJobPosting(anzeigeDTO);
         assertTrue(saveResult, "Job posting should be saved successfully");
-        testJobPostingId = anzeigeDTO.getId();
     }
 
     @Test
     // Test if the readAllJobPostings method works correctly
-    void readAllJobPostings() throws DatabaseLayerException {
+    void readAllJobPostingsTest() throws DatabaseLayerException {
         JobPostingControl jobPostingControl = new JobPostingControl();
-        jobPostingControl.readAllJobPostings();
+        List<AnzeigeDTO> anzeigenList = jobPostingControl.readAllJobPostings();
+        assertFalse(anzeigenList.isEmpty(), "There should be at least one job posting in the database");
+    }
+
+    @Test
+    void updateJobPostingTest() throws DatabaseLayerException {
+        boolean updateResult = jobPostingControl.updateJobPosting(anzeigeDTO.getId(), "Werkstudent IT Software Testing", "Bonn",
+                "Vollzeit", "Eine coole Stellenanzeige");
+        assertTrue(updateResult, "Job posting should be updated successfully");
+    }
+
+    @Test
+    void readAllMyJobPostingsTest() throws DatabaseLayerException {
+        List<AnzeigeDTO> anzeigenList = jobPostingControl.readAllMyJobPostings(companyDTO.getId());
+        assertFalse(anzeigenList.isEmpty(), "There should be at least one job posting in the database");
     }
 
 }
