@@ -16,10 +16,16 @@ import java.util.List;
 
 public class AnzeigeDAO {
 
+    /**
+     * Fügt eine neue Anzeige in die Datenbank ein.
+     * @param anzeigeDTO das DTO, das die Anzeigendaten enthält
+     * @return true, wenn die Anzeige erfolgreich hinzugefügt wurde, sonst false
+     * @throws DatabaseLayerException wenn ein SQL-Fehler auftritt
+     */
     public boolean addAnzeige(AnzeigeDTO anzeigeDTO) throws DatabaseLayerException {
         String query = "INSERT INTO collabhbrs.anzeige (titel, company_id, jobart, standort, veroeffentlichung, stellenbeschreibung) " +
                 "VALUES (?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement statement = JDBCConnectionPrepared.getInstance().getPreparedStatement(query,Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement statement = JDBCConnectionPrepared.getInstance().getPreparedStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, anzeigeDTO.getJobTitle());
             statement.setInt(2, anzeigeDTO.getCompany().getId());
             statement.setString(3, anzeigeDTO.getJobType());
@@ -44,6 +50,12 @@ public class AnzeigeDAO {
         return false;
     }
 
+    /**
+     * Sucht eine Anzeige in der Datenbank anhand der ID.
+     * @param id die ID der Anzeige
+     * @return das AnzeigeDTO, das die Anzeigendaten enthält, oder null, wenn keine Anzeige gefunden wurde
+     * @throws DatabaseLayerException wenn ein SQL-Fehler auftritt
+     */
     public AnzeigeDTO findAnzeigeById(int id) throws DatabaseLayerException {
         String query = "SELECT * FROM collabhbrs.anzeige WHERE id = ?";
         AnzeigeDTO anzeige = null;
@@ -62,6 +74,16 @@ public class AnzeigeDAO {
         return anzeige;
     }
 
+    /**
+     * Aktualisiert eine vorhandene Anzeige in der Datenbank.
+     * @param id die ID der Anzeige, die aktualisiert werden soll
+     * @param jobTitle der neue Jobtitel
+     * @param location der neue Standort
+     * @param jobType der neue Jobtyp
+     * @param description die neue Stellenbeschreibung
+     * @return true, wenn die Anzeige erfolgreich aktualisiert wurde, sonst false
+     * @throws DatabaseLayerException wenn ein SQL-Fehler auftritt
+     */
     public boolean updateJobPostingInDB(int id, String jobTitle, String location, String jobType, String description) throws DatabaseLayerException {
         boolean successResult = false;
         String query = "UPDATE collabhbrs.anzeige SET titel = ?, standort = ?, jobart = ?, stellenbeschreibung = ? WHERE id = ?";
@@ -78,9 +100,14 @@ public class AnzeigeDAO {
         } finally {
             JDBCConnectionPrepared.getInstance().closeConnection();
         }
-        return  successResult;
+        return successResult;
     }
 
+    /**
+     * Holt alle Anzeigen aus der Datenbank.
+     * @return eine Liste von AnzeigeDTOs, die alle Anzeigendaten enthalten
+     * @throws DatabaseLayerException wenn ein SQL-Fehler auftritt
+     */
     public List<AnzeigeDTO> getAllAnzeigen() throws DatabaseLayerException {
         String query = "SELECT * FROM collabhbrs.anzeige";
         List<AnzeigeDTO> anzeigen = new ArrayList<>();
@@ -97,7 +124,12 @@ public class AnzeigeDAO {
         return anzeigen;
     }
 
-
+    /**
+     * Holt alle Anzeigen eines bestimmten Unternehmens aus der Datenbank.
+     * @param id die ID des Unternehmens
+     * @return eine Liste von AnzeigeDTOs, die die Anzeigendaten des Unternehmens enthalten
+     * @throws DatabaseLayerException wenn ein SQL-Fehler auftritt
+     */
     public List<AnzeigeDTO> getAllMyJobPostings(int id) throws DatabaseLayerException {
         String query = "SELECT * FROM collabhbrs.anzeige WHERE company_id = ?";
         List<AnzeigeDTO> anzeigen = new ArrayList<>();
@@ -116,7 +148,13 @@ public class AnzeigeDAO {
         return anzeigen;
     }
 
-
+    /**
+     * Mappt ein ResultSet auf ein AnzeigeDTO.
+     * @param set das ResultSet, das die Anzeigendaten enthält
+     * @return ein AnzeigeDTO, das die gemappten Daten enthält
+     * @throws SQLException wenn ein SQL-Fehler auftritt
+     * @throws DatabaseLayerException wenn ein Fehler im Datenbankzugriff auftritt
+     */
     private AnzeigeDTO mapResultSetToAnzeige(ResultSet set) throws SQLException, DatabaseLayerException {
         AnzeigeDTO anzeige = new AnzeigeDTOImpl();
         CompanyDAO companyDAO = new CompanyDAO();
@@ -134,6 +172,12 @@ public class AnzeigeDAO {
         return anzeige;
     }
 
+    /**
+     * Löscht eine Anzeige aus der Datenbank.
+     * @param id die ID der zu löschenden Anzeige
+     * @return true, wenn die Anzeige erfolgreich gelöscht wurde, sonst false
+     * @throws DatabaseLayerException wenn ein SQL-Fehler auftritt
+     */
     public boolean deleteAnzeige(int id) throws DatabaseLayerException {
         String query = "DELETE FROM collabhbrs.anzeige WHERE id = ?";
         try (PreparedStatement statement = JDBCConnectionPrepared.getInstance().getPreparedStatement(query)) {

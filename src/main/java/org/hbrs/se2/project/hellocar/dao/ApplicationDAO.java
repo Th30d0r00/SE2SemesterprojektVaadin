@@ -16,6 +16,7 @@ import java.util.List;
 
 public class ApplicationDAO {
 
+    // Methode zur Abfrage einer Bewerbung anhand der ID
     public ApplicationDTO getApplicationById(int applicationId) throws DatabaseLayerException {
         String query = "SELECT * FROM collabhbrs.application WHERE id = ?";
         ApplicationDTO applicationDTO = null;
@@ -36,6 +37,7 @@ public class ApplicationDAO {
         return applicationDTO;
     }
 
+    // Methode zum Hinzufügen einer neuen Bewerbung in die Datenbank
     public Boolean addApplication(ApplicationDTO applicationDTO) throws DatabaseLayerException {
         boolean successfullyAddedApplication = false;
         String query = applicationDTO.getStellenanzeige() == null
@@ -82,7 +84,7 @@ public class ApplicationDAO {
         return successfullyAddedApplication;
     }
 
-
+    // Methode zur Abbildung eines ResultSets auf ein ApplicationDTO-Objekt
     private ApplicationDTO mapResultSetToApplication(ResultSet set) throws SQLException, DatabaseLayerException {
         UserDAO userDAO = new UserDAO();
         AnzeigeDAO anzeigeDAO = new AnzeigeDAO();
@@ -100,7 +102,7 @@ public class ApplicationDAO {
         application.setAppliedAt(set.getDate("applied").toLocalDate().atStartOfDay());
         application.setStatus(set.getString("status"));
 
-        //Verweise im DTO auf Company, Student und Anzeige setzen:
+        // Verweise im DTO auf Company, Student und Anzeige setzen
         int companyId = set.getInt("company_id");
         CompanyDTO company = companyDAO.getCompanyById(companyId);
         application.setCompany(company);
@@ -115,18 +117,20 @@ public class ApplicationDAO {
 
         Integer stellenanzeigeId = set.getInt("stellenanzeige_id");
 
-        //Falls der Verweis auf eine Stellenanzeige null ist, handelt es sich um eine Initiativbewerbung
-        if(stellenanzeigeId == 0) {
+        // Falls der Verweis auf eine Stellenanzeige null ist, handelt es sich um eine Initiativbewerbung
+        if (stellenanzeigeId == 0) {
             AnzeigeDTO anzeigeDTO = new AnzeigeDTOImpl();
             anzeigeDTO.setJobTitle("Initiativbewerbung");
             application.setStellenanzeige(anzeigeDTO);
-        } else { //In diesem Fall ist der Verweis nicht null (Bewerbung auf Stellenanzeige)
+        } else { // In diesem Fall ist der Verweis nicht null (Bewerbung auf Stellenanzeige)
             AnzeigeDTO anzeige = anzeigeDAO.findAnzeigeById(stellenanzeigeId);
             application.setStellenanzeige(anzeige);
         }
         // Prüfen auf Null-Werte?
         return application;
     }
+
+    // Methode zur Abfrage aller empfangenen Bewerbungen eines Unternehmens anhand der Unternehmens-ID
     public List<ApplicationDTO> getReceivedApplications(int companyId) throws DatabaseLayerException {
         String query = "SELECT * FROM collabhbrs.application WHERE company_id = ?";
         List<ApplicationDTO> applications = new ArrayList<>();
@@ -147,7 +151,7 @@ public class ApplicationDAO {
         return applications;
     }
 
-
+    // Methode zum Akzeptieren einer Bewerbung anhand der Bewerbungs-ID
     public boolean acceptApplication(int applicationId) throws DatabaseLayerException {
         String query = "UPDATE collabhbrs.application SET status = 'angenommen' WHERE id = ?";
         try (PreparedStatement statement = JDBCConnectionPrepared.getInstance().getPreparedStatement(query)) {
@@ -161,7 +165,7 @@ public class ApplicationDAO {
         }
     }
 
-
+    // Methode zum Ablehnen einer Bewerbung anhand der Bewerbungs-ID
     public boolean refuseApplication(int applicationId) throws DatabaseLayerException {
         String query = "UPDATE collabhbrs.application SET status = 'abgelehnt' WHERE id = ?";
         try (PreparedStatement statement = JDBCConnectionPrepared.getInstance().getPreparedStatement(query)) {
@@ -175,7 +179,7 @@ public class ApplicationDAO {
         }
     }
 
-
+    // Methode zur Abfrage aller Bewerbungen eines Studenten anhand der Studenten-ID
     public List<ApplicationDTO> getMyApplications(int id) throws DatabaseLayerException {
         String query = "SELECT * FROM collabhbrs.application WHERE student_id = ?";
         List<ApplicationDTO> applications = new ArrayList<>();
@@ -194,6 +198,7 @@ public class ApplicationDAO {
         return applications;
     }
 
+    // Methode zum Löschen einer Bewerbung anhand der Bewerbungs-ID
     public boolean deleteApplication(int applicationId) throws DatabaseLayerException {
         String query = "DELETE FROM collabhbrs.application WHERE id = ?";
         try (PreparedStatement statement = JDBCConnectionPrepared.getInstance().getPreparedStatement(query)) {
