@@ -3,15 +3,12 @@ package org.hbrs.se2.project.hellocar.views;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.formlayout.FormLayout;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.component.button.Button;
 import org.hbrs.se2.project.hellocar.control.ApplicationControl;
-import org.hbrs.se2.project.hellocar.dao.ApplicationDAO;
-import org.hbrs.se2.project.hellocar.dao.UserDAO;
 import org.hbrs.se2.project.hellocar.dtos.ApplicationDTO;
 import com.vaadin.flow.component.textfield.TextField;
 import org.hbrs.se2.project.hellocar.dtos.UserDTO;
@@ -22,8 +19,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 /*
-* Zeigt dem Unternehmer die Details einer Bewerbung an.
-* */
+ * Zeigt dem Unternehmer die Details einer Bewerbung an.
+ * */
 
 @Route(value = Globals.Pages.SHOW_APPLICATION_DETAILS, layout = AppView.class)
 @PageTitle("Bewerbungsdetails")
@@ -126,21 +123,27 @@ public class ApplicationDetailView extends VerticalLayout implements HasUrlParam
 
     @Override
     public void setParameter(BeforeEvent beforeEvent, @OptionalParameter Integer applicationId) {
+        // Überprüfen, ob applicationId null ist und eine Nachricht ausgeben, wenn dies der Fall ist
         if (applicationId == null) {
             System.out.println("Null Value is not supported");
             return;
         }
 
         try {
+            // Abrufen der Bewerbung anhand der applicationId
             applicationDTO = applicationControl.findApplicationById(applicationId);
+
+            // Formatierer für das Datum erstellen
             final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MMMM uuuu", Locale.ENGLISH);
 
+            // Überprüfen, ob der Standort der Stellenanzeige null ist und entsprechend setzen
             if (applicationDTO.getStellenanzeige().getStandort() == null) {
                 standort.setValue("offen");
             } else {
                 standort.setValue(applicationDTO.getStellenanzeige().getStandort());
             }
 
+            // Setzen der restlichen Werte aus applicationDTO in die entsprechenden Felder
             jobTitle.setValue(applicationDTO.getStellenanzeige().getJobTitle());
             firstName.setValue(applicationDTO.getStudent().getFirstname());
             lastName.setValue(applicationDTO.getStudent().getLastname());
@@ -154,10 +157,13 @@ public class ApplicationDetailView extends VerticalLayout implements HasUrlParam
             verschicktAm.setValue(dtf.format(applicationDTO.getAppliedAt()));
 
         } catch (DatabaseLayerException e) {
+            // Fehlerbehandlung bei Problemen mit der Datenbank
             Notification.show("Fehler beim Abrufen der Application: " + e.getMessage(), 3000, Notification.Position.MIDDLE);
         } catch (NullPointerException e) {
+            // Fehlerbehandlung bei Null-Werten
             Notification.show("applicationID ist null: " + e.getMessage(), 3000, Notification.Position.MIDDLE);
             System.out.println(applicationId);
         }
     }
+
 }

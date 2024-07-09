@@ -202,50 +202,58 @@ public class EditProfileView extends Div {
     }
     */
 
-    boolean checkIfFormComplete(){
+    boolean checkIfFormComplete() {
         boolean formComplete = true;
+
+        // Überprüfe das Formular für den Account-Typ "STUDENT"
         if (accountType == AccountType.STUDENT) {
             String form_firstname = changeFirstname.getValue();
             String form_lastname = changeLastname.getValue();
             LocalDate form_birthday = changeBirthday.getValue();
             String form_fachsemesterStr = changeFachsemester.getValue();
 
-            // Überprüfen, ob form_fachsemesterStr numerisch ist
+            // Überprüfe das Fachsemester
             if (form_fachsemesterStr != null) {
                 if (form_fachsemesterStr.isEmpty() || !isNumeric(form_fachsemesterStr) || (Integer.parseInt(form_fachsemesterStr) <= 0)) {
                     formComplete = false;
                     Notification.show("Bitte geben Sie eine gültige Zahl für das Fachsemester ein.");
                 }
-            } else { //Fall, dass Fachsemester null ist
+            } else { // Fall, dass Fachsemester null ist
                 changeFachsemester.setValue(String.valueOf(currentStudent.getFachsemester()));
             }
 
+            // Überprüfe den Vornamen
             if (form_firstname != null) {
                 if (form_firstname.length() > 64) {
                     formComplete = false;
                     Notification.show("Ihr Vorname darf nicht länger als 64 Zeichen sein.");
                 }
-            } else { //Fall, dass Firstname null ist
+            } else { // Fall, dass Vorname null ist
                 changeFirstname.setValue(currentStudent.getFirstname());
             }
 
-                if (form_firstname != null && form_firstname.length() > 64) {
+            // Überprüfe den Nachnamen
+            if (form_lastname != null) {
+                if (form_lastname.length() > 64) {
                     formComplete = false;
                     Notification.show("Ihr Nachname darf nicht länger als 64 Zeichen sein.");
-                } else { //Fall, dass Lastname null ist
+                }
+            } else { // Fall, dass Nachname null ist
                 changeLastname.setValue(currentStudent.getLastname());
             }
 
-            // Überprüfen, ob das Geburtsdatum mindestens 16 Jahre zurückliegt
+            // Überprüfe das Geburtsdatum
             if (form_birthday != null) {
-                if(!isAtLeast16YearsOld(form_birthday)) {
+                if (!isAtLeast16YearsOld(form_birthday)) {
                     formComplete = false;
                     Notification.show("Sie müssen mindestens 16 Jahre alt sein.");
                 }
-            } else { //Fall, dass Birthday null ist
+            } else { // Fall, dass Geburtsdatum null ist
                 changeBirthday.setValue(currentStudent.getBirthday());
             }
         }
+
+        // Überprüfe das Formular für den Account-Typ "UNTERNEHMEN"
         if (accountType == AccountType.UNTERNEHMEN) {
             String form_companyName = changeCompanyName.getValue();
             LocalDate form_foundingDate = changeFoundingDate.getValue();
@@ -253,40 +261,45 @@ public class EditProfileView extends Div {
             String form_locations = changeLocations.getValue();
             String form_description = changeDescription.getValue();
 
-
+            // Überprüfe den Firmennamen
             if (form_companyName != null) {
                 if (form_companyName.length() > 64) {
                     formComplete = false;
                     Notification.show("Ihr Firmenname darf nicht länger als 64 Zeichen sein.");
                 }
-            } else { //Fall, dass CompanyName null ist
+            } else { // Fall, dass Firmenname null ist
                 changeCompanyName.setValue(currentCompany.getCompanyName());
             }
 
+            // Setze das Gründungsdatum, falls es null ist
             if (form_foundingDate == null) {
                 changeFoundingDate.setValue(currentCompany.getFoundingDate());
             }
 
+            // Überprüfe die Mitarbeiteranzahl
             if (form_employees != null) {
                 if (Integer.parseInt(form_employees) <= 0) {
                     formComplete = false;
                     Notification.show("Die Mitarbeiteranzahl muss größer als 0 sein.");
                 }
-            } else { //Fall, dass Employees null ist
+            } else { // Fall, dass Mitarbeiteranzahl null ist
                 changeEmployees.setValue(String.valueOf(currentCompany.getEmployees()));
             }
 
+            // Setze die Standorte, falls null
             if (form_locations == null) {
                 changeLocations.setValue(currentCompany.getLocations());
             }
 
+            // Setze die Beschreibung, falls null
             if (form_description == null) {
                 changeDescription.setValue(currentCompany.getDescription());
             }
-
         }
+
         return formComplete;
     }
+
 
     // Hilfsmethode, um zu überprüfen, ob eine Zeichenkette numerisch ist
     private boolean isNumeric(String str) {

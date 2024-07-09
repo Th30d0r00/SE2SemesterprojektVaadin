@@ -219,32 +219,37 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
         userDTO.setCompany(companyDTO);
     }
 
-    boolean checkIfFormComplete(){
+    boolean checkIfFormComplete() {
         boolean formComplete = true;
 
+        // Überprüfe den ausgewählten Account-Typ
         AccountType form_type = accountType.getValue();
-        String form_mail = email.getValue();
-        String form_pw = password.getValue();
-
-        if(form_type == null){
+        if (form_type == null) {
             formComplete = false;
             Notification.show("Bitte wählen Sie ein Kundenkonto aus (Student/Unternehmen).");
         }
-        if(form_mail == null || form_mail.isEmpty()){
+
+        // Überprüfe die E-Mail Adresse
+        String form_mail = email.getValue();
+        if (form_mail == null || form_mail.isEmpty()) {
             formComplete = false;
             Notification.show("Bitte geben Sie eine E-Mail Adresse an.");
-        } else if(!validEmail(form_mail)){
+        } else if (!validEmail(form_mail)) {
             formComplete = false;
             Notification.show("Bitte geben Sie eine gültige E-Mail Adresse an.");
         }
+
+        // Überprüfe das Passwort
+        String form_pw = password.getValue();
         if (form_pw == null || form_pw.isEmpty()) {
             formComplete = false;
             Notification.show("Bitte geben Sie ein Passwort ein.");
-        } else if(form_pw.length() < 8){
+        } else if (form_pw.length() < 8) {
             formComplete = false;
             Notification.show("Ihr Passwort muss mindestens 8 Zeichen lang sein.");
         }
 
+        // Falls der Account-Typ ein Student ist, überprüfe zusätzliche Felder
         if (form_type == AccountType.STUDENT) {
             String form_firstname = firstname.getValue();
             String form_lastname = lastname.getValue();
@@ -252,7 +257,7 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
             String form_fachsemesterStr = fachsemester.getValue();
             int form_fachsemester = 0;
 
-            // Überprüfen, ob form_fachsemesterStr numerisch ist, bevor es geparst wird
+            // Überprüfe das Fachsemester
             if (form_fachsemesterStr != null && !form_fachsemesterStr.isEmpty() && isNumeric(form_fachsemesterStr)) {
                 form_fachsemester = Integer.parseInt(form_fachsemesterStr);
             } else {
@@ -260,6 +265,7 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
                 Notification.show("Bitte geben Sie eine gültige Zahl für das Fachsemester ein.");
             }
 
+            // Überprüfe den Vornamen
             if (form_firstname == null || form_firstname.isEmpty()) {
                 formComplete = false;
                 Notification.show("Bitte geben Sie einen Vornamen ein.");
@@ -268,6 +274,7 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
                 Notification.show("Ihr Vorname darf nicht länger als 64 Zeichen sein.");
             }
 
+            // Überprüfe den Nachnamen
             if (form_lastname == null || form_lastname.isEmpty()) {
                 formComplete = false;
                 Notification.show("Bitte geben Sie einen Nachnamen ein.");
@@ -276,19 +283,20 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
                 Notification.show("Ihr Nachname darf nicht länger als 64 Zeichen sein.");
             }
 
+            // Überprüfe das Fachsemester (muss größer als 0 sein)
             if (form_fachsemester <= 0) {
                 formComplete = false;
                 Notification.show("Bitte geben Sie ein gültiges Fachsemester an.");
             }
 
-            // Überprüfen, ob das Geburtsdatum mindestens 16 Jahre zurückliegt
+            // Überprüfe das Geburtsdatum (mindestens 16 Jahre alt)
             if (form_birthday == null || !isAtLeast16YearsOld(form_birthday)) {
                 formComplete = false;
                 Notification.show("Sie müssen mindestens 16 Jahre alt sein.");
             }
         }
 
-
+        // Falls der Account-Typ ein Unternehmen ist, überprüfe zusätzliche Felder
         if (form_type == AccountType.UNTERNEHMEN) {
             String form_companyName = companyName.getValue();
             LocalDate form_foundingDate = foundingDate.getValue();
@@ -297,6 +305,7 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
             String form_description = description.getValue();
             int employeeCount = 0;
 
+            // Überprüfe den Firmennamen
             if (form_companyName == null || form_companyName.isEmpty()) {
                 formComplete = false;
                 Notification.show("Bitte geben Sie einen Firmennamen an.");
@@ -305,6 +314,7 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
                 Notification.show("Ihr Firmenname darf nicht länger als 64 Zeichen sein.");
             }
 
+            // Überprüfe die Mitarbeiteranzahl (muss eine gültige Zahl und größer als 0 sein)
             if (form_employees == null || form_employees.isEmpty() || !isNumeric(form_employees)) {
                 formComplete = false;
                 Notification.show("Geben Sie bitte eine gültige Zahl für die Mitarbeiteranzahl ein.");
@@ -316,16 +326,19 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
                 }
             }
 
+            // Überprüfe die Standorte
             if (form_locations == null || form_locations.isEmpty()) {
                 formComplete = false;
                 Notification.show("Geben Sie mindestens einen Standort ein.");
             }
 
+            // Überprüfe das Gründungsdatum
             if (form_foundingDate == null) {
                 formComplete = false;
                 Notification.show("Wählen Sie bitte Ihr Gründungsdatum aus.");
             }
 
+            // Überprüfe die Unternehmensbeschreibung (nicht leer und nicht länger als 500 Zeichen)
             if (form_description == null || form_description.isEmpty() || form_description.length() > 500) {
                 formComplete = false;
                 Notification.show("Geben Sie eine kurze Beschreibung Ihres Unternehmens ein, die bis zu 500 Zeichen lang ist.");
@@ -334,6 +347,7 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
 
         return formComplete;
     }
+
 
     public boolean validEmail(String emailStr) {
         Pattern VALID_EMAIL_ADDRESS_REGEX =

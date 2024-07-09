@@ -17,7 +17,6 @@ import org.hbrs.se2.project.hellocar.dao.AnzeigeDAO;
 import org.hbrs.se2.project.hellocar.dtos.AnzeigeDTO;
 import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerException;
 import org.hbrs.se2.project.hellocar.util.Globals;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /*
  * Ansicht zur Anzeige von Jobdetails für den Studenten
@@ -84,20 +83,27 @@ public class JobDetailView extends Div implements HasUrlParameter<Integer> {
 
     @Override
     public void setParameter(BeforeEvent event, Integer parameter) {
+        // Setze die jobId basierend auf dem Parameter
         jobId = parameter;
+
         AnzeigeDTO jobAnzeige = null;
         try {
+            // Versuche, die Jobanzeige anhand der jobId zu finden
             jobAnzeige = anzeigeDAO.findAnzeigeById(jobId);
         } catch (DatabaseLayerException e) {
+            // Behandele eine Datenbankschicht-Ausnahme, indem eine RuntimeException geworfen wird
             throw new RuntimeException(e);
         }
+
         if (jobAnzeige != null) {
+            // Setze die Werte der UI-Felder mit den Daten der gefundenen Jobanzeige
             titelField.setValue(jobAnzeige.getJobTitle());
             standortField.setValue(jobAnzeige.getStandort());
             jobArtField.setValue(jobAnzeige.getJobType());
             stellenbeschreibungField.setValue(jobAnzeige.getJobDescription());
             veroeffentlichungsdatumField.setValue(jobAnzeige.getPublicationDate().toString());
         } else {
+            // Falls keine Jobanzeige gefunden wurde, wirf eine RuntimeException mit entsprechender Nachricht
             throw new RuntimeException("Jobanzeige mit ID " + jobId + " nicht gefunden!");
         }
     }

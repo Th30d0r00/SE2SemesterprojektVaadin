@@ -152,33 +152,51 @@ public class EnterApplicationView extends VerticalLayout implements HasUrlParame
     @Override
     public void setParameter(BeforeEvent beforeEvent, @OptionalParameter Integer parameter) {
         if (parameter != null) {
+            // Setze die jobId basierend auf dem Parameter
             jobId = parameter;
-            JobPostingControl JobPostingControl = new JobPostingControl();
-            StudentControl studentControl= new StudentControl();
+
+            // Initialisiere die benötigten Control-Objekte
+            JobPostingControl jobPostingControl = new JobPostingControl();
+            StudentControl studentControl = new StudentControl();
             UserControl userControl = new UserControl();
+
             try {
-                AnzeigeDTO anzeigeDTO = JobPostingControl.findJobPosting(jobId);
-                //Check ob anzeigeDTO null ist, wenn ja dann handelt es sich um eine Initiative Bewerbung. In dem Fall
-                //wird der Parameter als companyId interpretiert
+                // Versuche, die Stellenanzeige anhand der jobId zu finden
+                AnzeigeDTO anzeigeDTO = jobPostingControl.findJobPosting(jobId);
+
+                // Überprüfe, ob anzeigeDTO null ist, was auf eine Initiativebewerbung hinweisen könnte
                 if (anzeigeDTO == null) {
+                    // Setze die companyId als parameter (Annahme: parameter wird als companyId interpretiert)
                     companyId = parameter;
+
+                    // Initialisiere das CompanyControl-Objekt
                     CompanyControl companyControl = new CompanyControl();
+
+                    // Setze die Company im applicationDTO
                     applicationDTO.setCompany(companyControl.findCompany(companyId));
+
+                    // Setze den Student und den User im applicationDTO
                     applicationDTO.setStudent(studentControl.findStudent(getCurrentUser().getId()));
                     applicationDTO.setUser(userControl.findUser(getCurrentUser().getId()));
                 } else {
+                    // Setze die Company und die Stellenanzeige im applicationDTO
                     applicationDTO.setCompany(anzeigeDTO.getCompany());
                     applicationDTO.setStellenanzeige(anzeigeDTO);
+
+                    // Setze den Student und den User im applicationDTO
                     applicationDTO.setStudent(studentControl.findStudent(getCurrentUser().getId()));
                     applicationDTO.setUser(userControl.findUser(getCurrentUser().getId()));
                 }
             } catch (DatabaseLayerException e) {
+                // Behandele den Fehler beim Abrufen der Datenbank
                 Notification.show("Fehler beim Abrufen der Application");
             } catch (SQLException e) {
+                // Werfe eine RuntimeException, falls ein SQL-Fehler auftritt
                 throw new RuntimeException(e);
             }
         }
     }
+
 
     public UserDTO getCurrentUser() {
         return (UserDTO) UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER);

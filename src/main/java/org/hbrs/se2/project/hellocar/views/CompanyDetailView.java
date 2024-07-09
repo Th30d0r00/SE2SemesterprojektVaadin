@@ -20,8 +20,8 @@ import org.hbrs.se2.project.hellocar.util.Globals;
 import java.sql.SQLException;
 
 /*
-* zeigt dem Bewerber (Student) die Details eines Unternehmens an
-* */
+ * zeigt dem Bewerber (Student) die Details eines Unternehmens an
+ * */
 
 @Route(value = Globals.Pages.COMPANY_DETAILS, layout = AppView.class)
 @PageTitle("Unternehmensdetails")
@@ -95,15 +95,20 @@ public class CompanyDetailView extends VerticalLayout implements HasUrlParameter
 
     @Override
     public void setParameter(BeforeEvent beforeEvent, @OptionalParameter Integer companyId) {
+        // Setzen der companyId und Überprüfen, ob die companyId null ist
         this.companyId = companyId;
         if (companyId == null) {
             System.out.println("Null Value is not supported");
             return;
         }
         try {
+            // Abrufen der Company- und User-Daten anhand der companyId
             CompanyDTO companyDTO = companyDAO.getCompanyById(companyId);
             UserDTO userDTO = userDAO.findUserById(companyId);
+
+            // Überprüfen, ob beide DTOs erfolgreich abgerufen wurden
             if (userDTO != null && companyDTO != null) {
+                // Setzen der Werte in die entsprechenden Felder
                 nameField.setValue(companyDTO.getCompanyName());
                 emailField.setValue(userDTO.getEmail());
                 employeesField.setValue(Integer.toString(companyDTO.getEmployees()));
@@ -111,12 +116,16 @@ public class CompanyDetailView extends VerticalLayout implements HasUrlParameter
                 locationsField.setValue(companyDTO.getLocations());
                 descriptionField.setValue(companyDTO.getDescription());
             } else {
+                // Fehlerbehandlung, wenn eines der DTOs null ist
                 Notification.show("CompanyDTO oder UserDTO ist null: ", 3000, Notification.Position.MIDDLE);
             }
         } catch (SQLException e) {
+            // Fehlerbehandlung bei SQL-Fehlern
             Notification.show("SQLException: " + e.getMessage(), 3000, Notification.Position.MIDDLE);
         } catch (DatabaseLayerException e) {
+            // Fehlerbehandlung bei Problemen mit der Datenbank
             Notification.show("DatabaseLayerException: " + e.getMessage(), 3000, Notification.Position.MIDDLE);
         }
     }
+
 }
