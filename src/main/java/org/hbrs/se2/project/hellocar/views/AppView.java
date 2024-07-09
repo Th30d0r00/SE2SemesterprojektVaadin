@@ -27,6 +27,10 @@ import org.hbrs.se2.project.hellocar.util.Globals;
 import org.hbrs.se2.project.hellocar.util.Utils;
 import java.util.Optional;
 
+/*
+ * Haupt-View der Anwendung. Diese View wird nach dem Login angezeigt und enthält die Navigationsleiste.
+ */
+
 @CssImport("./styles/views/main/main-view.css")
 @JsModule("./styles/shared-styles.js")
 @Uses(TextArea.class)

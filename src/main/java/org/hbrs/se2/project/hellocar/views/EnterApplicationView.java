@@ -24,6 +24,10 @@ import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerExcepti
 import org.hbrs.se2.project.hellocar.util.Globals;
 import java.sql.SQLException;
 
+/*
+ * Ansicht zum Erstellen einer neuen Bewerbung als Student
+ * */
+
 @Route(value = Globals.Pages.JOB_APPLY, layout = AppView.class)
 @PageTitle("Neue Bewerbung erstellen")
 public class EnterApplicationView extends VerticalLayout implements HasUrlParameter<Integer> {

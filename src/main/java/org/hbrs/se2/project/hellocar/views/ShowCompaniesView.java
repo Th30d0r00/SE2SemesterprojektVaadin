@@ -20,6 +20,10 @@ import org.hbrs.se2.project.hellocar.util.Globals;
 
 import java.util.List;
 
+/*
+ * Ansicht zur Darstellung aller Unternehmen, die für eine Initiativbewerbung in Frage kommen.
+ */
+
 @Route(value = Globals.Pages.SHOW_COMPANIES, layout = AppView.class)
 @PageTitle(value = "Unternehmen finden")
 public class ShowCompaniesView extends Div {

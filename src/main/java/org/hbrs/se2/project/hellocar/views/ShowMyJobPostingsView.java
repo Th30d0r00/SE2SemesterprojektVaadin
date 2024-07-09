@@ -19,6 +19,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.hbrs.se2.project.hellocar.util.Globals;
 import org.hbrs.se2.project.hellocar.dtos.UserDTO;
 
+/*
+ * Ansicht zur Darstellung der eigenen Stellenanzeigen für Unternehmen
+ */
+
 @Route(value = Globals.Pages.SHOW_MY_JOBPOSTINGS, layout = AppView.class)
 @PageTitle(value = "Meine Stellenanzeigen")
 public class ShowMyJobPostingsView extends Div{

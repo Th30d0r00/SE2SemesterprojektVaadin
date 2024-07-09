@@ -21,6 +21,10 @@ import org.hbrs.se2.project.hellocar.util.Globals;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
+/*
+* Zeigt dem Unternehmer die Details einer Bewerbung an.
+* */
+
 @Route(value = Globals.Pages.SHOW_APPLICATION_DETAILS, layout = AppView.class)
 @PageTitle("Bewerbungsdetails")
 @CssImport("./styles/views/applicationdetailview/application-detail-view.css")

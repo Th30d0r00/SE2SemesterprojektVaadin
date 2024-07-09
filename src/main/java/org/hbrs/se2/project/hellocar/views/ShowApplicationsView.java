@@ -21,6 +21,10 @@ import org.hbrs.se2.project.hellocar.util.Globals;
 
 import java.util.List;
 
+/*
+ * Ansicht zur Darstellung der eingegangenen Bewerbungen für Unternehmen.
+ */
+
 @Route(value = Globals.Pages.SHOW_APPLICATIONS, layout = AppView.class)
 @PageTitle("Eingegangene Bewerbungen")
 public class ShowApplicationsView extends Div {

@@ -27,6 +27,10 @@ import org.hbrs.se2.project.hellocar.util.Globals;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
+/*
+ * Ansicht zum Bearbeiten des eigenen Profils für Studenten und Unternehmen
+ * */
+
 @Route(value = Globals.Pages.EDIT_PROFILE, layout = AppView.class)
 @PageTitle("Profil bearbeiten")
 @CssImport("./styles/views/editprofileview/edit-profile-view.css")

@@ -32,6 +32,10 @@ import java.time.LocalDate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/*
+ * Ansicht zur Registrierung eines neuen Benutzers. Diese View enthält ein Formular zur Eingabe der Registrierungsdaten.
+ */
+
 @Route(value = Globals.Pages.USER_REGISTRATION)
 @PageTitle("User Registration")
 @CssImport("./styles/views/entercar/enter-car-view.css")

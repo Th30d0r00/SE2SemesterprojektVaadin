@@ -19,6 +19,10 @@ import org.hbrs.se2.project.hellocar.util.Globals;
 
 import java.sql.SQLException;
 
+/*
+* zeigt dem Bewerber (Student) die Details eines Unternehmens an
+* */
+
 @Route(value = Globals.Pages.COMPANY_DETAILS, layout = AppView.class)
 @PageTitle("Unternehmensdetails")
 @CssImport("./styles/views/companydetailview/company-detail-view.css")

@@ -18,6 +18,10 @@ import org.hbrs.se2.project.hellocar.dtos.AnzeigeDTO;
 import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerException;
 import org.hbrs.se2.project.hellocar.util.Globals;
 
+/*
+ * Ansicht zum Ändern einer Anzeige als Unternehmen
+ * */
+
 @Route(value = Globals.Pages.EDIT_JOBPOSTING, layout = AppView.class)
 @PageTitle("Stellenanzeige bearbeiten")
 @CssImport("./styles/views/editjobpostingview/enter-job-posting.css")

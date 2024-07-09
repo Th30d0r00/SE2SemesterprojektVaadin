@@ -25,6 +25,10 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/*
+ * Ansicht für die Anzeige aller Bewerbungen des aktuellen Benutzers.
+ */
+
 @Route(value = Globals.Pages.SHOW_MY_APPLICATIONS, layout = AppView.class)
 @PageTitle("Meine Bewerbungen")
 public class ShowMyApplications extends Div {

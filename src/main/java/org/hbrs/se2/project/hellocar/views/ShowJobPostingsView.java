@@ -23,6 +23,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
+/*
+ * Ansicht zur Darstellung aller verfügbaren Jobanzeigen, auf die sich ein Student bewerben kann.
+ */
+
 @Route(value = Globals.Pages.SHOW_JOBPOSTINGS, layout = AppView.class)
 @PageTitle(value = "Verfügbare Stellenanzeigen")
 public class ShowJobPostingsView extends Div {

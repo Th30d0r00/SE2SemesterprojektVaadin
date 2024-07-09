@@ -22,6 +22,10 @@ import org.hbrs.se2.project.hellocar.util.Globals;
 
 import java.sql.SQLException;
 
+/*
+ * Ansicht zum Erstellen einer Stellenanzeige als Unternehmen
+ * */
+
 @Route(value = Globals.Pages.ENTER_JOBPOSTING, layout = AppView.class)
 @PageTitle("Stellenanzeige erstellen")
 @CssImport("./styles/views/enterjobposting/enter-job-posting-view.css")
