@@ -1,6 +1,7 @@
 package org.hbrs.se2.project.hellocar.views;
 
 import com.vaadin.flow.component.*;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.textfield.PasswordField;
 import org.hbrs.se2.project.hellocar.util.RegistrationResult;
 import org.hbrs.se2.project.hellocar.control.RegistrationControl;
@@ -64,6 +65,10 @@ public class RegistrationView extends Div {  // 3. Form (Spezialisierung / Verer
     public RegistrationView() {
         addClassName("enter-car-view");
         accountType.setItems(AccountType.values());
+
+        Image logo = new Image("images/freshconnect.png", "freshconnect logo");
+        logo.setWidth("200px");
+        add(logo);
 
         defaultVisibility();
 
