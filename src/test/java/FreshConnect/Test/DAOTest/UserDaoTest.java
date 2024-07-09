@@ -1,112 +1,80 @@
 package FreshConnect.Test.DAOTest;
 
+import org.hbrs.se2.project.hellocar.control.factories.DTOFactory;
 import org.hbrs.se2.project.hellocar.dao.UserDAO;
 import org.hbrs.se2.project.hellocar.dtos.CompanyDTO;
 import org.hbrs.se2.project.hellocar.dtos.StudentDTO;
 import org.hbrs.se2.project.hellocar.dtos.UserDTO;
-import org.hbrs.se2.project.hellocar.dtos.impl.CompanyDTOImpl;
-import org.hbrs.se2.project.hellocar.dtos.impl.StudentDTOImpl;
-import org.hbrs.se2.project.hellocar.dtos.impl.UserDTOImpl;
 import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerException;
-import org.hbrs.se2.project.hellocar.util.AccountType;
-import org.hbrs.se2.project.hellocar.util.Security;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class UserDaoTest {
+    private static UserDTO userDTOStudent;
+    private static UserDTO userDTOCompany;
+    private static CompanyDTO companyDTO;
+    private static StudentDTO studentDTO;
+    private static UserDAO userDAO = new UserDAO();
 
-        @Test
-        public void addUserAsStudentTest() throws DatabaseLayerException {
+    @BeforeAll
+    public static void setup() throws DatabaseLayerException {
 
-            /*
-             * Es wird ein User erstellt, ihm werden die verschiedenen Attribute zugewiesen
-             * */
+        // Create a CompanyDTO object
+        companyDTO = DTOFactory.createCompany("FreshConnect",
+                LocalDate.of(2018, 11, 13), 9,
+                "Bonn", "Eine coole Company");
 
-            UserDAO dao = new UserDAO();
-            UserDTO userToAdd = new UserDTOImpl();
-            userToAdd.setEmail("mustermann@gmail.com");
-            userToAdd.setPassword("mustermann1234");
-            userToAdd.setSalt(Security.getSalt());
-            userToAdd.setHashValue(Security.getHash(userToAdd.getPassword(),userToAdd.getSalt()));
-            userToAdd.setAccountType(AccountType.valueOf("STUDENT"));
+        // Create a UserDTO object for Company
+        userDTOCompany = DTOFactory.createCompanyUser("FreshConnect@freshe.de", "123456", companyDTO);
 
-            /*
-             * Es wird ein StudentDTO erstellt und dem Attribut Student des Users zugewiesen
-             * */
+        // Create a StudentDTO object
+        studentDTO = DTOFactory.createStudent("Tom", "Student", LocalDate.of(1999, 1, 1), 1);
 
-            StudentDTO studentToAdd = new StudentDTOImpl();
-            studentToAdd.setFirstname("peter");
-            studentToAdd.setLastname("muster");
-            LocalDate date = LocalDate.of(2020, 1, 8);
-            studentToAdd.setBirthday(date);
-            userToAdd.setStudent(studentToAdd);
-            dao.addUser(userToAdd);
+        // Create a UserDTO object for Student
+        userDTOStudent = DTOFactory.createStudentUser("tomstudent@gmail.com", "123456", studentDTO);
+    }
 
-            /*
-             * Der User wird mit der Methode findUSerByEmail ausgelesen und die Attribute mit dem ursprünglich
-             * erstellten User verglichen
-             * */
+    @AfterAll
+    public static void tearDown() throws DatabaseLayerException {
+        // Save the id of the users
+        userDTOCompany.setId(userDAO.findUserByEmail("FreshConnect@freshe.de").getId());
+        userDTOStudent.setId(userDAO.findUserByEmail("tomstudent@gmail.com").getId());
 
-            UserDTO readUser = dao.findUserByEmail("mustermann@gmail.com");
-            assertEquals(userToAdd.getEmail(), readUser.getEmail());
-            assertEquals(userToAdd.getAccountType(), readUser.getAccountType());
+        // Delete the users from the database
+        userDAO.deleteUserProfile(userDTOCompany.getId());
+        userDAO.deleteUserProfile(userDTOStudent.getId());
+    }
 
-            /*
-             * Es werden zum Schluss noch die Attribute des Studenten ausgelesen und verglichen
-             * */
-
-            assertEquals(userToAdd.getStudent().getFirstname(), readUser.getStudent().getFirstname());
-            assertEquals(userToAdd.getStudent().getLastname(), readUser.getStudent().getLastname());
-            assertEquals(userToAdd.getStudent().getBirthday(), readUser.getStudent().getBirthday());
-        }
+    @Test
+    public void addUserAsStudentTest() throws DatabaseLayerException {
+        assertTrue(userDAO.addUser(userDTOStudent), "User was added to the database");
+        UserDTO studentThatWasAdded = userDAO.findUserByEmail("tomstudent@gmail.com");
+        assertEquals(userDTOStudent.getEmail(), studentThatWasAdded.getEmail());
+        assertEquals(userDTOStudent.getRole(), studentThatWasAdded.getRole());
+        assertEquals(userDTOStudent.getAccountType(), studentThatWasAdded.getAccountType());
+        assertEquals(userDTOStudent.getStudent().getFirstname(), studentThatWasAdded.getStudent().getFirstname());
+        assertEquals(userDTOStudent.getStudent().getLastname(), studentThatWasAdded.getStudent().getLastname());
+        assertEquals(userDTOStudent.getStudent().getBirthday(), studentThatWasAdded.getStudent().getBirthday());
+        assertEquals(userDTOStudent.getStudent().getFachsemester(), studentThatWasAdded.getStudent().getFachsemester());
+    }
 
     @Test
     public void addUserAsCompanyTest() throws DatabaseLayerException {
-
-        /*
-         * Es wird ein User erstellt, ihm werden die verschiedenen Attribute zugewiesen
-         * */
-
-        UserDAO dao = new UserDAO();
-        UserDTO userToAdd = new UserDTOImpl();
-        userToAdd.setEmail("mustermann@hotmail.com");
-        userToAdd.setPassword("musterfirma1234");
-        userToAdd.setSalt(Security.getSalt());
-        userToAdd.setHashValue(Security.getHash(userToAdd.getPassword(),userToAdd.getSalt()));
-        userToAdd.setAccountType(AccountType.valueOf("UNTERNEHMEN"));
-
-        /*
-         * Es wird ein CompanyDTO erstellt und dem Attribut Company des Users zugewiesen
-         * */
-
-        CompanyDTO companyToAdd = new CompanyDTOImpl();
-        companyToAdd.setCompanyName("mustergmbh");
-        companyToAdd.setEmployees(13);
-        LocalDate date = LocalDate.of(2020, 1, 8);
-        companyToAdd.setFoundingDate(date);
-        userToAdd.setCompany(companyToAdd);
-        dao.addUser(userToAdd);
-
-        /*
-         * Der User wird mit der Methode findUSerByEmail ausgelesen und die Attribute mit dem ursprünglich
-         * erstellten User verglichen
-        * */
-
-        UserDTO readUser = dao.findUserByEmail("mustermann@hotmail.com");
-        assertEquals(userToAdd.getEmail(), readUser.getEmail());
-        assertEquals(userToAdd.getAccountType(), readUser.getAccountType());
-
-        /*
-         * Es werden zum Schluss noch die Attribute des Unternehmens ausgelesen und verglichen
-         * */
-
-        assertEquals(userToAdd.getCompany().getCompanyName(), readUser.getCompany().getCompanyName());
-        assertEquals(userToAdd.getCompany().getEmployees() , readUser.getCompany().getEmployees());
-        assertEquals(userToAdd.getCompany().getFoundingDate(), readUser.getCompany().getFoundingDate());
-
-
+        assertTrue(userDAO.addUser(userDTOCompany), "User was added to the database");
+        UserDTO companyThatWasAdded = userDAO.findUserByEmail("FreshConnect@freshe.de");
+        assertEquals(userDTOCompany.getEmail(), companyThatWasAdded.getEmail());
+        assertEquals(userDTOCompany.getRole(), companyThatWasAdded.getRole());
+        assertEquals(userDTOCompany.getAccountType(), companyThatWasAdded.getAccountType());
+        assertEquals(userDTOCompany.getCompany().getCompanyName(), companyThatWasAdded.getCompany().getCompanyName());
+        assertEquals(userDTOCompany.getCompany().getFoundingDate(), companyThatWasAdded.getCompany().getFoundingDate());
+        assertEquals(userDTOCompany.getCompany().getEmployees(), companyThatWasAdded.getCompany().getEmployees());
+        assertEquals(userDTOCompany.getCompany().getLocations(), companyThatWasAdded.getCompany().getLocations());
+        assertEquals(userDTOCompany.getCompany().getDescription(), companyThatWasAdded.getCompany().getDescription());
     }
 }

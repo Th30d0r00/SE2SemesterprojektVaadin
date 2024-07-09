@@ -37,7 +37,7 @@ public class CompanyDAO {
     public boolean updateCompanyProfileInDB(int companyId, String newCompanyName, LocalDate newFoundingDate, int newEmployees,
                                             String newLocations, String newDescription) throws DatabaseLayerException {
         boolean successfullyUpdatedCompany = false;
-        String sql = "UPDATE collabhbrs.company SET name = ?, founding_date = ?, employees = ?, locations = ?, description = ? WHERE id = ?";
+        String sql = "UPDATE collabhbrs.company SET company_name = ?, founding_date = ?, employees = ?, locations = ?, description = ? WHERE id = ?";
 
         try (PreparedStatement statement = JDBCConnectionPrepared.getInstance().getPreparedStatement(sql)) {
             statement.setString(1, newCompanyName);

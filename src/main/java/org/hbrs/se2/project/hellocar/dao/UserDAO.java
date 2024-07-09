@@ -61,6 +61,7 @@ public class UserDAO {
                     student.setFirstname(set.getString("firstname"));
                     student.setLastname(set.getString("lastname"));
                     student.setBirthday(set.getDate("birthday").toLocalDate());
+                    student.setFachsemester(set.getInt("fachsemester"));
                     user.setStudent(student);
                 }
             }
