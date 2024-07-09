@@ -15,6 +15,8 @@ import java.util.List;
  */
 
 public class CompanyDAO {
+
+    // Methode zur Abfrage eines Unternehmens anhand der ID
     public CompanyDTO getCompanyById(int companyId) throws SQLException, DatabaseLayerException {
         CompanyDTO company = null;
         String sql = "SELECT * FROM collabhbrs.company WHERE id = ?";
@@ -33,7 +35,7 @@ public class CompanyDAO {
         return company;
     }
 
-
+    // Methode zur Aktualisierung eines Unternehmensprofils in der Datenbank
     public boolean updateCompanyProfileInDB(int companyId, String newCompanyName, LocalDate newFoundingDate, int newEmployees,
                                             String newLocations, String newDescription) throws DatabaseLayerException {
         boolean successfullyUpdatedCompany = false;
@@ -59,7 +61,7 @@ public class CompanyDAO {
         return successfullyUpdatedCompany;
     }
 
-
+    // Methode zur Abbildung eines ResultSets auf ein CompanyDTO-Objekt
     private CompanyDTO mapResultSetToCompany(ResultSet set) throws SQLException {
         CompanyDTO company = new CompanyDTOImpl();
         company.setId(set.getInt("id"));
@@ -71,6 +73,7 @@ public class CompanyDAO {
         return company;
     }
 
+    // Methode zur Abfrage aller Unternehmen aus der Datenbank
     public List<CompanyDTO> getAllCompanies() throws DatabaseLayerException {
         List<CompanyDTO> companies = new ArrayList<>();
         String sql = "SELECT * FROM collabhbrs.company";
