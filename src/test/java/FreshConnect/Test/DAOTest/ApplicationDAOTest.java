@@ -1,148 +1,88 @@
-/*package FreshConnect.Test;
+package FreshConnect.Test.DAOTest;
 
+
+import org.hbrs.se2.project.hellocar.control.factories.DTOFactory;
 import org.hbrs.se2.project.hellocar.dao.AnzeigeDAO;
 import org.hbrs.se2.project.hellocar.dao.ApplicationDAO;
 import org.hbrs.se2.project.hellocar.dao.UserDAO;
-import org.hbrs.se2.project.hellocar.dtos.AnzeigeDTO;
-import org.hbrs.se2.project.hellocar.dtos.ApplicationDTO;
-import org.hbrs.se2.project.hellocar.dtos.StudentDTO;
-import org.hbrs.se2.project.hellocar.entities.Company;
+import org.hbrs.se2.project.hellocar.dtos.*;
+
+import org.hbrs.se2.project.hellocar.dtos.impl.StudentDTOImpl;
+import org.hbrs.se2.project.hellocar.dtos.impl.UserDTOImpl;
 import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerException;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 
-import java.sql.Date;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ApplicationDAOTest {
 
-    @Mock
-    private ResultSet mockResultSet;
+    private static ApplicationDAO applicationDAO = new ApplicationDAO();
+    private static UserDTO userDTOStudent = new UserDTOImpl();
+    private static UserDTO userDTOCompany = new UserDTOImpl();
+    private static StudentDTO studentDTO = new StudentDTOImpl();
+    private static ApplicationDTO applicationDTO;
+    private static AnzeigeDTO anzeigeDTO;
+    private static CompanyDTO companyDTO;
+    private static AnzeigeDAO anzeigeDAO = new AnzeigeDAO();
+    private static UserDAO userDAO = new UserDAO();
 
-    @Mock
-    private UserDAO mockUserDAO;
+    @BeforeAll
+    public static void setup() throws DatabaseLayerException {
+        studentDTO = DTOFactory.createStudent("Gustav",
+                "Gans", LocalDate.of(1999, 7, 14), 4);
 
-    @Mock
-    private AnzeigeDAO mockAnzeigeDAO;
+        companyDTO = DTOFactory.createCompany("FreshConnect",
+                LocalDate.of(1999, 7, 14) , 500, "Bonn", "Eine coole Company");
 
-    private ApplicationDAO applicationDAO;
+        userDTOStudent = DTOFactory.createStudentUser("gustavgans@gmail.com", "test123", studentDTO);
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-        applicationDAO = new ApplicationDAO();
-        applicationDAO.setUserDAO(mockUserDAO);
-        applicationDAO.setAnzeigeDAO(mockAnzeigeDAO);
+        userDTOCompany = DTOFactory.createCompanyUser("FresheConnect@gmail.com", "test123", companyDTO);
+
+        anzeigeDTO = DTOFactory.createAnzeigeDTO("Softwareentwickler", "Java", "Bonn",
+                companyDTO, "Eine coole Stelle", LocalDateTime.now());
+
+        applicationDTO = DTOFactory.createApplicationDTO("FreshConnect", "Tester",
+                LocalDate.of(2024, 7, 14), "Berlin",
+                "Ich bin sehr motiviert.", "Mein Lebenslauf...",
+                LocalDateTime.now(), "versendet", anzeigeDTO, studentDTO, companyDTO, userDTOStudent);
+
+        userDAO.addUser(userDTOStudent);
+        userDAO.addUser(userDTOCompany);
+        companyDTO.setId(userDAO.findUserByEmail(userDTOCompany.getEmail()).getId());
+        studentDTO.setId(userDAO.findUserByEmail(userDTOStudent.getEmail()).getId());
+        userDTOStudent.setId(userDAO.findUserByEmail(userDTOStudent.getEmail()).getId());
+        anzeigeDAO.addAnzeige(anzeigeDTO);
+        applicationDAO.addApplication(applicationDTO);
     }
 
+    @AfterAll
+    public static void teardown() throws DatabaseLayerException {
+        userDAO.deleteUserProfile(userDAO.findUserByEmail(userDTOStudent.getEmail()).getId());
+        userDAO.deleteUserProfile(userDAO.findUserByEmail(userDTOCompany.getEmail()).getId());
+    }
+
+    // Test if the application is added to the database
     @Test
-    void testMapResultSetToApplication_FullApplication() throws SQLException, DatabaseLayerException {
-        // Arrange
-        setupMockResultSet(true);
-        setupMockDAOs();
-
-        // Act
-        ApplicationDTO result = applicationDAO.mapResultSetToApplication(mockResultSet);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals(1, result.getId());
-        assertEquals("123456789", result.getTelefonnummer());
-        assertEquals("Student", result.getBeschaeftigung());
-        assertEquals(LocalDate.of(2024, 1, 1), result.getVerfuegbar());
-        assertEquals("Berlin", result.getWohnort());
-        assertEquals("Motivation", result.getMotivationsschreiben());
-        assertEquals("CV", result.getLebenslauf());
-        assertEquals(LocalDate.of(2023, 7, 1).atStartOfDay(), result.getAppliedAt());
-        assertEquals("Pending", result.getStatus());
-        assertNotNull(result.getCompany());
-        assertNotNull(result.getStudent());
-        assertEquals("test@example.com", result.getEmail());
-        assertEquals("John", result.getFirstname());
-        assertEquals("Doe", result.getLastname());
-        assertEquals(3, result.getFachsemester());
-        assertEquals(LocalDate.of(2000, 1, 1), result.getBirthday());
-        assertNotNull(result.getStellenanzeige());
-        assertEquals("Software Developer", result.getJobTitel());
-        assertEquals("Berlin", result.getStandort());
-
-        verify(mockResultSet, times(11)).getInt(anyString());
-        verify(mockResultSet, times(6)).getString(anyString());
-        verify(mockResultSet, times(2)).getDate(anyString());
-        verify(mockUserDAO, times(3)).findUserById(anyInt());
-        verify(mockAnzeigeDAO, times(2)).findAnzeigeById(anyInt());
+    public void testAddApplication() throws DatabaseLayerException {
+       assertTrue(applicationDAO.addApplication(applicationDTO));
     }
 
+    //Test myApplicationList
     @Test
-    void testMapResultSetToApplication_InitiativApplication() throws SQLException, DatabaseLayerException {
-        // Arrange
-        setupMockResultSet(false);
-        setupMockDAOs();
-
-        // Act
-        ApplicationDTO result = applicationDAO.mapResultSetToApplication(mockResultSet);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals("Initiativbewerbung", result.getJobTitel());
-        assertEquals("-", result.getStandort());
-        assertNull(result.getStellenanzeige());
-
-        verify(mockResultSet, times(10)).getInt(anyString());
-        verify(mockResultSet, times(6)).getString(anyString());
-        verify(mockResultSet, times(2)).getDate(anyString());
-        verify(mockUserDAO, times(3)).findUserById(anyInt());
-        verify(mockAnzeigeDAO, never()).findAnzeigeById(anyInt());
+    public void testMyReceivedApplicationList() throws DatabaseLayerException {
+        assertFalse(applicationDAO.getReceivedApplications(companyDTO.getId()).isEmpty());
     }
 
+    //Test myApplicationList
     @Test
-    void testMapResultSetToApplication_SQLExceptionThrown() throws SQLException {
-        // Arrange
-        when(mockResultSet.getInt("id")).thenThrow(new SQLException("SQL Error"));
-
-        // Act & Assert
-        assertThrows(SQLException.class, () -> applicationDAO.mapResultSetToApplication(mockResultSet));
+    public void testMySentApplicationList() throws DatabaseLayerException {
+        assertFalse(applicationDAO.getMyApplications(studentDTO.getId()).isEmpty());
     }
 
-    private void setupMockResultSet(boolean withStellenanzeige) throws SQLException {
-        when(mockResultSet.getInt("id")).thenReturn(1);
-        when(mockResultSet.getString("telefonnummer")).thenReturn("123456789");
-        when(mockResultSet.getString("beschaeftigung")).thenReturn("Student");
-        when(mockResultSet.getDate("verfuegbar")).thenReturn(Date.valueOf(LocalDate.of(2024, 1, 1)));
-        when(mockResultSet.getString("wohnort")).thenReturn("Berlin");
-        when(mockResultSet.getString("motivationsschreiben")).thenReturn("Motivation");
-        when(mockResultSet.getString("lebenslauf")).thenReturn("CV");
-        when(mockResultSet.getDate("applied")).thenReturn(Date.valueOf(LocalDate.of(2023, 7, 1)));
-        when(mockResultSet.getString("status")).thenReturn("Pending");
-        when(mockResultSet.getInt("company_id")).thenReturn(1);
-        when(mockResultSet.getInt("student_id")).thenReturn(2);
-        if (withStellenanzeige) {
-            when(mockResultSet.getInt("stellenanzeige_id")).thenReturn(3);
-        }
-    }
-
-    private void setupMockDAOs() throws DatabaseLayerException {
-        Company mockCompany = mock(Company.class);
-        when(mockUserDAO.findUserById(1)).thenReturn(mockCompany);
-
-        StudentDTO mockStudent = mock(StudentDTO.class);
-        when(mockUserDAO.findUserById(2)).thenReturn(mockStudent);
-        when(mockStudent.getEmail()).thenReturn("test@example.com");
-        when(mockStudent.getFirstname()).thenReturn("John");
-        when(mockStudent.getLastname()).thenReturn("Doe");
-        when(mockStudent.getFachsemester()).thenReturn(3);
-        when(mockStudent.getBirthday()).thenReturn(LocalDate.of(2000, 1, 1));
-
-        AnzeigeDTO mockAnzeige = mock(AnzeigeDTO.class);
-        when(mockAnzeigeDAO.findAnzeigeById(3)).thenReturn(mockAnzeige);
-        when(mockAnzeige.getJobTitle()).thenReturn("Software Developer");
-        when(mockAnzeige.getStandort()).thenReturn("Berlin");
-    }
-}*/
+}

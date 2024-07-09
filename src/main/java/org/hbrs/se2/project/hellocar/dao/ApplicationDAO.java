@@ -46,7 +46,7 @@ public class ApplicationDAO {
                 "(telefonnummer, beschaeftigung, verfuegbar, wohnort, motivationsschreiben, lebenslauf, applied, status, stellenanzeige_id, student_id, company_id, user_id) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        try (PreparedStatement statement = JDBCConnectionPrepared.getInstance().getPreparedStatement(query)) {
+        try (PreparedStatement statement = JDBCConnectionPrepared.getInstance().getPreparedStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, applicationDTO.getTelefonnummer());
             statement.setString(2, applicationDTO.getBeschaeftigung());
             statement.setDate(3, Date.valueOf(applicationDTO.getVerfuegbar()));
