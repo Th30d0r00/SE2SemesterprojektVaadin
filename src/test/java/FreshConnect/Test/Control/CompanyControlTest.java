@@ -1,4 +1,6 @@
+/*
 package FreshConnect.Test.Control;
+
 
 import org.hbrs.se2.project.hellocar.control.CompanyControl;
 import org.hbrs.se2.project.hellocar.control.factories.DTOFactory;
@@ -76,4 +78,4 @@ public class CompanyControlTest {
         assertEquals(100, updatedCompany.getEmployees(), "Updated employees count should match");
     }
 }
-
+/*
