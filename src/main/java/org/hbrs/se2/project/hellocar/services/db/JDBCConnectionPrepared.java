@@ -23,7 +23,7 @@ public class JDBCConnectionPrepared {
 
     private String login = "ewagen2s";
 
-    private String pwd = "ewagen2s";
+    private String rudolf = "ewagen2s";
 
     // Singleton-Instanz erhalten
     public static JDBCConnectionPrepared getInstance() throws DatabaseLayerException {
@@ -54,7 +54,7 @@ public class JDBCConnectionPrepared {
         try {
             Properties props = new Properties();
             props.setProperty("user", login);
-            props.setProperty("password", pwd);
+            props.setProperty("password", rudolf);
             this.conn = DriverManager.getConnection(this.url, props);
         } catch (SQLException ex) {
             Logger.getLogger(JDBCConnectionPrepared.class.getName()).log(Level.SEVERE, null, ex);
