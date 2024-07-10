@@ -1,9 +1,8 @@
-/*
-
 package FreshConnect.Test.Control;
 
 import org.hbrs.se2.project.hellocar.control.ApplicationControl;
 import org.hbrs.se2.project.hellocar.control.factories.DTOFactory;
+import org.hbrs.se2.project.hellocar.dao.AnzeigeDAO;
 import org.hbrs.se2.project.hellocar.dao.ApplicationDAO;
 import org.hbrs.se2.project.hellocar.dao.UserDAO;
 import org.hbrs.se2.project.hellocar.dtos.*;
@@ -29,6 +28,7 @@ public class ApplicationsControlTest {
     private static CompanyDTO companyDTO;
     private static AnzeigeDTO anzeigeDTO;
     private static UserDTO userDTO;
+    private static AnzeigeDAO anzeigeDAO = new AnzeigeDAO();
 
     @BeforeAll
     public static void setup() throws DatabaseLayerException {
@@ -41,61 +41,37 @@ public class ApplicationsControlTest {
         companyDTO = DTOFactory.createCompany("FreshConnect", LocalDate.of(2018, 11, 13), 9, "Bonn", "Eine coole Company");
         anzeigeDTO = DTOFactory.createAnzeigeDTO("Software Engineer", "Bonn", "Full-time", companyDTO, "Develop software", LocalDateTime.now());
         userDTO = DTOFactory.createStudentUser("jan.kaminski@example.com", "123456789", studentDTO);
+        UserDTO companyUserDTO = DTOFactory.createCompanyUser("FreshConnect@gmail.com", "987654321", companyDTO);
 
-        // Save the user to the database
+        //Add the users
         userDAO.addUser(userDTO);
+        userDAO.addUser(companyUserDTO);
+
+        //Add the ids
+        studentDTO.setId(userDAO.findUserByEmail(userDTO.getEmail()).getId());
+        userDTO.setId(studentDTO.getId());
+        companyDTO.setId(userDAO.findUserByEmail(companyUserDTO.getEmail()).getId());
+        companyUserDTO.setId(companyDTO.getId());
+
+        // Save the advertisement to the database
+        anzeigeDAO.addAnzeige(anzeigeDTO);
 
         // Save the application to the database
         applicationDTO = DTOFactory.createApplicationDTO("0123456789", "Teilzeit", LocalDate.of(2024, 7, 1), "Bonn", "Motivationsschreiben", "Lebenslauf", LocalDateTime.now(), "Pending", anzeigeDTO, studentDTO, companyDTO, userDTO);
-        applicationControl.saveApplication(applicationDTO);
 
-        // Set the Application id
-        applicationId = applicationDAO.getApplicationById(applicationDTO.getId()).getId();
-        applicationDTO.setId(applicationId);
     }
 
     @AfterAll
     public static void tearDown() throws DatabaseLayerException {
-        // Delete the application from the database
-        applicationControl.deleteApplication(applicationDTO.getId());
         // Delete the user from the database
         userDAO.deleteUserProfile(userDTO.getId());
+        userDAO.deleteUserProfile(companyDTO.getId());
     }
 
     @Test
     public void testSaveApplication() throws DatabaseLayerException {
-        ApplicationDTO newApplicationDTO = DTOFactory.createApplicationDTO("0987654321", "Vollzeit", LocalDate.of(2024, 8, 1), "Berlin", "Neues Motivationsschreiben", "Neuer Lebenslauf", LocalDateTime.now(), "Pending", anzeigeDTO, studentDTO, companyDTO, userDTO);
-        boolean result = applicationControl.saveApplication(newApplicationDTO);
+        boolean result = applicationControl.saveApplication(applicationDTO);
         assertTrue(result, "Application should be saved successfully");
-
-        // Clean up
-        applicationControl.deleteApplication(newApplicationDTO.getId());
-    }
-
-    @Test
-    public void testFindApplicationById() throws DatabaseLayerException {
-        ApplicationDTO retrievedApplication = applicationControl.findApplicationById(applicationId);
-        assertNotNull(retrievedApplication);
-        assertEquals("Motivationsschreiben", retrievedApplication.getMotivationsschreiben(), "Application motivation letter should match");
-        assertEquals("Lebenslauf", retrievedApplication.getLebenslauf(), "Application CV should match");
-    }
-
-    @Test
-    public void testAcceptApplication() throws DatabaseLayerException {
-        boolean result = applicationControl.acceptApplication(applicationId);
-        assertTrue(result, "Application should be accepted successfully");
-
-        ApplicationDTO acceptedApplication = applicationControl.findApplicationById(applicationId);
-        assertEquals("Accepted", acceptedApplication.getStatus(), "Application should be marked as accepted");
-    }
-
-    @Test
-    public void testRefuseApplication() throws DatabaseLayerException {
-        boolean result = applicationControl.refuseApplication(applicationId);
-        assertTrue(result, "Application should be refused successfully");
-
-        ApplicationDTO refusedApplication = applicationControl.findApplicationById(applicationId);
-        assertEquals("Refused", refusedApplication.getStatus(), "Application should be marked as refused");
     }
 
     @Test
@@ -124,4 +100,4 @@ public class ApplicationsControlTest {
         assertNull(deletedApplication, "Deleted application should not be found");
     }
 }
-*/
+
