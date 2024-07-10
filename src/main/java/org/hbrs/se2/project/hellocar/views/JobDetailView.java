@@ -32,6 +32,7 @@ public class JobDetailView extends Div implements HasUrlParameter<Integer> {
     private TextField jobArtField;
     private TextArea stellenbeschreibungField;
     private TextField veroeffentlichungsdatumField;
+    private TextField unternehmenField;
     private Integer jobId;
 
     public JobDetailView() {
@@ -56,8 +57,11 @@ public class JobDetailView extends Div implements HasUrlParameter<Integer> {
         veroeffentlichungsdatumField = new TextField();
         veroeffentlichungsdatumField.setLabel("Veröffentlichungsdatum");
 
+        unternehmenField = new TextField();
+        unternehmenField.setLabel("Unternehmen");
+
         // Füge die Textfelder zum Layout hinzu
-        formLayout.add(titelField, standortField, jobArtField, veroeffentlichungsdatumField, stellenbeschreibungField);
+        formLayout.add(titelField, standortField, jobArtField, veroeffentlichungsdatumField, stellenbeschreibungField, unternehmenField);
 
         Button applyButton = new Button("Bewerben", e -> {
             // Logik zur Bewerbung auf die Jobanzeige
@@ -102,6 +106,7 @@ public class JobDetailView extends Div implements HasUrlParameter<Integer> {
             jobArtField.setValue(jobAnzeige.getJobType());
             stellenbeschreibungField.setValue(jobAnzeige.getJobDescription());
             veroeffentlichungsdatumField.setValue(jobAnzeige.getPublicationDate().toString());
+            unternehmenField.setValue(jobAnzeige.getCompany().getCompanyName());
         } else {
             // Falls keine Jobanzeige gefunden wurde, wirf eine RuntimeException mit entsprechender Nachricht
             throw new RuntimeException("Jobanzeige mit ID " + jobId + " nicht gefunden!");

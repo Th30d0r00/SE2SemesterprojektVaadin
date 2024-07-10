@@ -6,6 +6,7 @@ import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.component.button.Button;
 import org.hbrs.se2.project.hellocar.control.ApplicationControl;
@@ -37,8 +38,8 @@ public class ApplicationDetailView extends VerticalLayout implements HasUrlParam
     private final TextField beschaeftigung = new TextField();
     private final TextField wohnort = new TextField();
     private final TextField verfuegbar = new TextField();
-    private final TextField motivationsschreiben = new TextField(); //Länge beachten
-    private final TextField lebenslauf = new TextField();
+    private final TextArea motivationsschreiben = new TextArea(); //Länge beachten
+    private final TextArea lebenslauf = new TextArea();
     private final TextField verschicktAm = new TextField();
     private final Button acceptButton = new Button("Bewerbung annehmen");
     private final Button refuseButton = new Button("Bewerbung ablehnen");
