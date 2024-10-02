@@ -35,3 +35,7 @@ build/
 
 ### front-end ###
 /frontend/generated/
+
+### vite ###
+vite.generated.ts
+
