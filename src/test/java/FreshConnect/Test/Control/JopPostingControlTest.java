@@ -1,12 +1,12 @@
 package FreshConnect.Test.Control;
 
-import org.hbrs.se2.project.hellocar.control.JobPostingControl;
-import org.hbrs.se2.project.hellocar.control.factories.DTOFactory;
-import org.hbrs.se2.project.hellocar.dao.UserDAO;
-import org.hbrs.se2.project.hellocar.dtos.AnzeigeDTO;
-import org.hbrs.se2.project.hellocar.dtos.CompanyDTO;
-import org.hbrs.se2.project.hellocar.dtos.UserDTO;
-import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerException;
+import org.hbrs.se2.project.collhbrs.control.JobPostingControl;
+import org.hbrs.se2.project.collhbrs.control.factories.DTOFactory;
+import org.hbrs.se2.project.collhbrs.dao.UserDAO;
+import org.hbrs.se2.project.collhbrs.dtos.AnzeigeDTO;
+import org.hbrs.se2.project.collhbrs.dtos.CompanyDTO;
+import org.hbrs.se2.project.collhbrs.dtos.UserDTO;
+import org.hbrs.se2.project.collhbrs.services.db.exceptions.DatabaseLayerException;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;

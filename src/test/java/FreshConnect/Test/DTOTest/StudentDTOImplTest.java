@@ -1,7 +1,7 @@
 package FreshConnect.Test.DTOTest;
 
-import org.hbrs.se2.project.hellocar.dtos.StudentDTO;
-import org.hbrs.se2.project.hellocar.dtos.impl.StudentDTOImpl;
+import org.hbrs.se2.project.collhbrs.dtos.StudentDTO;
+import org.hbrs.se2.project.collhbrs.dtos.impl.StudentDTOImpl;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;

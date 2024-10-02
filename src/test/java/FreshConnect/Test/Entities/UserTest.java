@@ -1,9 +1,9 @@
 package FreshConnect.Test.Entities;
 
-import org.hbrs.se2.project.hellocar.entities.Company;
-import org.hbrs.se2.project.hellocar.entities.Student;
-import org.hbrs.se2.project.hellocar.entities.User;
-import org.hbrs.se2.project.hellocar.util.AccountType;
+import org.hbrs.se2.project.collhbrs.entities.Company;
+import org.hbrs.se2.project.collhbrs.entities.Student;
+import org.hbrs.se2.project.collhbrs.entities.User;
+import org.hbrs.se2.project.collhbrs.util.AccountType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

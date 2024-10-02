@@ -1,6 +1,6 @@
 package FreshConnect.Test.Entities;
 
-import org.hbrs.se2.project.hellocar.entities.Student;
+import org.hbrs.se2.project.collhbrs.entities.Student;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;

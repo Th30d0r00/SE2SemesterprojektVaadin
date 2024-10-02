@@ -1,9 +1,9 @@
 package FreshConnect.Test.Entities;
 
-import org.hbrs.se2.project.hellocar.entities.Anzeige;
-import org.hbrs.se2.project.hellocar.entities.Application;
-import org.hbrs.se2.project.hellocar.entities.Company;
-import org.hbrs.se2.project.hellocar.entities.Student;
+import org.hbrs.se2.project.collhbrs.entities.Anzeige;
+import org.hbrs.se2.project.collhbrs.entities.Application;
+import org.hbrs.se2.project.collhbrs.entities.Company;
+import org.hbrs.se2.project.collhbrs.entities.Student;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
