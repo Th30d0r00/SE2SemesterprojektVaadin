@@ -26,3 +26,9 @@ Die Anwendung kann dann unter: <br>
 [http://localhost:8080/](http://localhost:8080/)
 
 abgerufen werden.
+
+![Stellenanzeigen](https://github.com/user-attachments/assets/3f362b67-1cb6-48ff-a44d-62bf6d43c81d)
+
+![Job-detail](https://github.com/user-attachments/assets/7548f2f5-4938-4059-a75a-cba12e87230c)
+
+![Stellenanzeige-veröffentlichen](https://github.com/user-attachments/assets/3108782a-96c2-4af3-ac71-7e82bb00ca99)
